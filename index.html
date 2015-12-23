@@ -16,24 +16,25 @@
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
-<!-- 		
+<!--         
           <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
           <h1 id="project_title">My LeetCode Solutions</h1>
-          <h2 id="project_tagline">itoupeter@gmail.com</h2>
+          <h2 id="project_tagline">Problems Solved: 7</h2>
+          <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/itoupeter/blogtest/zipball/master">Download this project as a .zip file</a>
               <a class="tar_download_link" href="https://github.com/itoupeter/blogtest/tarball/master">Download this project as a tar.gz file</a>
             </section>
- -->			
+ -->            
         </header>
     </div>
 
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-	  
+      
 <h3><a name="292" class="anchor" href="#292"><span class="octicon octicon-link"></span></a>#292 Nim Game (Easy)</h3>
 <p>Determine if n can be exactly divided by 4. If yes, you lose, else you win.</p>
 <pre><code>class Solution {
@@ -44,8 +45,8 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-	  
-<h3><a name="258" class="anchor" href="#258"><span class="octicon octicon-link"></span></a>#258 Add Digits (Easy)</h3>
+      
+<h3><a name="258" class="anchor" href="#258"></a>#258 Add Digits (Easy)</h3>
 <p>There are 10 possible results. If num is 0, print 0. Else if num can be exactly divided by 9, print 9. Else print the remainder.</p>
 <pre><code>class Solution {
 public:
@@ -55,6 +56,129 @@ public:
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
+      
+<h3><a name="104" class="anchor" href="#104"></a>#104 Maximum Depth of Binary Tree (Easy)</h3>
+<p>Recursively find maximum depth of subtrees of the current node, return the larger one incremented by 1.</p>
+<pre><code>class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        return root? max( maxDepth( root->left ), maxDepth( root->right ) ) + 1 : 0;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+      
+<h3><a name="237" class="anchor" href="#237"></a>#237 Delete Node in a Linked List (Easy)</h3>
+<p>Instead of delete the given node, replace it by its next node and delete the next node.</p>
+<pre><code>class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        
+        ListNode *nextNode( node->next );
+        ListNode *nextNextNode( nextNode->next );
+        
+        node->val = nextNode->val;
+        node->next = nextNextNode;
+        
+        delete nextNode;
+    }
+};
+</code></pre>
+<p>Runtime: 20 ms</p>
+      
+<h3><a name="283" class="anchor" href="#283"></a>#283 Move Zeroes (Easy)</h3>
+<p>Suppose we already have a "sorted" sequence in the form [num,...,num,0,...,0] and here comes a:<br>
+I) zero: simply add it to the tail<br>
+II) non-zero: add it to the tail and swap it with the first zero in the original sequence<br>
+Run the algorithm above with original sequence empty.</p>
+<pre><code>class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+
+        int nNums( nums.size() );
+        int nZeros( 0 );
+
+        for( int i = 0; i < nNums; ++i ){
+            if( nums[ i ] == 0 ){
+                ++nZeros;
+            }else if( nZeros > 0 && i - nZeros >= 0 ){
+                swap( nums[ i ], nums[ i - nZeros ] );
+            }
+        }
+    }
+
+    void swap( int &a, int &b ){
+        a ^= b ^= a ^= b;
+    }
+};
+</code></pre>
+<p>Runtime: 20 ms</p>
+      
+<h3><a name="100" class="anchor" href="#100"></a>#100 Same Tree (Easy)</h3>
+<p>Compare current node, then subtrees recursively. Mind null pointer error.</p>
+<pre><code>class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if( p == NULL && q == NULL ) return true;
+        if( p == NULL && q != NULL ) return false;
+        if( p != NULL && q == NULL ) return false;
+        if( p->val != q->val ) return false;
+        if( !isSameTree( p->left, q->left ) ) return false;
+        if( !isSameTree( p->right, q->right ) ) return false;
+        return true;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="226" class="anchor" href="#226"></a>#226 Invert Binary Tree (Easy)</h3>
+<p>Recursively swap left subtree and right subtree.</p>
+<pre><code>class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        
+        if( root == NULL ) return NULL;
+        
+        TreeNode *tmp( root->left );
+        root->left = root->right;
+        root->right = tmp;
+        
+        invertTree( root->left );
+        invertTree( root->right );
+        
+        return root;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="242" class="anchor" href="#242"></a>#242 Valid Anagram (Easy)</h3>
+<p>Simply compare occurrence of letters in each word.</p>
+<pre><code>class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        
+        if( s.length() != t.length() ) return false;
+        
+        int len( s.length() );
+        int count[ 26 ];
+        
+        memset( count, 0, sizeof count );
+        
+        for( int i = 0; i < len; ++i ){
+            ++count[ s[ i ] - ( int )'a' ];
+            --count[ t[ i ] - ( int )'a' ];
+        }
+        
+        for( int i = 0; i < 26; ++i ){
+            if( count[ i ] ) return false;
+        }
+        
+        return true;
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
 
 
 <!-- 
