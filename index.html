@@ -20,7 +20,7 @@
           <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
           <h1 id="project_title">My LeetCode Solutions</h1>
-          <h2 id="project_tagline">Problems Solved: 7</h2>
+          <h2 id="project_tagline">Problems Solved: 11</h2>
           <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
             <section id="downloads">
@@ -179,6 +179,75 @@ public:
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
+      
+<h3><a name="217" class="anchor" href="#217"></a>#217 Contains Duplicate (Easy)</h3>
+<p>Use std::unordered_set.</p>
+<pre><code>class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        
+        unordered_set< int > uset;
+        
+        for( int num : nums ){
+            
+            if( uset.find( num ) != uset.end() )
+                return true;
+            else
+                uset.insert( num );
+        }
+        
+        return false;
+    }
+};
+</code></pre>
+<p>Runtime: 48 ms</p>
+<p>Runtime (using std::set): 104 ms</p>
+      
+<h3><a name="171" class="anchor" href="#171"></a>#171 Excel Sheet Column Number (Easy)</h3>
+<p>A new type of number with numerical base 26.</p>
+<pre><code>class Solution {
+public:
+    int titleToNumber(string s) {
+        
+        int len( s.length() );
+        int result( 0 );
+        
+        for( int i = 0; i < len; ++i ){
+            if( i ) result *= 26;
+            result += s[ i ] - ( int )'A' + 1;
+        }
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+      
+<h3><a name="169" class="anchor" href="#169"></a>#169 Majority Element (Easy)</h3>
+<p>Since we are given the condition "majority element always exists", its number of occurrence is greater than that of other numbers. Subtract the number of occurrence of the currently expected ME by number of occurrence of other numbers.</p>
+<pre><code>class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+
+        int majorCount( 0 );
+        int majorNum( 0 );
+    
+        for( int num : nums ){
+            if( majorCount == 0 ){
+                ++majorCount;
+                majorNum = num;
+            }else if( majorNum == num ){
+                ++majorCount;
+            }else{
+                --majorCount;
+            }
+        }
+        
+        return majorNum;
+    }
+};
+</code></pre>
+<p>Runtime: 20 ms</p>
 
 
 <!-- 
