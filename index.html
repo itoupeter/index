@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Liang</title>
+    <title>Liang's LeetCode Solutions</title>
   </head>
 
   <body>
@@ -20,7 +20,7 @@
           <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
           <h1 id="project_title">My LeetCode Solutions</h1>
-          <h2 id="project_tagline">Problems Solved: 13</h2>
+          <h2 id="project_tagline">Problems Solved: 25</h2>
           <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
             <section id="downloads">
@@ -253,7 +253,7 @@ public:
 <p>Since the given tree is a BST, value of LCA must be between values of p and q.</p>
 <pre><code>class Solution {
 public:
-	TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
 
         if( p->val > q->val ){
             TreeNode *tmp( p );
@@ -268,8 +268,8 @@ public:
         else if( q->val < root->val ) 
             return lowestCommonAncestor( root->left, p, q );
         else
-    		return lowestCommonAncestor( root->right, p, q );
-	}
+            return lowestCommonAncestor( root->right, p, q );
+    }
 
 };
 </code></pre>
@@ -290,7 +290,309 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
+      
+<h3><a name="13" class="anchor" href="#13"></a>#13 Roman to Integer (Easy)</h3>
+<p>If a digit is less than its following digit, subtract it from result, else add it to result.</p>
+<pre><code>class Solution {
+public:
+    int romanToInt(string s) {
+        
+        static const int r2d[ 26 ]{
+            0, 0, 100, 500, 0, 0, 0, 0, 1, 0, 0, 50, 1000, 
+            0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 10, 0, 0, 
+        };
 
+        int result( r2d[ s[ 0 ] - ( int )'A'] );
+        int pre( result ), cur( 0 );
+        int len( s.length() );
+
+        for( int i = 1; i < len; ++i ){
+            cur = r2d[ s[ i ] - ( int )'A' ];
+            if( cur > pre ) result -= pre << 1;
+            result += cur;
+            pre = cur;
+        }
+
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 36 ms</p>
+      
+<h3><a name="206" class="anchor" href="#206"></a>#206 Reverse Linked List (Easy)</h3>
+<p>Use a vector. OK I am cheating.</p>
+<pre><code>class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+
+        if( head == NULL ) return NULL;
+
+        vector< ListNode * > nodes;
+
+        for( ListNode *pNode = head; pNode != NULL; pNode = pNode->next ){
+            nodes.push_back( pNode );
+        }
+
+        for( int i = nodes.size() - 1; i > 0; --i ){
+            nodes[ i ]->next = nodes[ i - 1 ];
+        }
+
+        nodes[ 0 ]->next = NULL;
+
+        return nodes.back();
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+      
+<h3><a name="70" class="anchor" href="#70"></a>#70 Climbing Stairs (Easy)</h3>
+<p>Number of ways to reach nth step can be added up by:<br>
+number of ways to reach (n-1)th step (climb 1 step from here) and<br>
+number of ways to reach (n-2)th step (clime 2 steps from here).</p>
+<pre><code>class Solution {
+public:
+    int climbStairs(int n) {
+        
+        vector< int > v( 2, 1 );
+        
+        for( int i = 2; i <= n; ++i ){
+            v.push_back( v[ i - 1 ] + v[ i - 2 ] );
+        }
+        
+        return v[ n ];
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="83" class="anchor" href="#83"></a>#83 Remove Duplicates from Sorted List (Easy)</h3>
+<p>If next node has same value as current node, delete next node (and release memory).</p>
+<pre><code>class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        
+        for( ListNode *cur = head; cur != NULL; ){
+            
+            ListNode *nxt( cur->next );
+            
+            if( nxt == NULL ) break;
+            if( nxt->val == cur->val ){
+                cur->next = nxt->next;
+                delete nxt;
+            }else{
+                cur = nxt;
+            }
+        }
+        
+        return head;
+    }
+};
+</code></pre>
+<p>Runtime: 16 ms</p>
+      
+<h3><a name="263" class="anchor" href="#263"></a>#263 Ugly Number (Easy)</h3>
+<p>Divide the number by 2, 3, and 5 repeatedly. If 1 is left, the number is ugly.</p>
+<pre><code>class Solution {
+public:
+    bool isUgly(int num) {
+
+        if( num <= 0 ) return false;
+
+        while( num % 2 == 0 ) num /= 2;
+        while( num % 3 == 0 ) num /= 3;
+        while( num % 5 == 0 ) num /= 5;
+
+        return num == 1;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="202" class="anchor" href="#202"></a>#202 Happy Number (Easy)</h3>
+<p>Use std::unordered_set to check if a cycle exists.</p>
+<pre><code>class Solution {
+public:
+    bool isHappy(int n) {
+
+        if( n <= 0 ) return false;
+
+        unordered_set< int > uset;
+
+        while( n != 1 ){
+            if( uset.find( n ) != uset.end() )
+                return false;
+            else{
+                uset.insert( n );
+                n = nextN( n );
+            }
+        }
+        
+        return true;
+    }
+
+    int nextN( int n ){
+    
+        int result( 0 ), tmp;
+
+        while( n ){
+            tmp = n % 10;
+            n /= 10;
+            result += tmp * tmp;
+        }
+
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="21" class="anchor" href="#21"></a>#21 Merge Two Sorted Lists (Easy)</h3>
+<p>Repeatedly take the larger head node of the lists.</p>
+<pre><code>class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+
+        if( l1 == NULL )
+            return l2;
+        else if( l2 == NULL )
+            return l1;
+
+        ListNode head( 0 ), *tail( &head );
+        
+        for( ; l1 != NULL && l2 != NULL; tail = tail->next ){
+
+            if( l1->val < l2->val ){
+                tail->next = l1;
+                l1 = l1->next;
+            }else{
+                tail->next = l2;
+                l2 = l2->next;
+            }
+        }
+
+        if( l1 == NULL )
+            tail->next = l2;
+        else
+            tail->next = l1;
+
+        return head.next;
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+      
+<h3><a name="232" class="anchor" href="#232"></a>#232 Implement Queue using Stacks (Easy)</h3>
+<p>Take advantage of 2 stacks to get access to both head and tail.</p>
+<pre><code>class Queue {
+public:
+    // Push element x to the back of queue.
+    void push(int x) {
+        while( !b.empty() ){ a.push( b.top() ); b.pop(); }
+        a.push( x );
+    }
+
+    // Removes the element from in front of queue.
+    void pop(void) {
+        while( !a.empty() ){ b.push( a.top() ); a.pop(); }
+        b.pop();
+    }
+
+    // Get the front element.
+    int peek(void) {
+        while( !a.empty() ){ b.push( a.top() ); a.pop(); }
+        return b.top();
+    }
+
+    // Return whether the queue is empty.
+    bool empty(void) {
+        return a.empty() && b.empty();
+    }
+
+    stack< int > a, b;
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="231" class="anchor" href="#231"></a>#231 Power of 2 (Easy)</h3>
+<p>In binary representation, (n & -n) is the rightmost 1 of n. Use it to cancel the rightmost 1 of n (by XOR) and n will be 0 if it is power of 2.</p>
+<pre><code>class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        return n > 0 && ( n & -n ^ n ) == 0;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="110" class="anchor" href="#110"></a>#110 Balanced Binary Tree (Easy)</h3>
+<p>Recursively compare depths of subtrees.</p>
+<pre><code>class Solution {
+public:
+    bool isBalanced(TreeNode* root) {
+        
+        int depth( 0 );
+        
+        return isBalancedAndGetDepth( root, depth );
+    }
+    
+    bool isBalancedAndGetDepth( TreeNode *root, int &depth ){
+        
+        if( root == NULL ) return true;
+        
+        int lDepth( 0 ), rDepth( 0 );
+        
+        if( !isBalancedAndGetDepth( root->left, lDepth ) ) return false;
+        if( !isBalancedAndGetDepth( root->right, rDepth ) ) return false;
+        if( lDepth - rDepth > 1 || lDepth - rDepth < -1 ) return false;
+        depth = lDepth > rDepth ? lDepth + 1 : rDepth + 1;
+        
+        return true;
+    }
+};
+</code></pre>
+<p>Runtime: 20 ms</p>
+      
+<h3><a name="101" class="anchor" href="#101"></a>#101 Symmetric Tree (Easy)</h3>
+<p>For a symmetric tree, its right subtree is a mirror of its left subtree.<br>
+For two mirrored trees A and B, A's right subtree is a mirror of B's left subtree, and A's left subtree is a mirror of B's right subtree.</p>
+<pre><code>class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        return root == NULL || isMirror( root->left, root->right );
+    }
+    
+    bool isMirror( TreeNode *left, TreeNode *right ){
+        if( left == NULL && right == NULL ) return true;
+        if( left != NULL && right == NULL ) return false;
+        if( left == NULL && right != NULL ) return false;
+        
+        return left->val == right->val
+            && isMirror( left->left, right->right )
+            && isMirror( left->right, right->left );
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="27" class="anchor" href="#27"></a>#27 Remove Element (Easy)</h3>
+<p>Just remove element.</p>
+<pre><code>class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        
+        int len( nums.size() );
+        
+        for( int i = 0; i < len; ++i ){
+            if( nums[ i ] != val ) continue;
+            while( i < len && nums[ len - 1 ] == val ) --len;
+            if( i < len ) nums[ i ] = nums[ --len ];
+        }
+        
+        return len;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
 
       </section>
     </div>
@@ -298,7 +600,7 @@ public:
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">Blogtest maintained by <a href="https://github.com/itoupeter">itoupeter</a></p>
+        <p class="copyright">Liang's LeetCode Solutions maintained by <a href="https://github.com/itoupeter">itoupeter</a></p>
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
