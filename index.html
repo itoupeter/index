@@ -20,7 +20,7 @@
           <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
           <h1 id="project_title">My LeetCode Solutions</h1>
-          <h2 id="project_tagline">Problems Solved: 25</h2>
+          <h2 id="project_tagline">Problems Solved: 53</h2>
           <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
             <section id="downloads">
@@ -348,7 +348,7 @@ public:
 <h3><a name="70" class="anchor" href="#70"></a>#70 Climbing Stairs (Easy)</h3>
 <p>Number of ways to reach nth step can be added up by:<br>
 number of ways to reach (n-1)th step (climb 1 step from here) and<br>
-number of ways to reach (n-2)th step (clime 2 steps from here).</p>
+number of ways to reach (n-2)th step (climb 2 steps from here).</p>
 <pre><code>class Solution {
 public:
     int climbStairs(int n) {
@@ -514,7 +514,7 @@ public:
 <p>Runtime: 0 ms</p>
       
 <h3><a name="231" class="anchor" href="#231"></a>#231 Power of 2 (Easy)</h3>
-<p>In binary representation, (n & -n) is the rightmost 1 of n. Use it to cancel the rightmost 1 of n (by XOR) and n will be 0 if it is power of 2.</p>
+<p>In binary representation, (n & -n) is the rightmost 1 of n. Use it to cancel the rightmost 1 of n (by XOR) and n will be 0 if it is a power of 2.</p>
 <pre><code>class Solution {
 public:
     bool isPowerOfTwo(int n) {
@@ -591,6 +591,860 @@ public:
         return len;
     }
 };
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="107" class="anchor" href="#107"></a>#107 Binary Tree Level Order Traversal II (Easy)</h3>
+<p>Use std::queue to implement BFS and use std::stack to print result in expected order.</p>
+<pre><code>class Solution {
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+
+        if( root == NULL ) return vector< vector< int > >();
+
+        vector< vector< int > > result;
+        queue< pair< TreeNode *, int > > mqueue;
+        stack< pair< TreeNode *, int > > mstack;
+
+        mqueue.push( make_pair( root, 0 ) );
+        
+        while( !mqueue.empty() ){
+            
+            TreeNode *node( mqueue.front().first );
+            int layer( mqueue.front().second );
+
+            mstack.push( mqueue.front() );
+            if( node->right != NULL ) mqueue.push( make_pair( node->right, layer + 1 ) );
+            if( node->left != NULL ) mqueue.push( make_pair( node->left, layer + 1 ) );
+            mqueue.pop();
+        }
+
+        while( !mstack.empty() ){
+            
+            vector< int > v;
+            int maxLayer( mstack.top().second );
+
+            while( !mstack.empty() && mstack.top().second == maxLayer ){
+                v.push_back( mstack.top().first->val );
+                mstack.pop();
+            }
+
+            result.push_back( v );
+        }
+
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+      
+<h3><a name="198" class="anchor" href="#198"></a>#198 House Robber (Easy)</h3>
+<p>Dynamic Progromming<br>
+a[i] is the maximum value I can get from previous i houses without robbing the ith house,<br>
+b[i] is the maximum value I can get from previous i houses with robbing the ith house,<br>
+Then we have:<br>
+a[i+1] = max{ a[i], b[i] }, without robbing (i+1)th house,<br>
+b[i+1] = a[i] + {value of (i+1)th house}, with robbing (i+1)th house.</p>
+<pre><code>class Solution {
+public:
+    int rob(vector<int>& nums) {
+
+        int nNums( nums.size() );
+        vector< int > a( nNums + 1, 0 ), b( nNums + 1, 0 );
+
+        for( int i = 0; i < nNums; ++i ){
+            a[ i + 1 ] = max( a[ i ], b[ i ] );
+            b[ i + 1 ] = a[ i ] + nums[ i ];
+        }
+
+        return max( a[ nNums ], b[ nNums ] );
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="26" class="anchor" href="#26"></a>#26 Remove Duplicates from Sorted Array (Easy)</h3>
+<p>Iterate and remove duplicates.</p>
+<pre><code>class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        
+        if( nums.empty() ) return 0;
+        
+        int nNums( nums.size() ), result( 1 );
+        
+        for( int i = 1; i < nNums; ++i ){
+            if( nums[ i ] != nums[ i - 1 ] ){
+                nums[ result++ ] = nums[ i ];
+            }
+        }
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 32 ms</p>
+      
+<h3><a name="66" class="anchor" href="#66"></a>#66 Plus One (Easy)</h3>
+<p>Simple iteration. Increment from least significant digit and break if no carry.</p>
+<pre><code>class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        
+        vector< int > result;
+        int nDigits( digits.size() );
+        bool carry( true );
+        
+        for( int i = nDigits - 1; i >= 0; --i ){
+            if( ++digits[ i ] > 9 ){
+                digits[ i ] -= 10;
+            }else{
+                carry = false;
+                break;
+            }
+        }
+        
+        if( carry ) result.push_back( 1 );
+        result.insert( result.end(), digits.begin(), digits.end() );
+            
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="118" class="anchor" href="#118"></a>#118 Pascal's Triangle (Easy)</h3>
+<p>a[i,1] = a[i,i] = 1<br>
+a[i,j] = a[i-1,j-1] + a[i-1,j].</p>
+<pre><code>class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        
+        if( numRows == 0 ) return vector< vector< int > >();
+        
+        vector< vector< int > > result{{1}};
+        
+        for( int i = 2; i <= numRows; ++i ){
+            
+            vector< int > v{1};
+            
+            for( int j = 1; j <= i - 2; ++j ){
+                v.push_back( result[ i - 2 ][ j - 1 ] + result[ i - 2 ][ j ] );
+            }
+            
+            v.push_back( 1 );
+            result.push_back( v );
+        }
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="172" class="anchor" href="#172"></a>#172 Factorial Trailing Zeroes (Easy)</h3>
+<p>Since trailing zeroes are produced by 2 and 5 (2*5=10) in n!'s factors and 5 appears less frequently, simply count number of occurrence of 5 in n!'s factors.</p>
+<pre><code>class Solution {
+public:
+    int trailingZeroes(int n) {
+        
+        int result( 0 );
+        long long N( n ), powerOf5( 5 );
+        
+        while( N >= powerOf5 ){
+            result += ( int )( N / powerOf5 );
+            powerOf5 *= 5LL;
+        }
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="119" class="anchor" href="#119"></a>#119 Pascal's Triangle II (Easy)</h3>
+<p>Reverse order of calculation so that next row can be produced in place.</p>
+<pre><code>class Solution {
+public:
+    vector<int> getRow(int rowIndex) {
+        
+        vector< int > result{ 1 };
+        
+        for( int i = 1; i <= rowIndex; ++i ){
+            for( int j = i - 1; j > 0; --j ){
+                result[ j ] += result[ j - 1 ];
+            }
+            result.push_back( 1 );
+        }
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="102" class="anchor" href="#102"></a>#102 Binary Tree Level Order Traversal (Easy)</h3>
+<p>Use a queue to implement BFS.</p>
+<pre><code>class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+
+        if( root == NULL ) return vector< vector< int > >();
+
+        vector< vector< int > > result;
+        vector< int > v;
+        queue< pair< TreeNode *, int > > mqueue;
+        int currentLevel( 0 );
+
+        mqueue.push( make_pair( root, 0 ) );
+                
+        while( !mqueue.empty() ){
+
+            TreeNode *node( mqueue.front().first );
+            int nodeLevel( mqueue.front().second );
+
+            if( nodeLevel != currentLevel ){
+                result.push_back( v );
+                v.clear();
+                ++currentLevel;
+            }
+            
+            v.push_back( node->val );
+
+            if( node->left != NULL ){
+                mqueue.push( make_pair( node->left, currentLevel + 1 ) );
+            }
+            if( node->right != NULL ){
+                mqueue.push( make_pair( node->right, currentLevel + 1 ) );
+            }
+            
+            mqueue.pop();
+        }
+
+        result.push_back( v );
+
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+      
+<h3><a name="112" class="anchor" href="#112"></a>#112 Path Sum (Easy)</h3>
+<p>If there's a path from current node to leaf summed to {Sum}, there's a path from its child node to leaf Summed to {Sum - value of current node}.</p>
+<pre><code>class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        
+        if( root == NULL ) return false;
+        if( root->left == NULL && root->right == NULL ){
+            return root->val == sum;
+        }else{
+            sum -= root->val;
+            if( root->left != NULL && hasPathSum( root->left, sum ) ) return true;
+            if( root->right != NULL && hasPathSum( root->right, sum ) ) return true;
+            return false;
+        }
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+      
+<h3><a name="225" class="anchor" href="#225"></a>#225 Implement Stack using Queues (Easy)</h3>
+<p>Take advantage of 2 queues to get access to both head and tail.</p>
+<pre><code>class Stack {
+public:
+    // Push element x onto stack.
+    void push(int x) {
+        b.push( x );
+    }
+
+    // Removes the element on top of the stack.
+    void pop() {
+        if( !b.empty() ){
+            while( b.size() > 1 ){ a.push( b.front() ); b.pop(); }
+            b.pop();
+        }else{
+            while( !a.empty() ){ b.push( a.front() ); a.pop(); }
+            pop();
+        }
+    }
+
+    // Get the top element.
+    int top() {
+        if( !b.empty() ){
+            while( b.size() > 1 ){ a.push( b.front() ); b.pop(); }
+            return b.front();
+        }else{
+            while( !a.empty() ){ b.push( a.front() ); a.pop(); }
+            return top();
+        }
+    }
+
+    // Return whether the stack is empty.
+    bool empty() {
+        return a.empty() && b.empty();
+    }
+
+    queue< int > a, b;
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="9" class="anchor" href="#9"></a>#9 Panlindrome Number (Easy)</h3>
+<p>(Discussion) Reverse till half and compare.</p>
+<pre><code>class Solution {
+public:
+    bool isPalindrome(int x) {
+        
+        if( x < 0 || x != 0 && x % 10 == 0 ) return false;
+        
+        int y( 0 );
+        
+        while( x >= y ){
+            if( x == y || x / 10 == y ) return true;
+            y = y * 10 + x % 10;
+            x /= 10;
+        }
+        
+        return false;
+    }
+};
+</code></pre>
+<p>Runtime: 80 ms</p>
+      
+<h3><a name="111" class="anchor" href="#111"></a>#111 Minimum Depth of Binary Tree (Easy)</h3>
+<p>Recursively find min depth. Trim branches deeper than current min depth.</p>
+<pre><code>class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        
+        if( root == NULL ) return 0;
+        
+        result = 0x7fffffff;
+        traverse( root, 1 );
+        
+        return result;
+    }
+    
+    void traverse( TreeNode *root, int depth ){
+        
+        if( root->left == NULL && root->right == NULL )
+            result = depth;
+        else if( result <= depth )
+            return;
+        else{
+            if( root->left != NULL ) traverse( root->left, depth + 1 );
+            if( root->right != NULL ) traverse( root->right, depth + 1 );
+        }
+    }
+    
+    int result;
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+      
+<h3><a name="160" class="anchor" href="#160"></a>#160 Intersection of Two Linked Lists (Easy)</h3>
+<p>Calculate difference of length of the given lists D.<br>
+Two pointers walk on the lists, with the pointer on longer list walked D steps in advance.<br>
+The intersection is where they meet.</p>
+<pre><code>class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        
+        ListNode *ptrA( headA ), *ptrB( headB );
+        ListNode *tailA( NULL ), *tailB( NULL );
+        int lenA( 0 ), lenB( 0 );
+        
+        for( ; ptrA != NULL; ptrA = ptrA->next ){
+            if( ptrA->next == NULL ) tailA = ptrA;
+            ++lenA;
+        }
+        
+        for( ; ptrB != NULL; ptrB = ptrB->next ){
+            if( ptrB->next == NULL ) tailB = ptrB;
+            ++lenB;
+        }
+        
+        if( tailA != tailB ) return NULL;
+        
+        if( lenA < lenB ){
+            auto tmp1( lenA ); lenA = lenB; lenB = tmp1;
+            auto tmp2( headA ); headA = headB; headB = tmp2;
+        }
+        
+        ptrA = headA;
+        ptrB = headB;
+        
+        for( int i = lenA - lenB; i > 0; ptrA = ptrA->next, --i );
+        for( ; ptrA != ptrB; ptrA = ptrA->next, ptrB = ptrB->next );
+        
+        return ptrA;
+    }
+};
+</code></pre>
+<p>Runtime: 52 ms</p>
+<p>(Discussion) Smart solution!</p>
+<pre><code>class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode *ptrA = headA, *ptrB = headB;
+        while (ptrA != ptrB) { 
+            ptrA = ptrA ? ptrA->next : headB;
+            ptrB = ptrB ? ptrB->next : headA;
+        }
+        return ptrA;
+    }
+};
+</code></pre>
+      
+<h3><a name="88" class="anchor" href="#88"></a>#88 Merge Sorted Array (Easy)</h3>
+<p>Merge from tail, so that no extra memory is needed.</p>
+<pre><code>class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        
+        if( m == 0 ){ nums1 = nums2; return; }
+        if( n == 0 ) return;
+        
+        nums1.resize( m + n );
+        
+        for( int i = m - 1, j = n - 1, k = m + n - 1; k >= 0; --k ){
+            if( i < 0 ){ nums1[ k ] = nums2[ j-- ]; continue; }
+            if( j < 0 ){ nums1[ k ] = nums1[ i-- ]; continue; }
+            nums1[ k ] = nums1[ i ] > nums2[ j ] ? nums1[ i-- ] : nums2[ j-- ];
+        }
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="190" class="anchor" href="#190"></a>#190 Reverse Bits (Easy)</h3>
+<p>Simple bits manipulation.</p>
+<pre><code>class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) {
+
+        n = ( n << 1 & 0xAAAAAAAAU ) | ( n >> 1 & 0x55555555U );
+        n = ( n << 2 & 0xCCCCCCCCU ) | ( n >> 2 & 0x33333333U );
+        n = ( n << 4 & 0xF0F0F0F0U ) | ( n >> 4 & 0x0F0F0F0FU );
+        n = ( n << 8 & 0xFF00FF00U ) | ( n >> 8 & 0x00FF00FFU );
+        n = ( n << 16 & 0xFFFF0000U ) | ( n >> 16 & 0x0000FFFFU );
+
+        return n;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="36" class="anchor" href="#36"></a>#36 Valid Sudoku (Easy)</h3>
+<p>Simple counting.</p>
+<pre><code>class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+
+        vector< bool > flag;
+        char tmp;
+
+        for( int i = 0, jj, kk; i < 9; ++i ){
+
+            flag.assign( 10, false );
+            for( int j = 0; j < 9; ++j ){
+                if( ( tmp = board[ i ][ j ] ) == '.' ) continue;
+                if( flag[ tmp - '0' ] ) return false;
+                flag[ tmp - '0' ] = true;
+            }
+
+            flag.assign( 10, false );
+            for( int j = 0; j < 9; ++j ){
+                if( ( tmp = board[ j ][ i ] ) == '.' ) continue;
+                if( flag[ tmp - '0' ] ) return false;
+                flag[ tmp - '0' ] = true;
+            }
+
+            jj = i / 3 * 3; kk = i % 3 * 3;
+            flag.assign( 10, false );
+            for( int j = 0; j < 3; ++j ){
+                for( int k = 0; k < 3; ++k ){
+                    if( ( tmp = board[ jj + j ][ kk + k ] ) == '.' ) continue;
+                    if( flag[ tmp - '0' ] ) return false;
+                    flag[ tmp - '0' ] = true;
+                }
+            }
+        }
+
+        return true;
+    }
+};
+</code></pre>
+<p>Runtime: 16 ms</p>
+      
+<h3><a name="223" class="anchor" href="#223"></a>#223 Rectangle Area (Easy)</h3>
+<p>Use long long to avoid int overflow.</p>
+<pre><code>class Solution {
+public:
+    int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        
+        long long a( ( 0LL + C - A ) * ( 0LL + D - B ) );
+        long long b( ( 0LL + G - E ) * ( 0LL + H - F ) );
+        long long c( 0LL + min( C, G ) - max( A, E ) );
+        long long d( 0LL + min( D, H ) - max( B, F ) );
+        long long e( c > 0LL && d > 0LL ? c * d : 0LL );
+        
+        return ( int )( a + b - e );
+    }
+};
+</code></pre>
+<p>Runtime: 32 ms</p>
+      
+<h3><a name="219" class="anchor" href="#219"></a>#219 Contains Duplicate II (Easy)</h3>
+<p>Use std::unordered_set.</p>
+<pre><code>class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        
+        if( k <= 0 ) return false;
+        
+        unordered_set< int > uset;
+        int nNums( nums.size() );
+        
+        for( int i = 0; i < nNums; ++i ){
+            if( uset.find( nums[ i ] ) != uset.end() ) return true;
+            if( i - k >= 0 ) uset.erase( nums[ i - k ] );
+            uset.insert( nums[ i ] );
+        }
+        
+        return false;
+    }
+};
+</code></pre>
+<p>Runtime: 32 ms</p>
+      
+<h3><a name="58" class="anchor" href="#58"></a>#58 Length of Last Word (Easy)</h3>
+<p>Simple counting.</p>
+<pre><code>class Solution {
+public:
+    int lengthOfLastWord(string s) {
+        
+        int len( s.length() );
+        int result( 0 );
+        
+        while( len > 0 && s[ len - 1 ] == ' ' ) --len;
+        while( len > 0 && s[ len - 1 ] != ' ' ) --len, ++result;
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="19" class="anchor" href="#19"></a>#19 Remove Nth Node From End of List (Easy)</h3>
+<p>2 pointers walk along the list with fast one ahead of slow one by N steps. Delete slow one when fast one meets the end.</p>
+<pre><code>class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int &n) {
+        
+        ListNode *fast( head ), *slow( head );
+        
+        for( int i = 0; i < n; ++i, fast = fast->next );
+        
+        if( !fast ){ 
+            auto tmp( head ); 
+            head = head->next; 
+            delete tmp; 
+            return head;
+        }else{ 
+            fast = fast->next;
+            while( fast ){ slow = slow->next; fast = fast->next; }
+            auto nxt( slow->next ); slow->next = nxt->next; delete nxt;
+        }
+        
+        return head;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="20" class="anchor" href="#20"></a>#20 Valid Parentheses (Easy)</h3>
+<p>Use a stack. When it comes a right bracket, push into stack, or check if it makes a pair with the top element in stack.</p>
+<pre><code>class Solution {
+public:
+    bool isValid(string s) {
+    
+        stack< int > mstack;
+        unordered_map< char, int > umap{
+            { '(', 0 }, { ')', 1 }, 
+            { '{', 2 }, { '}', 3 }, 
+            { '[', 4 }, { ']', 5 }, 
+        };
+        
+        for( char ch : s ){
+            int code( umap[ ch ] );
+            if( code & 1 ){
+                if( mstack.empty() ) return false;
+                if( mstack.top() != code - 1 ) return false;
+                mstack.pop();
+            }else
+                mstack.push( code );
+        }
+        
+        return mstack.empty();
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="205" class="anchor" href="#205"></a>#205 Isomorphic Strings (Easy)</h3>
+<p>Check 1-to-1 mapping.</p>
+<pre><code>class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        
+        char chmap[ 256 ]{ 0 };
+        bool used[ 256 ]{ false };
+        int len( s.length() );
+        
+        for( int i = 0; i < len; ++i ){
+            if( chmap[ s[ i ] ] ){
+                if( chmap[ s[ i ] ] != t[ i ] ) return false;
+            }else{
+                if( used[ t[ i ] ] ) return false;
+                chmap[ s[ i ] ] = t[ i ];
+                used[ t[ i ] ] = true;
+            }
+        }
+        
+        return true;
+    }
+};
+</code></pre>
+<p>Runtime: 36 ms</p>
+<p>(Discussion) Smarter solution.</p>
+<pre><code>class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        
+        char stmap[ 512 ]{ 0 };
+        int len( s.length() );
+        
+        for( int i = 0; i < len; ++i ){
+            if( stmap[ s[ i ] ] != stmap[ t[ i ] + 256 ] return false;
+            stmap[ s[ i ] ] = stmap[ t[ i ] + 256 ] = i + 1;
+        }
+        
+        return true;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+      
+<h3><a name="290" class="anchor" href="#290"></a>#290 Word Pattern (Easy)</h3>
+<p>1-to-1 map, similar idea as #205.<br>
+(Discussion) Use istringstream to read words from str.</p>
+<pre><code>class Solution {
+public:
+    bool wordPattern(string pattern, string str) {
+
+        unordered_map< char, int > pmap;
+        unordered_map< string, int > smap;
+        int head( 0 ), tail( 0 ), len( pattern.length() ), i;
+        string word;
+
+        for( i = 0; i < len && tail != -1; ++i ){
+            tail = str.find( " ", head );
+            word = str.substr( head, tail - head );
+            head = tail + 1;
+
+            auto ite1( pmap.find( pattern[ i ] ) );
+            auto ite2( smap.find( word ) );
+
+            if( ( ite1 == pmap.end() ) != ( ite2 == smap.end() ) ) 
+                return false;
+            if( ( ite1 != pmap.end() ) && ( ite2 != smap.end() ) 
+                && ( ite1->second != ite2->second ) ) return false;
+
+            pmap[ pattern[ i ] ] = smap[ word ] = i;
+        }
+
+        return i == len && tail == -1;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="203" class="anchor" href="#203"></a>#203 Remove Linked List Elements (Easy)</h3>
+<p>Use a dummy head node to simplify situation.</p>
+<pre><code>class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        
+        ListNode result( 0 ); result.next = head;
+        
+        for( auto ptr = &result; ptr->next; ){
+            if( ptr->next->val == val ){
+                auto tmp( ptr->next->next );
+                delete ptr->next;
+                ptr->next = tmp;
+            }else
+                ptr = ptr->next;
+        }
+        
+        return result.next;
+    }
+};
+</code></pre>
+<p>Runtime: 32 ms</p>
+      
+<h3><a name="38" class="anchor" href="#38"></a>#38 Count and Say (Easy)</h3>
+<p>Use std::stringstream to simplify string manipulation.</p>
+<pre><code>class Solution {
+public:
+    string countAndSay(int n) {
+
+        if( n <= 1 ) return string( "1" );
+
+        stringstream ss;
+        string s( "1" );
+
+        while( --n ){
+
+            char pre( '\0' );
+            int preCount( 0 );
+
+            for( char cur : s ){
+                if( cur != pre ){ 
+                    if( preCount ) ss << preCount << pre;
+                    pre = cur; 
+                    preCount = 1;
+                }else
+                    ++preCount;
+            }
+
+            if( preCount ) ss << preCount << pre;
+            ss >> s; ss.clear(); ss.str( "" );
+        }
+
+        return s;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="299" class="anchor" href="#299"></a>#299 Bulls and Cows (Easy)</h3>
+<p>Simple counting. Use std::stringstream or std::to_string.</p>
+<pre><code>class Solution {
+public:
+    string getHint(string secret, string guess) {
+
+        stringstream ss;
+        int nBulls( 0 ), nCows( 0 );
+        int count[ 20 ]{ 0 };
+        int len( secret.length() );
+
+        for( int i = 0; i < len; ++i ){
+            nBulls += secret[ i ] == guess[ i ] ? 1 : 0;
+            ++count[ secret[ i ] - '0' ];
+            ++count[ guess[ i ] - '0' + 10 ];
+        }
+
+        for( int i = 0; i < 10; ++i ){
+            nCows += min( count[ i ], count[ i + 10 ] );
+        }
+
+        ss << nBulls << "A" << nCows - nBulls << "B";
+        return ss.str();
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="14" class="anchor" href="#14"></a>#14 Longest Common Prefix (Easy)</h3>
+<p>Simple counting.</p>
+<pre><code>class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        
+        if( strs.empty() ) return string( "" );
+        
+        int nStrs( strs.size() );
+        int maxLen( strs[ 0 ].length() );
+        
+        for( int i = 1; i < nStrs; ++i ){
+            int len( strs[ i ].length() ), j;
+            for( j = 0; j < len && j < maxLen; ++j )
+                if( strs[ 0 ][ j ] != strs[ i ][ j ] ) break;
+            maxLen = j;
+        }
+        
+        return strs[ 0 ].substr( 0, maxLen );
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="67" class="anchor" href="#67"></a>#67 Add Binary (Easy)</h3>
+<p>Split digits into vector and add.</p>
+<pre><code>class Solution {
+public:
+    string addBinary(string a, string b) {
+
+        vector< int > va, vb;
+        string result;
+
+        split( a, va ); 
+        split( b, vb );
+
+        int lenA( va.size() );
+        int lenB( vb.size() );
+
+        if( lenA < lenB ){
+            va.swap( vb );
+            lenA = lenB;
+        }
+        vb.resize( lenA );
+        va.push_back( 0 );
+
+        for( int i = 0; i < lenA; ++i ){
+            va[ i + 1 ] += va[ i ] + vb[ i ] >> 1;
+            result = ( va[ i ] + vb[ i ] & 1 ? '1' : '0' ) + result;
+        }
+
+        return va.back() ? '1' + result : result;
+    }
+
+    void split( const string &s, vector< int > &v ){
+        for( int i = s.length() - 1; i >= 0; --i ){
+            v.push_back( s[ i ] - '0' );
+        }
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+(Discussion) More concise code!</p>
+<pre><code>class Solution {
+public:
+    string addBinary(string a, string b) {
+
+        int i( a.length() - 1 );
+        int j( b.length() - 1 );
+        int carry( 0 );
+        string result;
+
+        while( i >= 0 || j >= 0 || carry ){
+            carry += i >= 0 && a[ i-- ] - '0' ? 1 : 0;
+            carry += j >= 0 && b[ j-- ] - '0' ? 1 : 0;
+            result = ( carry & 1 ? '1' : '0' ) + result;
+            carry >>= 1;
+        }
+
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="" class="anchor" href="#"></a># (Easy)</h3>
+<p>.</p>
+<pre><code>
 </code></pre>
 <p>Runtime: 4 ms</p>
 
