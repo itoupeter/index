@@ -20,7 +20,7 @@
           <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
           <h1 id="project_title">My LeetCode Solutions</h1>
-          <h2 id="project_tagline">Problems Solved: 53</h2>
+          <h2 id="project_tagline">Problems Solved: 60</h2>
           <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
             <section id="downloads">
@@ -1439,6 +1439,186 @@ public:
         return result;
     }
 };
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="234" class="anchor" href="#234"></a>#234 Palindrome Linked List (Easy)</h3>
+<p>Reverse first half and compare.</p>
+<pre><code>class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        
+        if( head == NULL || head->next == NULL ) return true;
+        
+        ListNode dummy( 0 ); dummy.next = head;
+        ListNode *fast( &dummy ), *slow( &dummy );
+        ListNode *l, *r;
+        
+        while( fast->next && fast->next->next ){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        
+        l = slow; r = slow->next;
+        if( fast->next ) r = r->next;
+        l->next = NULL;
+        
+        for( auto p = &dummy, c = head, n = c->next; ; ){
+            c->next = p;
+            if( !n ){ head->next = NULL; break; }
+            p = c; c = n; n = n->next;
+        }
+        
+        for( ; l && l->val == r->val; l = l->next, r = r->next );
+        return l == NULL;
+    }
+};
+</code></pre>
+<p>Runtime: 28 ms</p>
+      
+<h3><a name="257" class="anchor" href="#257"></a>#257 Binary Tree Paths (Easy)</h3>
+<p>Simple DFS. Use a vector to record nodes on current path.</p>
+<pre><code>class Solution {
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        if( root == NULL ) 
+            return vector< string >();
+        else{ 
+            traverse( root ); 
+            return vs; 
+        }
+    }
+    
+    void traverse( TreeNode *root ){
+        
+        vi.push_back( root->val );
+        
+        if( root->left == NULL && root->right == NULL ){
+            string s;
+            for( int i : vi ) s += "->" + to_string( i );
+            vs.push_back( s.substr( 2, -1 ) );
+        }else{
+            if( root->left ) traverse( root->left );
+            if( root->right ) traverse( root->right );
+        }
+        
+        vi.pop_back();
+    }
+    
+    vector< string > vs;
+    vector< int > vi;
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+      
+<h3><a name="303" class="anchor" href="#303"></a>#303 Range Sum Query - Immutable (Easy)</h3>
+<p>Precompute suffix sum array, then sumRange( i, j ) = suffixSum( j ) - suffixSum( i - 1 ).</p>
+<pre><code>class NumArray {
+public:
+    NumArray(vector<int> &nums) {
+        for( int i = 0; i < nums.size(); ++i )
+            v.push_back( v[ i ] + nums[ i ] );
+    }
+
+    int sumRange(int i, int j) {
+        return  v[ j + 1 ] - v[ i ];
+    }
+
+    vector< int > v{ 0 };
+};
+</code></pre>
+<p>Runtime: 596 ms</p>
+      
+<h3><a name="28" class="anchor" href="#28"></a>#28 Implement strStr() (Easy)</h3>
+<p>Compare by brute force.</p>
+<pre><code>class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        
+        int lenH( haystack.length() );
+        int lenN( needle.length() );
+        
+        if( lenN == 0 ) return 0;
+        if( lenH < lenN ) return -1;
+        
+        for( int i = 0; i < lenH - lenN + 1; ++i ){
+            for( int j = 0; ; ++j ){
+                if( haystack[ i + j ] != needle[ j ] ) break;
+                if( j == lenN - 1 ) return i;
+            }
+        }
+        
+        return -1;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="7" class="anchor" href="#7"></a>#7 Reverse Integer (Easy)</h3>
+<p>Mind tricky inputs like INT_MAX, INT_MIN.</p>
+<pre><code>class Solution {
+public:
+    int reverse(int x) {
+        
+        if( x == 1 << 31 ) return 0;
+        if( x < 0 ) return -reverse( -x );
+        
+        long long y( 0LL );
+        
+        while( x ){
+            y = y * 10LL + x % 10;
+            x /= 10;
+        }
+        
+        return y <= 0x7fffffffLL ? ( int )y : 0;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+      
+<h3><a name="125" class="anchor" href="#125"></a>#125 Valid Palindrome (Easy)</h3>
+<p>.</p>
+<pre><code>class Solution {
+public:
+    bool isPalindrome(string s) {
+        
+        string t;
+        int len( 0 );
+        
+        for( char ch : s ){
+            if( ch >= '0' && ch <= '9'
+                || ch >= 'a' && ch <= 'z'
+                || ch >= 'A' && ch <= 'Z' ){
+                t += ch > 'Z' ? ( char )( ch - 32 ) : ch;
+                ++len;
+            }
+        }
+        
+        for( int i = 0; i < len >> 1; ++i ){
+            if( t[ i ] != t[ len - i - 1 ] ) return false;
+        }
+        
+        return true;
+    }
+};
+</code></pre>
+<p>Runtime: 16 ms</p>
+      
+<h3><a name="" class="anchor" href="#"></a># (Easy)</h3>
+<p>.</p>
+<pre><code>
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="" class="anchor" href="#"></a># (Easy)</h3>
+<p>.</p>
+<pre><code>
+</code></pre>
+<p>Runtime: 4 ms</p>
+      
+<h3><a name="" class="anchor" href="#"></a># (Easy)</h3>
+<p>.</p>
+<pre><code>
 </code></pre>
 <p>Runtime: 4 ms</p>
       
