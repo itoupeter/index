@@ -20,7 +20,7 @@
           <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
           <h1 id="project_title">My LeetCode Solutions</h1>
-          <h2 id="project_tagline">Problems Solved: 60</h2>
+          <h2 id="project_tagline">Problems Solved: 84</h2>
           <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
             <section id="downloads">
@@ -1604,29 +1604,671 @@ public:
 </code></pre>
 <p>Runtime: 16 ms</p>
       
-<h3><a name="" class="anchor" href="#"></a># (Easy)</h3>
-<p>.</p>
-<pre><code>
+<h3><a name="6" class="anchor" href="#6"></a>#6 ZigZag Conversion (Easy)</h3>
+<p>Simple simulation.</p>
+<pre><code>class Solution {
+public:
+    string convert(string s, int numRows) {
+
+        if( s.empty() || numRows < 2 ) return s;
+
+        vector< string > vs( numRows, "" );
+        int len( s.length() ), loop( numRows - 1 << 1 );
+        string result;
+
+        for( int i = 0, j = 0; i < len; ++i ){
+            j = i % loop; 
+            if( j >= numRows ) j = ( numRows - 1 << 1 ) - j;
+            vs[ j ] += s[ i ];
+        }
+
+        for( string str : vs ) result += str;
+
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 48 ms</p>
+      
+<h3><a name="204" class="anchor" href="#204"></a>#Count Primes (Easy)</h3>
+<p>"Sift" non-primes out using known primes. Mind int range overflow.</p>
+<pre><code>class Solution {
+public:
+    int countPrimes(int n) {
+        
+        if( n < 2 ) return 0;
+        
+        vector< bool > prime( n, true );
+        int result( 0 );
+        
+        for( int i = 2; i < n; ++i ){
+            if( !prime[ i ] ) continue;
+            ++result;
+            if( i > 46340 ) continue;
+            for( int j = i * i; j < n; j += i ){
+                prime[ j ] = false;
+            }
+        }
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 312 ms</p>
+      
+<h3><a name="228" class="anchor" href="#228"></a>#228 Summary Ranges (Easy)</h3>
+<p>Simple iteration. Append an end symbol to simplify situation.</p>
+<pre><code>class Solution {
+public:
+    vector<string> summaryRanges(vector<int>& nums) {
+
+        if( nums.empty() ) return vector< string >();
+
+        vector< string > result;
+        int nNums( nums.size() );
+        int head( 0 ), tail( 0 );
+
+        nums.push_back( nums[ nNums++ - 1 ] );
+        
+        for( int i = 1; i < nNums; tail = i++ ){
+            if( nums[ i ] != nums[ i - 1 ] + 1 ){
+                if( tail - head )
+                    result.push_back( to_string( nums[ head ] ) 
+                        + "->" + to_string( nums[ tail ] ) );
+                else
+                    result.push_back( to_string( nums[ head ] ) );
+                head = i;
+            }
+        }
+
+        return result;
+    }
+};
 </code></pre>
 <p>Runtime: 4 ms</p>
       
-<h3><a name="" class="anchor" href="#"></a># (Easy)</h3>
-<p>.</p>
-<pre><code>
+<h3><a name="278" class="anchor" href="#278"></a>#278 First Bad Version (Easy)</h3>
+<p>Binary search. Mind int range overflow when computing middle.</p>
+<pre><code>bool isBadVersion(int version);
+
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        
+        int lower( 1 ), upper( n ), middle;
+        
+        while( upper - lower ){
+            middle = lower + ( upper - lower >> 1 );
+            if( isBadVersion( middle ) )
+                upper = middle;
+            else
+                lower = middle + 1;
+        }
+        
+        return isBadVersion( upper ) ? upper : 0;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="155" class="anchor" href="#155"></a>#155 Min Stack (Easy)</h3>
+<p>Use 2 stacks. One for normal use, the other to store mins.</p>
+<pre><code>class MinStack {
+public:
+    void push(int x) {
+        if( b.empty() || x <= b.top() ) b.push( x );
+        a.push( x );
+    }
+
+    void pop() {
+        if( b.top() == a.top() ) b.pop();
+        a.pop();
+    }
+
+    int top() {
+        return a.top();
+    }
+
+    int getMin() {
+        return b.top();
+    }
+
+    stack< int > a, b;
+};
+</code></pre>
+<p>Runtime: 28 ms</p>
+      
+<h3><a name="168" class="anchor" href="#168"></a>#168 Excel Sheet Column Title (Easy)</h3>
+<p>A new type of number with a numeral base of 26.</p>
+<pre><code>class Solution {
+public:
+    string convertToTitle(int n) {
+
+        string result;
+
+        do{
+            result = ( char )( --n % 26 + 'A' ) + result;
+        }while( n /= 26 );
+
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="189" class="anchor" href="#189"></a>#189 Rotate Array (Easy)</h3>
+<p>Reverse first part, reverse second part, then reverse whole.<br>
+Note that k might be greater than size of nums.</p>
+<pre><code>class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        if( nums.empty() || ( k %= nums.size() ) < 1 ) return;
+        reverse( nums, 0, nums.size() - k - 1 );
+        reverse( nums, nums.size() - k, nums.size() - 1 );
+        reverse( nums, 0, nums.size() - 1 );
+    }
+    
+    void reverse( vector< int > &nums, int a, int b ){
+        for( int i = 0; i < b - a + 1 >> 1; ++i ){
+            auto tmp( nums[ a + i ] );
+            nums[ a + i ] = nums[ b - i ];
+            nums[ b - i ] = tmp;
+        }
+    }
+};
 </code></pre>
 <p>Runtime: 4 ms</p>
       
-<h3><a name="" class="anchor" href="#"></a># (Easy)</h3>
-<p>.</p>
-<pre><code>
+<h3><a name="165" class="anchor" href="#165"></a>#165 Compare Version Numbers(Easy)</h3>
+<p>Use std::istringstream to ease string manipulation.</p>
+<pre><code>class Solution {
+public:
+    int compareVersion(string version1, string version2) {
+
+        for( char &ch : version1 ) ch == '.' ? ch = ' ' : 0;
+        for( char &ch : version2 ) ch == '.' ? ch = ' ' : 0;
+
+        int a( 0 ), b( 0 );
+        bool getA, getB;
+        istringstream iss1( version1 );
+        istringstream iss2( version2 );
+
+        while( true ){
+            a = b = 0;
+            getA = iss1 >> a ? true : false; 
+            getB = iss2 >> b ? true : false;
+            if( !getA && !getB ) return 0;
+            if( a != b ) return a > b ? 1 : -1;
+        }
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="8" class="anchor" href="#8"></a>#8 String to Integer (Easy)</h3>
+<p>Simple state machine.</p>
+<pre><code>class Solution {
+public:
+    int myAtoi(string str) {
+        
+        bool positive( true );
+        bool starting( true );
+        long long result( 0 );
+        
+        for( char ch : str ){
+            if( starting ){
+                if( ch == ' ' || ch == '\t' )  continue;
+                if( ch == '+' || ch == '-' || ch >= '0' && ch <= '9' ){ 
+                    if( ch == '-' ) positive = false;
+                    else if( ch != '+' ) result = ch - '0';
+                    starting = false; 
+                    continue; 
+                }
+                return 0;
+            }else{
+                if( ch < '0' || ch > '9' ) break;
+                result = result * 10 + ( ch - '0' );
+                if( positive && result > 0x7fffffffLL ) return 0x7fffffff;
+                if( !positive && result > 0x80000000LL ) return 0x80000000;
+            }
+        }
+        
+        return positive ? ( int )result : ( int )( -result );
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+      
+<h3><a name="136" class="anchor" href="#136"></a>#136 Single Number (Medium)</h3>
+<p>Idea similar to qsort. Choose a standard and make left part less than or equal to standard and right part greater than standard. The answer is in the part with odd number of elements.</p>
+<pre><code>class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+
+        if( nums.empty() ) return 0;
+        
+        return find( nums, 0, nums.size() - 1 );
+    }
+
+    int find( vector< int > &nums, int l, int r ){
+    
+        if( r == l ) return nums[ l ];
+
+        int i( l ), j( r );
+        int m( nums[ l + rand() % ( r - l + 1 ) ] );
+
+        while( i < j ){
+            while( nums[ i ] <= m ) ++i;
+            while( nums[ j ] > m ) --j;
+            if( i < j ){
+                auto tmp( nums[ i ] );
+                nums[ i ] = nums[ j ];
+                nums[ j ] = tmp;
+            }
+        }
+
+        if( i <= r && ( r - i + 1 & 1 ) )
+            return find( nums, i, r );
+        else
+            return find( nums, l, j );
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+<p>(Discussion) XOR! Genius!</p>
+<pre><code>class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+
+        int result( 0 );
+        
+        for( int i : nums ) result ^= i;
+        
+        return result;
+    }
+};
+</code></pre>
+      
+<h3><a name="260" class="anchor" href="#260"></a>#260 Single Number III (Medium)</h3>
+<p>XOR all numbers. Use a bit set of the result to classify all numbers into two parts. The answer is the XOR of each part.</p>
+<pre><code>class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        
+        int all( 0 ), first( 0 ), second( 0 );
+        
+        for( int i : nums ) all ^= i; all &= -all;
+        for( int i : nums ) i & all ? first ^= i : second ^= i; 
+        
+        return vector< int >{ first, second };
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="122" class="anchor" href="#122"></a>#122 Best Time to Buy and Sell Stock II (Medium)</h3>
+<p>If price today is higher than yesterday, "bought" yesterday and sell today.</p>
+<pre><code>class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        
+        int result( 0 ), yesterday( 0x7fffffff );
+        
+        for( int today : prices ){
+            result += today > yesterday ? today - yesterday : 0;
+            yesterday = today;
+        }
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+      
+<h3><a name="238" class="anchor" href="#238"></a>#238 Product of Array Except Self (Medium)</h3>
+<p>Use output to store prefix product and nums to store suffix product, then combine them together.</p>
+<pre><code>class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        
+        vector< int > output( nums.size(), 1 );
+        
+        for( int i = 1; i < nums.size(); ++i ){
+            output[ i ] = output[ i - 1] * nums[ i - 1 ];
+        }
+        
+        for( int i = nums.size() - 2; i >= 0; --i ){
+            nums[ i ] *= nums[ i + 1 ];
+            output[ i ] *= nums[ i + 1 ];
+        }
+        
+        return output;
+    }
+};
+</code></pre>
+<p>Runtime: 60 ms</p>
+      
+<h3><a name="144" class="anchor" href="#144"></a>#144 Binary Tree Preorder Traversal (Medium)</h3>
+<p>Use stack to solve it iteratively.</p>
+<pre><code>class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+
+        if( root == NULL ) return vector< int >();
+
+        vector< int > result;
+        stack< TreeNode * > mstack;
+        TreeNode *pNode;
+
+        mstack.push( root );
+
+        while( !mstack.empty() ){
+            pNode = mstack.top(); 
+            mstack.pop();
+            result.push_back( pNode->val );
+            if( pNode->right ) mstack.push( pNode->right );
+            if( pNode->left ) mstack.push( pNode->left );
+        }
+
+        return result;
+    }
+
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="319" class="anchor" href="#319"></a>#319 Bulb Switcher (Medium)</h3>
+<p>Lights at positions of perfect square will be on.</p>
+<pre><code>class Solution {
+public:
+    int bulbSwitch(int n) {
+        return ( int )sqrt( n + 0. );
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="94" class="anchor" href="#94"></a>#94 Binary Tree Inorder Traversal (Medium)</h3>
+<p>Use stack to solve it iteratively. Add a flag to indicate inorder.</p>
+<pre><code>class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        
+        if( root == NULL ) return vector< int >();
+        
+        vector< int > result;
+        stack< pair< TreeNode *, bool > > mstack;
+        bool inorder;
+        
+        mstack.push( make_pair( root, false ) );
+        
+        while( !mstack.empty() ){
+            root = mstack.top().first;
+            inorder = mstack.top().second;
+            mstack.pop();
+            if( inorder ){ result.push_back( root->val ); continue; }
+            if( root->right ) mstack.push( make_pair( root->right, false ) );
+            mstack.push( make_pair( root, true ) );
+            if( root->left ) mstack.push( make_pair( root->left, false ) );
+        }
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="268" class="anchor" href="#268"></a>#268 Missing Number (Medium)</h3>
+<p>All Hail XOR!!</p>
+<pre><code>class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        
+        int result( 0 );
+        
+        for( int i = 0; i <= nums.size(); ++i ) result ^= i;
+        for( int i : nums ) result ^= i;
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 36 ms</p>
+      
+<h3><a name="318" class="anchor" href="#318"></a>#318 Maximum Product of Word Lengths (Medium)</h3>
+<p>Use bitset to indicate letter usage. Compare by brute force.</p>
+<pre><code>class Solution {
+public:
+    int maxProduct(vector<string>& words) {
+
+        int hash( 0 ), result( 0 );
+        int nWords( words.size() );
+        vector< pair< int, int > > vp;
+
+        for( const string &str : words ){
+            hash = 0;
+            for( const char &ch : str ) hash |= 1 << ch - 'a';
+            vp.push_back( make_pair( hash, str.length() ) );
+        }
+
+        for( int i = 0; i < nWords - 1; ++i ){
+            for( int j = i + 1; j < nWords; ++j ){
+                if( vp[ i ].first & vp[ j ].first != 0 ) continue;
+                result = max( result, vp[ i ].second * vp[ j ].second );
+            }
+        }
+
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 148 ms</p>
+      
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p>Fast pointer walks twice as fast as slow pointer. There is a loop if fast one meets slow one before it meets end.</p>
+<pre><code>class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        
+        if( head == NULL ) return false;
+        
+        ListNode *slow( head ), *fast( head->next );
+        
+        while( fast && slow != fast ){
+            slow = slow->next;
+            fast = fast->next;
+            if( fast == NULL ) return false;
+            fast = fast->next;
+        }
+        
+        return fast != NULL;
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+      
+<h3><a name="137" class="anchor" href="#137"></a>#137 Single Number II (Medium)</h3>
+<p>Can be solved similarly to #136.</p>
+<p>(Discussion)Crazy XOR!!</p>
+<pre><code>class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        
+        int ones( 0 ), twos( 0 );
+        
+        for( int x : nums ){
+            ones ^= x & ~twos;
+            twos ^= x & ~ones;
+        }
+        
+        return ones;
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+      
+<h3><a name="116" class="anchor" href="#116"></a>#116 Populating Next Right Pointers in Each Node (Medium)</h3>
+<p>Next of a left child is its parent's right child. Next of a right child is its parent's next node's left child. So we should populate the tree from right to left.</p>
+<pre><code>class Solution {
+public:
+    void connect(TreeLinkNode *root) {
+        traverse( root, NULL, RIGHT );        
+    }
+
+    void traverse( TreeLinkNode *root, TreeLinkNode *parent, int flag ){
+        
+        if( root == NULL ) return;
+        if( parent != NULL ){
+            if( flag == LEFT ){
+                root->next = parent->right;
+            }else if( parent->next != NULL ){
+                root->next = parent->next->left;
+            }else{
+                root->next = NULL;
+            }
+        }else{
+            root->next = NULL;
+        }
+
+        traverse( root->right, root, RIGHT );
+        traverse( root->left, root, LEFT );
+    }
+
+    static const int LEFT = 0;
+    static const int RIGHT = 1;
+};
+</code></pre>
+<p>Runtime: 24 ms</p>
+      
+<h3><a name="108" class="anchor" href="#108"></a>#108 Convert Sorted Array to Binary Search Tree (Medium)</h3>
+<p>Recursively build tree using first half for left subtree and the other half for right subtree.</p>
+<pre><code>class Solution {
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        return buildTree( nums, 0, nums.size() - 1 );
+    }
+    
+    TreeNode* buildTree( vector< int > &nums, int l, int r ){
+        
+        if( l > r ) return NULL;
+        
+        int m( r + l + 1 >> 1 );
+        TreeNode *root = new TreeNode( nums[ m ] ); 
+        root->left = buildTree( nums, l, m - 1 );
+        root->right = buildTree( nums, m + 1, r );
+        
+        return root;
+    }
+};
+</code></pre>
+<p>Runtime: 16 ms</p>
+      
+<h3><a name="53" class="anchor" href="#53"></a>#53 Maximum Subarray (Medium)</h3>
+<p>Greedy strategy. Add current number to sum. Set sum to zero if it is less than zero.</p>
+<pre><code>class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        
+        int result( 1 << 31 ), sum( 0 );
+        
+        for( int i : nums ){
+            sum += i;
+            result = max( result, sum );
+            sum < 0 ? sum = 0 : 0;
+        }
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+      
+<h3><a name="153" class="anchor" href="#153"></a>#153 Find Minimum in Rotated Sorted Array (Medium)</h3>
+<p>Binary search.</p>
+<pre><code>class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        
+        int lower( 0 ), upper( nums.size() - 1 ), middle;
+        
+        while( upper - lower ){
+            middle = lower + ( upper - lower >> 1 );
+            if( nums[ middle ] <= nums[ upper ] )
+                upper = middle;
+            else
+                lower = middle + 1;
+        }
+        
+        return nums[ upper ];
+    }
+};
 </code></pre>
 <p>Runtime: 4 ms</p>
       
-<h3><a name="" class="anchor" href="#"></a># (Easy)</h3>
-<p>.</p>
+<h3><a name="22" class="anchor" href="#22"></a>#22 Generate Parentheses (Medium)</h3>
+<p>Recursively generate.</p>
+<pre><code>class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        
+        result.clear();
+        generate( "", 0, n );
+        
+        return result;
+    }
+    
+    void generate( string str, int m, int n ){
+        if( !n ){ result.push_back( str + string( m, ')' ) ); return; }
+        if( m ) generate( str + ")", m - 1, n );
+        generate( str + "(", m + 1, n - 1 );
+    }
+    
+    vector< string > result;
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
+<p></p>
 <pre><code>
 </code></pre>
-<p>Runtime: 4 ms</p>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+      
+<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
 
       </section>
     </div>
