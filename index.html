@@ -20,7 +20,7 @@
           <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
           <h1 id="project_title">My LeetCode Solutions</h1>
-          <h2 id="project_tagline">Problems Solved: 84</h2>
+          <h2 id="project_tagline">Problems Solved: 88</h2>
           <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
             <section id="downloads">
@@ -2228,27 +2228,102 @@ public:
 </code></pre>
 <p>Runtime: 0 ms</p>
       
-<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="62" class="anchor" href="#62"></a>#62 Unique Paths (Medium)</h3>
+<p>Since grid(i,j) can be reached from grid(i-1,j) or grid(i,j-1), thus f[i,j] = f[i-1,j] + f[i,j-1]. Can use only an 1*n or m*1 array.</p>
+<pre><code>class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        
+        vector< int > vi( n, 1 );
+        
+        for( int i = 1; i < m; ++i ){
+            for( int j = 1; j < n; ++j ){
+                vi[ j ] += vi[ j - 1 ];
+            }
+        }
+        
+        return vi[ n - 1 ];
+    }
+};
 </code></pre>
 <p>Runtime: 0 ms</p>
       
-<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="89" class="anchor" href="#89"></a>#89 Gray Code (Medium)</h3>
+<p>First half is symmetric to second half except that LSB of first half is 0 while second half is 1.</p>
+<pre><code>class Solution {
+public:
+    vector<int> grayCode(int n) {
+
+        vector< int > vi{ 0 };
+
+        for( int i = 0; i < n; ++i ){
+            for( int j = vi.size() - 1; j >=0; --j ){
+                vi.push_back( 1 << i | vi[ j ] );
+            }
+        }
+
+        return vi;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+      
+<h3><a name="230" class="anchor" href="#230"></a>#230 Kth Smallest Element in a BST (Medium)</h3>
+<p>Recursively count number of nodes of tree and find kth smallest element.</p>
+<pre><code>class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+
+        int nNodes;
+
+        return kthAndNNodes( root, k, nNodes );
+    }
+
+    int kthAndNNodes( TreeNode *root, int k, int &nNodes ){
+        
+        if( root == NULL ) return 0;
+
+        int nLNodes( 0 ), nRNodes( 0 ), result;
+
+        result = kthAndNNodes( root->left, k, nLNodes );
+        nNodes = nLNodes;
+        if( k <= nNodes ) return result;
+
+        nNodes += 1;
+        if( k <= nNodes ) return root->val;
+
+        result = kthAndNNodes( root->right, k - nNodes, nRNodes );
+        nNodes += nRNodes;
+        return result;
+    }
+};
 </code></pre>
 <p>Runtime: 0 ms</p>
       
-<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
-<p></p>
-<pre><code>
-</code></pre>
-<p>Runtime: 0 ms</p>
-      
-<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="309" class="anchor" href="#309"></a>#309 Best Time to Buy and Sell Stock with Cooldown (Medium)</h3>
+<p>DP on state machine:<br>
+State A: can buy (goto B) or rest (goto A):	A[i] = max( A[i-1], C[i-1] ).<br>
+State B: can sell (goto C) or rest (goto B): B[i] = max( B[i-1], A[i-1] - today's price ).<br>
+State C: can rest (goto A) only: C[i] = max( C[i-1], B[i-1] + today's price ).
+</p>
+<pre><code>class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        
+        int nPrices( prices.size() );
+        vector< int > a( nPrices + 1, 0 );
+        vector< int > b( nPrices + 1, 1 << 31 );
+        vector< int > c( nPrices + 1, 1 << 31 );
+        
+        for( int i = 1; i <= nPrices; ++i ){
+            a[ i ] = max( a[ i - 1 ], c[ i - 1 ] );
+            b[ i ] = max( b[ i - 1 ], a[ i - 1 ] - prices[ i - 1 ] );
+            c[ i ] = max( c[ i - 1 ], b[ i - 1 ] + prices[ i - 1 ] );
+        }
+        
+        return max( a[ nPrices ], c[ nPrices ] );
+    }
+};
 </code></pre>
 <p>Runtime: 0 ms</p>
       
