@@ -20,7 +20,7 @@
        <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
        <h1 id="project_title">My LeetCode Solutions</h1>
-       <h2 id="project_tagline">Problems Solved: 101</h2>
+       <h2 id="project_tagline">Problems Solved: 107</h2>
        <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
         <section id="downloads">
@@ -2673,25 +2673,212 @@ public:
 </code></pre>
 <p>Runtime: 16 ms</p>
     
-<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
+<h3><a name="289" class="anchor" href="#289"></a>#289 Game of Life (Medium)</h3>
+<p>Simple simulation. Use second LSB to record new state to solve it in-place.</p>
+<pre><code>class Solution {
+public:
+    void gameOfLife(vector<vector<int>>& board) {
+
+        if( board.empty() || board[ 0 ].empty() ) return;
+
+        static const int dx[]{ -1, -1, -1, 0, 1, 1, 1, 0 };
+        static const int dy[]{ -1, 0, 1, 1, 1, 0, -1, -1 };
+
+        int M( board.size() ), N( board[ 0 ].size() ), x, y;
+
+        for( int i = 0; i < M; ++i ){
+            for( int j = 0; j < N; ++j ){
+                int lives( 0 );
+                for( int k = 0; k < 8; ++k ){
+                    x = i + dx[ k ]; y = j + dy[ k ] ;
+                    if( x >= 0 && x < M && y >= 0 && y < N )
+                        lives += board[ x ][ y ] & 1;
+                }
+                if( lives == 2 )
+                    board[ i ][ j ] |= board[ i ][ j ] << 1;
+                else if( lives == 3 )
+                    board[ i ][ j ] |= 2;
+            }
+        }
+
+        for( auto &i : board ) for( auto &j : i ) j >>= 1;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+    
+<h3><a name="77" class="anchor" href="#77"></a>#77 Combinations (Medium)</h3>
+<p>Recursively generate.</p>
+<pre><code>class Solution {
+public:
+    vector<vector<int>> combine(int n, int k) {
+        
+        N = n; K = k;
+        v.clear();
+        vv.clear();
+        generate( 0, 0 );
+        
+        return vv;
+    }
+    
+    void generate( int num, int last ){
+        
+        if( num == K ){ vv.push_back( v ); return; }
+        
+        for( int i = last + 1; i <= N; ++i ){
+            v.push_back( i );
+            generate( num + 1, i );
+            v.pop_back();
+        }
+    }
+    
+    int N, K;
+    vector< int > v;
+    vector< vector< int > > vv;
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+    
+<h3><a name="162" class="anchor" href="#162"></a>#162 Find Peak Element (Medium)</h3>
+<p>Ternary search.</p>
+<pre><code>class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        
+        int lower( 0 ), upper( nums.size() - 1 );
+        int first, second, result;
+        
+        while( upper - lower > 2 ){
+            first = lower + ( upper - lower ) / 3;
+            second = upper - first + lower;
+            nums[ first ] < nums[ second ] ? lower = first : upper = second;
+        }
+        
+        result = lower;
+        if( upper - lower > 0 ) result = 
+            nums[ result ] > nums[ lower + 1 ] ? result : lower + 1;
+        if( upper - lower > 1 ) result = 
+            nums[ result ] > nums[ lower + 2 ] ? result : lower + 2;
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+    
+<h3><a name="73" class="anchor" href="#73"></a>#73 Set Matrix Zeroes (Medium)</h3>
+<p>The idea is to find a row containing zero, and use it to mark columns to be set to zeroes.</p>
+<pre><code>class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+
+        int zeroRow( -1 );
+        int M( matrix.size() ), N( matrix[ 0 ].size() );
+
+        for( int i = 0; i < M; ++i )
+            for( int j = 0; j < N; ++j )
+                if( matrix[ i ][ j ] == 0 ){ zeroRow = i; i = M; break; }
+
+        if( zeroRow == -1 ) return;
+
+        for( int i = 0; i < M; ++i )
+            for( int j = 0; j < N; ++j )
+                if( matrix[ i ][ j ] == 0 )
+                    matrix[ zeroRow ][ j ] = 0;
+
+        for( int i = 0; i < M; ++i ){
+            if( i == zeroRow ) continue;
+            for( int j = 0; j < N; ++j ){
+                if( matrix[ i ][ j ] ) continue;
+                for( int &k : matrix[ i ] ) k = 0;
+                break;
+            }
+        }
+
+        for( int j = 0; j < N; ++j ){
+            if( matrix[ zeroRow ][ j ] ) continue;
+            for( int i = 0; i < M; ++i )
+                matrix[ i ][ j ] = 0;
+        }
+
+        for( int &i : matrix[ zeroRow ] ) i = 0;
+    }
+};
+</code></pre>
+<p>Runtime: 88 ms</p>
+    
+<h3><a name="300" class="anchor" href="#300"></a>#300 Longest Increasing Subsequence (Medium)</h3>
+<p>Maintain a ascending list of numbers and use binary search to insert new number.</p>
+<pre><code>class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        
+        vector< int > v{ 1 << 31 };
+        
+        for( int num : nums ) insert( v, num );
+        
+        return v.size() - 1;
+    }
+    
+    void insert( vector< int > &v, int x ){
+        
+        if( x > v.back() ){ v.push_back( x ); return; }
+        
+        int lower( 0 ), upper( v.size() - 1 ), middle;
+        
+        while( upper - lower ){
+            middle = lower + ( upper - lower >> 1 );
+            v[ middle ] >= x ? upper = middle : lower = middle + 1;
+        }
+        
+        v[ upper ] = x;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+    
+<h3><a name="284" class="anchor" href="#284"></a>#284 Peeking Iterator (Medium)</h3>
+<p>Create a copy of this iterator and use it to call next().</p>
+<pre><code>class PeekingIterator : public Iterator {
+public:
+    PeekingIterator(const vector<int>& nums) : Iterator(nums) {
+    }
+    
+    int peek() {
+        Iterator iterator( *this );
+        return iterator.next();
+    }
+    
+    int next() {
+        return Iterator::next();
+    }
+
+    bool hasNext() const {
+        return Iterator::hasNext();
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+    
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
 </code></pre>
 <p>Runtime: 0 ms</p>
     
-<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
 </code></pre>
 <p>Runtime: 0 ms</p>
     
-<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
 </code></pre>
 <p>Runtime: 0 ms</p>
     
-<h3><a name="" class="anchor" href="#"></a>#  (Medium)</h3>
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
 </code></pre>
