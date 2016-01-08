@@ -20,7 +20,7 @@
        <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
        <h1 id="project_title">My LeetCode Solutions</h1>
-       <h2 id="project_tagline">Problems Solved: 107</h2>
+       <h2 id="project_tagline">Problems Solved: 113</h2>
        <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
         <section id="downloads">
@@ -2860,11 +2860,207 @@ public:
 </code></pre>
 <p>Runtime: 4 ms</p>
     
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="173" class="anchor" href="#173"></a>#173 Binary Search Tree Iterator (Medium)</h3>
+<p>Use a stack to implement pre-order traversal.</p>
+<pre><code>class BSTIterator {
+public:
+    BSTIterator(TreeNode *root) {
+        if( root ) vp.push( make_pair( root, false ) );
+    }
+
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return !vp.empty();
+    }
+
+    /** @return the next smallest number */
+    int next() {
+        
+        auto top( vp.top() ); vp.pop();
+
+        while( !top.second ){
+            if( top.first->right ) vp.push( make_pair( top.first->right, false ) );
+            vp.push( make_pair( top.first, true ) );
+            if( top.first->left ) vp.push( make_pair( top.first->left, false ) );
+            top = vp.top(); vp.pop();
+        }
+
+        return top.first->val;
+    }
+
+    stack< pair< TreeNode *, bool > > vp;
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 32 ms</p>
+    
+<h3><a name="240" class="anchor" href="#240"></a>#240 Search a 2D Matrix II (Medium)</h3>
+<p>Perform binary search twice.</p>
+<pre><code>class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+
+        int m( 0 ), M( matrix.size() );
+        int n( -1 ), N( matrix[ 0 ].size() );
+        int lower, upper, mid;
+
+        while( ++n < N ){
+            lower = 0; upper = M - 1;
+            while( upper - lower ){
+                mid = lower + ( upper - lower + 1 >> 1 );
+                matrix[ mid ][ n ] > target ? ( upper = mid - 1 ) : ( lower = mid );
+            }
+            if( matrix[ m = upper ][ n ] == target ) return true;
+
+            lower = n; upper = N - 1;
+            while( upper - lower ){
+                mid = lower + ( upper - lower + 1 >> 1 );
+                matrix[ m ][ mid ] > target ? ( upper = mid - 1 ) : ( lower = mid );
+            }
+            if( matrix[ m ][ n = upper ] == target ) return true;
+        }
+    }
+};
+</code></pre>
+<p>Runtime: 360 ms</p>
+<p>(Discussion) Different solution. Not necessarily faster.</p>
+<pre><code>class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+
+        int M( matrix.size() ), m( 0 );
+        int N( matrix[ 0 ].size() ), n( N - 1 );
+
+        while( m < M && n >= 0 ){
+            if( matrix[ m ][ n ] == target ) return true;
+            matrix[ m ][ n ] > target ? --n : ++m;
+        }
+
+        return false;
+    }
+};
+</code></pre>
+<p>Runtime: 360 ms</p>
+    
+<h3><a name="199" class="anchor" href="#199"></a>#199 Binary Tree Right Side View (Medium)</h3>
+<p>Traverse right subtree first then left subtree. Record first met node of each layer.</p>
+<pre><code>class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        
+        v.clear();
+        if( root ) traverse( root, 1 );
+        
+        return v;
+    }
+    
+    void traverse( TreeNode *root, int depth ){
+        if( depth > v.size() ) v.push_back( root->val );
+        if( root->right ) traverse( root->right, depth + 1 );
+        if( root->left ) traverse( root->left, depth + 1 );
+    }
+    
+    vector< int > v;
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+    
+<h3><a name="274" class="anchor" href="#274"></a>#274 H-Index (Medium)</h3>
+<p>Sort citations and perform binary search.</p>
+<pre><code>class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+
+        if( citations.empty() ) return 0;
+
+        sort( citations.begin(), citations.end() );
+        
+        int nCitations( citations.size() );
+        int lower( 0 ), upper( citations.back() ), mid;
+        
+        while( upper - lower ){
+            mid = lower + ( upper - lower + 1 >> 1 );
+            if( nCitations - find( citations, mid ) >= mid )
+                lower = mid;
+            else
+                upper = mid - 1;
+        }
+
+        return upper;
+    }
+
+    int find( vector< int > &v, int x ){
+        int lower( 0 ), upper( v.size() - 1 ), mid;
+        while( upper - lower ){
+            mid = lower + ( upper - lower >> 1 );
+            v[ mid ] < x ? lower = mid + 1 : upper = mid;
+        }
+        return upper;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+<p>(Discussion) Citations greater that n can be treated as n.</p>
+<pre><code>class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+
+        if( citations.empty() ) return 0;
+
+        int N( citations.size() );
+        vector< int > v( N + 1, 0 );
+
+        for( int i : citations ) i > N ? ++v[ N ] : ++v[ i ];
+        for( int i = N, j = 0; i >= 0; --i )
+            if( ( j += v[ i ] ) >= i ) return i;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+
+<h3><a name="275" class="anchor" href="#275"></a>#275 H-Index II (Medium)</h3>
+<p>Binary search.</p>
+<pre><code>class Solution {
+public:
+	int hIndex(vector<int>& citations) {
+
+		if( citations.empty() ) return 0;
+		if( citations.back() == 0 ) return 0;
+
+		int nCitations( citations.size() );
+		int lower( 1 ), upper( nCitations ), mid;
+
+		while( upper - lower ){
+			mid = lower + ( upper - lower + 1 >> 1 );
+			if( mid <= citations[ nCitations - mid ] )
+				lower = mid;
+			else
+				upper = mid - 1;
+		}
+
+		return upper;
+	}
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+    
+<h3><a name="80" class="anchor" href="#80"></a>#80 Remove Duplicates from Sorted Array II (Medium)</h3>
+<p>If the current number is equal to the third number from the current one, do not add it to result.</p>
+<pre><code>class Solution {
+public:
+	int removeDuplicates(vector<int>& nums) {
+
+		int nNums( nums.size() ), j( 0 );
+
+		for( int i = 0; i < nNums; ++i ){
+			if( i + 2 < nNums && nums[ i ] == nums[ i + 2 ] ) continue;
+			nums[ j++ ] = nums[ i ];
+		}
+
+		return j;
+	}
+};
+</code></pre>
+<p>Runtime: 20 ms</p>
     
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
