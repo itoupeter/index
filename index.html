@@ -20,7 +20,7 @@
        <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
        <h1 id="project_title">My LeetCode Solutions</h1>
-       <h2 id="project_tagline">Problems Solved: 113</h2>
+       <h2 id="project_tagline">Problems Solved: 122</h2>
        <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
         <section id="downloads">
@@ -3021,24 +3021,24 @@ public:
 <p>Binary search.</p>
 <pre><code>class Solution {
 public:
-	int hIndex(vector<int>& citations) {
+    int hIndex(vector<int>& citations) {
 
-		if( citations.empty() ) return 0;
-		if( citations.back() == 0 ) return 0;
+        if( citations.empty() ) return 0;
+        if( citations.back() == 0 ) return 0;
 
-		int nCitations( citations.size() );
-		int lower( 1 ), upper( nCitations ), mid;
+        int nCitations( citations.size() );
+        int lower( 1 ), upper( nCitations ), mid;
 
-		while( upper - lower ){
-			mid = lower + ( upper - lower + 1 >> 1 );
-			if( mid <= citations[ nCitations - mid ] )
-				lower = mid;
-			else
-				upper = mid - 1;
-		}
+        while( upper - lower ){
+            mid = lower + ( upper - lower + 1 >> 1 );
+            if( mid <= citations[ nCitations - mid ] )
+                lower = mid;
+            else
+                upper = mid - 1;
+        }
 
-		return upper;
-	}
+        return upper;
+    }
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
@@ -3047,20 +3047,248 @@ public:
 <p>If the current number is equal to the third number from the current one, do not add it to result.</p>
 <pre><code>class Solution {
 public:
-	int removeDuplicates(vector<int>& nums) {
+    int removeDuplicates(vector<int>& nums) {
 
-		int nNums( nums.size() ), j( 0 );
+        int nNums( nums.size() ), j( 0 );
 
-		for( int i = 0; i < nNums; ++i ){
-			if( i + 2 < nNums && nums[ i ] == nums[ i + 2 ] ) continue;
-			nums[ j++ ] = nums[ i ];
-		}
+        for( int i = 0; i < nNums; ++i ){
+            if( i + 2 < nNums && nums[ i ] == nums[ i + 2 ] ) continue;
+            nums[ j++ ] = nums[ i ];
+        }
 
-		return j;
-	}
+        return j;
+    }
 };
 </code></pre>
 <p>Runtime: 20 ms</p>
+    
+<h3><a name="200" class="anchor" href="#200"></a>#200 Number of Islands (Medium)</h3>
+<p></p>
+<pre><code>class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+
+        if( grid.empty() || grid[ 0 ].empty() ) return 0;
+
+        static const int dx[]{ -1, 0, 1, 0 };
+        static const int dy[]{ 0, 1, 0, -1 };
+
+        int M( grid.size() );
+        int N( grid[ 0 ].size() );
+        int result( 0 );
+
+        for( int i = 0; i < M; ++i ){
+            for( int j = 0; j < N; ++j ){
+                if( grid[ i ][ j ] == '0' ) continue;
+                ++result; grid[ i ][ j ] = '0';
+                mqueue.push( make_pair( i, j ) );
+                while( !mqueue.empty() ){
+                    for( int k = 0; k < 4; ++k ){
+                        int x( mqueue.front().first + dx[ k ] );
+                        int y( mqueue.front().second + dy[ k ] );
+                        if( x < 0 || x >= M || y < 0 || y >= N ) continue;
+                        if( grid[ x ][ y ] == '0' ) continue;
+                        grid[ x ][ y ] = '0';
+                        mqueue.push( make_pair( x, y ) );
+                    }
+                    mqueue.pop();
+                }
+            }
+        }
+
+        return result;
+    }
+
+    queue< pair< int, int > > mqueue;
+};
+</code></pre>
+<p>Runtime: 16 ms</p>
+    
+<h3><a name="241" class="anchor" href="#241"></a>#241 Different Ways to Add Parentheses (Medium)</h3>
+<p>DFS.</p>
+<pre><code>[ugly code]
+</code></pre>
+<p>Runtime: 4 ms</p>
+    
+<h3><a name="142" class="anchor" href="#142"></a>#142 Linked List Cycle II (Medium)</h3>
+<p>Fast pointer walks twice as fast as slow pointer. When they meet, let one of them point to head then they walk at same speed. The entry is where they meet.</p>
+<pre><code>class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        
+        ListNode dummy( 0 ); dummy.next = head;
+        ListNode *slow( &dummy ), *fast( &dummy );
+        
+        while( fast == &dummy || fast && slow != fast ){
+            slow = slow->next;
+            fast = fast->next;
+            if( fast == NULL ) return NULL;
+            fast = fast->next;
+        }
+        
+        if( !fast ) return NULL;
+        
+        slow = &dummy;
+        
+        while( slow != fast ){
+            slow = slow->next;
+            fast = fast->next;
+        }
+        
+        return fast;
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+    
+<h3><a name="129" class="anchor" href="#129"></a>#129 Sum Root to Leaf Numbers (Medium)</h3>
+<p>DFS.</p>
+<pre><code>class Solution {
+public:
+    int sumNumbers(TreeNode* root) {
+        
+        if( !root ) return 0;
+        result = 0;
+        traverse( root, 0 );
+        
+        return result;
+    }
+    <!--  -->
+    void traverse( TreeNode *root, int a ){
+        a = a * 10 + root->val;
+        if( !root->left && !root->right ){ result += a; return; }
+        if( root->left ) traverse( root->left, a );
+        if( root->right ) traverse( root->right, a );
+    }
+    
+    int result;
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+    
+<h3><a name="81" class="anchor" href="#81"></a>#81 Search in Rotated Sorted Array II (Medium)</h3>
+<p>Worst case time complexity: O(n).</p>
+<pre><code>class Solution {
+public:
+    bool search(vector<int>& nums, int target ) {
+        
+        int lower( 0 ), upper( nums.size() - 1 ), mid;
+        
+        while( upper - lower ){
+            mid = lower + ( upper - lower >> 1 );
+            if( nums[ mid ] == nums[ upper ] ) --upper;
+            else if( nums[ mid ] < nums[ upper ] ){
+                target > nums[ mid ] && target <= nums[ upper ] ?
+                    ( lower = mid + 1 ) : ( upper = mid );
+            }else{
+                target > nums[ mid ] || target <= nums[ upper ] ?
+                    ( lower = mid + 1 ) : ( upper = mid );
+            }
+        }
+        
+        return nums[ upper ] == target;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+    
+<h3><a name="215" class="anchor" href="#215"></a>#215 Kth Largest Element in an Array (Medium)</h3>
+<p>Idea of partition in qsort. Or use std::nth_element.</p>
+<pre><code>class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        return find( nums, k, 0, nums.size() - 1 );
+    }
+
+    int find( vector< int > &nums, int k, int l, int r ){
+
+        if( r == l ) return nums[ l ];
+
+        int m( nums[ l + rand() % ( r - l + 1 ) ] );
+        int i( l - 1 ), j( r + 1 );
+
+        for( int k = l; k < j; ){
+            if( nums[ k ] > m ) nums[ ++i ] = nums[ k++ ];
+            else if( nums[ k ] < m ){ --j; swap( nums[ k ], nums[ j ] ); }
+            else ++k;
+        }
+
+        if( i - l + 1 >= k )
+            return find( nums, k, l, i );
+        else if( k > j - l )
+            return find( nums, k - j + l, j, r );
+        else
+            return m;
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+    
+<h3><a name="279" class="anchor" href="#279"></a>#279 Perfect Squares (Medium)</h3>
+<p>Recursively search for solutions with least number of squares that sum to n.</p>
+<pre><code>class Solution {
+public:
+    int numSquares(int n) {
+        
+        for( int i = 1; ; ++i )
+            if( helper( i, n ) ) 
+                return i;
+    }
+
+    bool helper( int a, int s ){
+        
+        int r( sqrt( s + 0. ) );
+        
+        if( a == 1 ) return s == r * r ? true : false;
+        
+        for( int i = r; r >= 1; --r )
+            if( helper( a - 1, s - r * r ) )
+                return true;
+        
+        return false;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+    
+<h3><a name="114" class="anchor" href="#114"></a>#114 Flatten Binary Tree to Linked List (Medium)</h3>
+<p>Recursively flatten the left subtree and right subtree, connect right subtree to tail of left subtree and make left subtree into right, finally return tail of whole tree.</p>
+<pre><code>class Solution {
+public:
+    void flatten(TreeNode* root) {
+        if( root ) helper( root );
+    }
+
+    TreeNode* helper( TreeNode* root ){
+
+        TreeNode* tail( root );
+
+        if( root->left ){
+            tail = helper( root->left );
+            tail->right = root->right;
+            root->right = root->left;
+            root->left = NULL;
+        }
+        if( tail->right )
+            tail = helper( tail->right );
+
+        return tail;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+    
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+    
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
     
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
