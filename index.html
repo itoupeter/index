@@ -20,7 +20,7 @@
        <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
        <h1 id="project_title">My LeetCode Solutions</h1>
-       <h2 id="project_tagline">Problems Solved: 122</h2>
+       <h2 id="project_tagline">Problems Solved: 140</h2>
        <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
         <section id="downloads">
@@ -1165,7 +1165,7 @@ public:
 <p>Runtime: 4 ms</p>
     
 <h3><a name="20" class="anchor" href="#20"></a>#20 Valid Parentheses (Easy)</h3>
-<p>Use a stack. When it comes a right bracket, push into stack, or check if it makes a pair with the top element in stack.</p>
+<p>Use a stack. When it comes a left bracket, push into stack, or it comes a right bracket, check if it makes a pair with the top element in stack.</p>
 <pre><code>class Solution {
 public:
    bool isValid(string s) {
@@ -2573,7 +2573,7 @@ public:
 <p>Simple simulation.</p>
 <pre><code>class Solution {
 public:
-   vector<vector<int>> generateMatrix(int n) {
+    vector< vector< int > > generateMatrix(int n) {
        
        static const int dx[]{ 0, 1, 0, -1 }; 
        static const int dy[]{ 1, 0, -1, 0 };
@@ -3278,23 +3278,566 @@ public:
 </code></pre>
 <p>Runtime: 8 ms</p>
     
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="313" class="anchor" href="#313"></a>#313 Super Ugly Number (Medium)</h3>
+<p>Use an array to record the next ugly number to multiply with to produce a new ugly number.</p>
+<pre><code>class Solution {
+public:
+    int nthSuperUglyNumber(int n, vector<int>& primes) {
+
+        int nPrimes( primes.size() );
+        vector< int > ugly( n, 0x7fffffff );
+        vector< int > next( nPrimes, 0 );
+
+        ugly[ 0 ] = 1;
+
+        for( int i = 1; i < n; ++i ){
+            for( int j = 0; j < nPrimes; ++j )
+                ugly[ i ] = min( ugly[ i ], primes[ j ] * ugly[ next[ j ] ] );
+            for( int j = 0; j < nPrimes; ++j )
+                next[ j ] += ugly[ i ] == primes[ j ] * ugly[ next[ j ] ];
+        }
+
+        return ugly[ n - 1 ];
+    }   
+};
+</code></pre>
+<p>Runtime: 140 ms</p>
+    
+<h3><a name="78" class="anchor" href="#78"></a>#78 Subsets (Medium)</h3>
+<p>Sort the numbers. Iterate a variable from 0 to 2^{# of numbers} and use its bitsets to indicate seletion of numbers.</p>
+<pre><code>class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        
+        int nNums( nums.size() );
+        vector< vector< int > > vv;
+        vector< int > v;
+        
+        sort( nums.begin(), nums.end() );
+        
+        for( int i = 0; i < 1 << nNums; ++i ){
+            v.clear();
+            for( int j = 0; j < nNums; ++j )
+                if( 1 << j & i ) v.push_back( nums[ j ] );
+            vv.push_back( v );
+        }
+        
+        return vv;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+    
+<h3><a name="39" class="anchor" href="#39"></a>#39 Combination Sum (Medium)</h3>
+<p>Sort the numbers. DFS for all combinations.</p>
+<pre><code>class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+
+        sort( candidates.begin(), candidates.end() );
+        v.clear(); vv.clear();
+        generate( candidates, 0, target );
+
+        return vv;
+    }
+
+    void generate( vector< int >& nums, int a, int sum ){
+
+        if( sum == 0 ){ vv.push_back( v ); return; }
+        if( a == nums.size() || sum < nums[ a ] ) return;
+
+        generate( nums, a + 1, sum );
+        v.push_back( nums[ a ] );
+        generate( nums, a, sum - nums[ a ] );
+        v.pop_back();
+    }
+
+    vector< int > v;
+    vector< vector< int > > vv;
+};
+</code></pre>
+<p>Runtime: 16 ms</p>
+    
+<h3><a name="109" class="anchor" href="#109"></a>#109 Convert Sorted List to Binary Search Tree (Medium)</h3>
+<p>Find middle node and create root then recursively build left and right subtrees.</p>
+<pre><code>class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+
+        if( !head ) return NULL;
+
+        auto slow( head ), fast( head );
+
+        while( true ){
+            fast = fast->next;
+            if( !fast || !fast->next ) break;
+            fast = fast->next;
+            if( !fast || !fast->next ) break;
+            slow = slow->next;
+        }
+
+        fast = slow->next;
+        slow->next = NULL;
+
+        TreeNode* root;
+
+        if( fast ){
+            root = new TreeNode( fast->val );
+            root->left = sortedListToBST( head );
+            root->right = sortedListToBST( fast->next );
+        }else{
+            root = new TreeNode( head->val );
+        }
+
+        return root;
+    }
+};
+</code></pre>
+<p>Runtime: 28 ms</p>
+    
+<h3><a name="90" class="anchor" href="#90"></a>#90 Subsets II (Medium)</h3>
+<p>DFS for all combinations.</p>
+<pre><code>class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+
+        v.clear();
+        vv.clear();
+        m.clear();
+        for( int num : nums )
+            m.find( num ) == m.end() ? 
+                m[ num ] = 1 : m[ num ] += 1;
+        ite = m.begin();
+        generate( nums );
+
+        return vv;
+    }
+
+    void generate( vector< int >& nums ){
+
+        if( ite == m.end() ){ vv.push_back( v ); return; }
+
+        ++ite; generate( nums ); --ite;
+        for( int i = ite->second; i > 0; --i ){
+            v.push_back( ite->first );
+            ++ite; generate( nums ); --ite;
+        }
+        for( int i = ite->second; i > 0; --i )
+            v.pop_back();
+    }
+
+    vector< int > v;
+    vector< vector< int > > vv;
+    map< int, int > m;
+    map< int, int >::iterator ite;
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+    
+<h3><a name="213" class="anchor" href="#213"></a>#213 House Robber II (Medium)</h3>
+<p>Assume the first house is robbed or not and do DP as in #109.</p>
+<pre><code>class Solution {
+public:
+    int rob(vector<int>& nums) {
+    
+        if( nums.empty() ) return 0;
+        if( nums.size() == 1 ) return nums.back();
+        
+        int result1, result2;
+        int nNums( nums.size() );
+        vector< int > a( nNums );
+        vector< int > b( nNums );
+        
+        a[ 0 ] = nums[ 0 ];
+        b[ 0 ] = 1 << 31;
+        
+        for( int i = 1; i < nNums; ++i ){
+            a[ i ] = max( a[ i - 1 ], b[ i - 1 ] + nums[ i ] );
+            b[ i ] = max( a[ i - 1 ], b[ i - 1 ] );
+        }
+        
+        result1 = b.back();
+        
+        a[ 0 ] = 1 << 31;
+        b[ 0 ] = 0;
+        
+        for( int i = 1; i < nNums; ++i ){
+            a[ i ] = max( a[ i - 1 ], b[ i - 1 ] + nums[ i ] );
+            b[ i ] = max( a[ i - 1 ], b[ i - 1 ] );
+        }
+        
+        result2 = max( a.back(), b.back() );
+        
+        return max( result1, result2 );
+    }
+};
 </code></pre>
 <p>Runtime: 0 ms</p>
     
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="120" class="anchor" href="#120"></a>#120 Triangle (Medium)</h3>
+<p>Simple DP. Let F[i,j] denote minimum points can be gained arriving at position(i, j), then we have:<br>
+F[i, j] = min( F[i-1, j-1], F[i-1, j] ) + point[i, j].</p>
+<pre><code>class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        
+        int n( triangle.size() ), result( 1 << 30 );
+        
+        for( int i = 1; i < n; ++i ){
+            triangle[ i ].front() += triangle[ i - 1 ].front();
+            triangle[ i ].back() += triangle[ i - 1 ].back();
+            for( int j = 1; j < i; ++j )
+                triangle[ i ][ j ] += min( 
+                    triangle[ i - 1 ][ j - 1 ], 
+                    triangle[ i - 1 ][ j ]
+                );
+        }
+        
+        for( int i : triangle.back() ) result = min( result, i );
+        
+        return result;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 16 ms</p>
     
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="95" class="anchor" href="#95"></a>#95 Unique Binary Search Trees II (Medium)</h3>
+<p>Generate using DP.</p>
+<pre><code>class Solution {
+public:
+    vector<TreeNode*> generateTrees(int n) {
+
+        if( !n ) return vector< TreeNode* >();
+
+        vector< TreeNode* > result;
+        vector< int > start{ -1 };
+        vector< int > count{ 1 };
+
+        for( int m = 1; m <= n; ++m ){
+            start.push_back( result.size() );
+            count.push_back( 0 );
+            for( int root = 1; root <= m; ++root ){
+                for( int i = 0; i < count[ root - 1 ]; ++i )
+                for( int j = 0; j < count[ m - root ]; ++j ){
+                    TreeNode* rt( new TreeNode( root ) );
+                    if( start[ root - 1 ] >= 0 ) rt->left = clone( result[ start[ root - 1 ] + i ], 0 );
+                    if( start[ m - root ] >= 0 ) rt->right = clone( result[ start[ m - root ] + j ], root );
+                    result.push_back( rt );
+                    ++count.back();
+                }
+            }
+        }
+
+        return vector< TreeNode* >( result.begin() + start[ n ], result.end() );
+    }
+
+private:
+    TreeNode* clone( TreeNode* root, int add ){
+        TreeNode* root2 = new TreeNode( root->val + add );
+        if( root->left ) root2->left = clone( root->left, add );
+        if( root->right ) root2->right = clone( root->right, add );
+        return root2;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 24 ms</p>
+    
+<h3><a name="63" class="anchor" href="#63"></a>#63 Unique Paths II (Medium)</h3>
+<p>Same as #62, except that the grid with obstacle should be set to 0.</p>
+<pre><code>class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        
+        int M( obstacleGrid.size() );
+        int N( obstacleGrid[ 0 ].size() );
+        vector< vector< int > >& f( obstacleGrid );
+        
+        if( f[ 0 ][ 0 ] == 1 ) return 0;
+        f[ 0 ][ 0 ] = 1;
+        
+        for( int i = 0; i < M; ++i )
+        for( int j = i == 0; j < N; ++j ){
+            if( f[ i ][ j ] == 1 ){ f[ i ][ j ] = 0; continue; }
+            if( i > 0 ) f[ i ][ j ] += f[ i - 1 ][ j ];
+            if( j > 0 ) f[ i ][ j ] += f[ i ][ j - 1 ];
+        }
+        
+        return f.back().back();
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+    
+<h3><a name="201" class="anchor" href="#201"></a>#201 Bitwise AND of Numbers Range (Medium)</h3>
+<p>The result shares the same suffix with n and m in binary representation.</p>
+<pre><code>class Solution {
+public:
+    int rangeBitwiseAnd(int m, int n) {
+
+        int result( 0xffffffff ), shift( 0 );
+
+        while( m && n - m > 1 ){
+            m >>= 1;
+            n >>= 1;
+            ++shift;
+        }
+        
+        return m ? ( m & n ) << shift : 0;
+    }
+};
+</code></pre>
+<p>Runtime: 68 ms</p>
+    
+<h3><a name="86" class="anchor" href="#86"></a>#86 Partition List (Medium)</h3>
+<p>Simple linked list operations.</p>
+<pre><code>class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+
+        ListNode headA( 0 ), *tailA( &headA );
+        ListNode headB( 0 ), *tailB( &headB );
+
+        for( auto ptr = head; ptr; ptr = ptr->next )
+            ptr->val < x ? tailA = tailA->next = ptr : tailB = tailB->next = ptr;
+
+        tailA->next = headB.next;
+        tailB->next = NULL;
+
+        return headA.next;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
+    
+<h3><a name="34" class="anchor" href="#34"></a>#34 Search for a Range (Medium)</h3>
+<p>Binary search twice.</p>
+<pre><code>class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        
+        vector< int > result;
+        int lower( 0 ), upper( nums.size() - 1 ), mid;
+        
+        while( upper - lower ){
+            mid = lower + ( upper - lower >> 1 );
+            nums[ mid ] < target ? ( lower = mid + 1 ) : ( upper = mid );
+        }
+        
+        if( nums[ upper ] != target ) return vector< int >{ -1, -1 };
+        result.push_back( upper );
+        lower = 0; upper = nums.size() - 1;
+        
+        while( upper - lower ){
+            mid = lower + ( upper - lower + 1 >> 1 );
+            nums[ mid ] > target ? ( upper = mid - 1 ) : ( lower = mid );
+        }
+        
+        result.push_back( upper );
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+    
+<h3><a name="147" class="anchor" href="#147"></a>#147 Insertion Sort List (Medium)</h3>
+<p>Sort recursively.</p>
+<pre><code>class Solution {
+public:
+    ListNode* insertionSortList(ListNode* head) {
+
+        if( !head ) return NULL;
+
+        ListNode dummy( 0 ); dummy.next = head;
+        helper( &dummy );
+
+        return dummy.next;
+    }
+
+private:
+    void helper( ListNode* head ){
+        if( head->next ) helper( head->next );
+        insert( head );
+    }
+
+    void insert( ListNode* head ){
+        
+        if( !head->next || !head->next->next ) return;
+
+        auto nxt( head->next );
+        auto ptr( head->next );
+
+        while( ptr->next && ptr->next->val < nxt->val ) ptr = ptr->next;
+        if( ptr == nxt ) return;
+
+        head->next = nxt->next;
+        nxt->next = ptr->next;
+        ptr->next = nxt;
+    }
+};
+</code></pre>
+<p>Runtime: 80 ms</p>
+    
+<h3><a name="106" class="anchor" href="#106"></a>#106 Construct Binary Tree from Inorder and Postorder Traversal (Medium)</h3>
+<p>Recursively build tree.</p>
+<pre><code>class Solution {
+public:
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+
+        if( inorder.empty() ) return NULL;
+
+        this->inorder = inorder;
+        this->postorder = postorder;
+
+        return build( 0, inorder.size() - 1, 0, postorder.size() - 1 );
+    }
+
+    TreeNode* build( int a, int b, int c, int d ){
+
+        if( a == b ) return new TreeNode( inorder[ a ] );
+
+        TreeNode *root = new TreeNode( postorder[ d ] );
+
+        int m; for( m = a; inorder[ m ] != postorder[ d ]; ++m );
+        if( m > a ) root->left = build( a, m - 1, c, c - 1 + m - a );
+        if( m < b ) root->right = build( m + 1, b, c + m - a, d - 1 );
+        
+        return root;
+    }
+
+    vector< int > inorder;
+    vector< int > postorder;
+};
+</code></pre>
+<p>Runtime: 48 ms</p>
+    
+<h3><a name="16" class="anchor" href="#16"></a>#16 3Sum Closest (Medium)</h3>
+<p>Loop for first element, shrink range of second and third elements to make sum closer to target.</p>
+<pre><code>class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+
+        int N( nums.size() );
+        int result( 0x7fffffff );
+
+        sort( nums.begin(), nums.end() );
+
+        for( int i = 0; i < N - 2; ++i ){
+            int j( i + 1 ), k( N - 1 ), M( target - nums[ i ] );
+            while( j < k ){
+                if( abs( nums[ j ] + nums[ k ] - M ) < abs( result ) )
+                    result = nums[ j ] + nums[ k ] - M;
+                if( result == 0 ) return target;
+                M - nums[ j ] - nums[ k ] > 0 ? ++j : --k;
+            }
+        }
+
+        return target + result;
+    }
+};
+</code></pre>
+<p>Runtime: 16 ms</p>
+    
+<h3><a name="236" class="anchor" href="#236"></a>#236 Lowest Common Ancestor of a Binary Tree (Medium)</h3>
+<p>During traversal the first root whose tree contains v and w is LCA.</p>
+<pre><code>class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+
+        this->p = p;
+        this->q = q;
+        isFound = false;
+        helper( root );
+
+        return result;
+    }
+
+    int helper( TreeNode* root ){
+
+        if( !root ) return 0;
+
+        int count{ 
+            ( root == p ) + ( root == q )
+            + helper( root->left ) 
+            + helper( root->right )
+        };
+
+        if( count == 2 && !isFound ){
+            isFound = true;
+            result = root;
+        }
+
+        return count;
+    }
+
+    bool isFound;
+    TreeNode *p, *q, *result;
+};
+</code></pre>
+<p>Runtime: 24 ms</p>
+    
+<h3><a name="103" class="anchor" href="#103"></a>#103 Binary Tree Zigzag Level Order Traversal (Medium)</h3>
+<p>Search and print in layers. Print order corresponds to parity of layer.</p>
+<pre><code>typedef pair< TreeNode*, int > PTI;
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+
+        if( !root ) return vector< vector< int > >();
+
+        int depth( 0 ), lastSize( 0 );
+        vector< int > v;
+        vector< PTI > q;
+        vector< vector< int > > vv;
+
+        q.push_back( PTI( root, 0 ) );
+
+        while( q.size() - lastSize ){
+
+            int start( depth & 1 ? q.size() - 1 : lastSize );
+            int end( depth & 1 ? lastSize - 1 : q.size() );
+            int step( depth & 1 ? -1 : 1 );
+            
+            for( int i = start; i != end; i += step )
+                v.push_back( q[ i ].first->val );
+
+            start = lastSize; end = lastSize = q.size();
+
+            for( int i = start; i != end; ++i ){
+                auto p( q[ i ].first );
+                if( p->left ) q.push_back( PTI( p->left, depth + 1 ) );
+                if( p->right ) q.push_back( PTI( p->right, depth + 1 ) );
+            }
+            
+            vv.push_back( v );
+            v.clear();
+            ++depth;
+        }
+
+        return vv;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+    
+<h3><a name="55" class="anchor" href="#55"></a>#55 Jump Game (Medium)</h3>
+<p>Record the maximal index so for can be jumped to. Return false if current index is less then the max index.</p>
+<pre><code>class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        
+        int N( nums.size() ), M( 0 );
+        
+        for( int i = 0; i < N; ++i ){
+            if( i > M ) return false;
+            M = max( M, nums[ i ] + i );
+        }
+        
+        return true;
+    }
+};
+</code></pre>
+<p>Runtime: 16 ms</p>
     
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
