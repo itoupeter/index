@@ -20,7 +20,7 @@
        <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
        <h1 id="project_title">My LeetCode Solutions</h1>
-       <h2 id="project_tagline">Problems Solved: 140</h2>
+       <h2 id="project_tagline">Problems Solved: 145</h2>
        <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
         <section id="downloads">
@@ -3866,50 +3866,151 @@ public:
 <p>Recursively build tree.</p>
 <pre><code>class Solution {
 public:
-	TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
 
-		if( inorder.empty() ) return NULL;
+        if( inorder.empty() ) return NULL;
 
-		this->inorder = inorder;
-		this->preorder = preorder;
+        this->inorder = inorder;
+        this->preorder = preorder;
 
-		return build( 0, inorder.size() - 1, 0, preorder.size() - 1 );
-	}
+        return build( 0, inorder.size() - 1, 0, preorder.size() - 1 );
+    }
 
-	TreeNode* build( int a, int b, int c, int d ){
+    TreeNode* build( int a, int b, int c, int d ){
 
-		if( a == b ) return new TreeNode( inorder[ a ] );
+        if( a == b ) return new TreeNode( inorder[ a ] );
 
-		TreeNode *root = new TreeNode( preorder[ c ] );
+        TreeNode *root = new TreeNode( preorder[ c ] );
 
-		int m; for( m = a; inorder[ m ] != preorder[ c ]; ++m );
-		if( m > a ) root->left = build( a, m - 1, c + 1, c + m - a );
-		if( m < b ) root->right = build( m + 1, b, c + 1 + m - a, d );
+        int m; for( m = a; inorder[ m ] != preorder[ c ]; ++m );
+        if( m > a ) root->left = build( a, m - 1, c + 1, c + m - a );
+        if( m < b ) root->right = build( m + 1, b, c + 1 + m - a, d );
 
-		return root;
-	}
+        return root;
+    }
 
-	vector< int > inorder;
-	vector< int > preorder;
+    vector< int > inorder;
+    vector< int > preorder;
 };
 </code></pre>
 <p>Runtime: 48 ms</p>
     
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="113" class="anchor" href="#113"></a>#113 Path Sum II (Medium)</h3>
+<p>DFS for all path.</p>
+<pre><code>class Solution {
+public:
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+
+        if( !root ) return vector< vector< int > >();
+
+        vi.clear();
+        vvi.clear();
+        helper( root, sum );
+
+        return vvi;
+    }
+
+    void helper( TreeNode* root, int sum ){
+
+        vi.push_back( root->val );
+
+        if( !root->left && !root->right ){
+            if( sum == root->val ) vvi.push_back( vi );
+            vi.pop_back();
+            return;
+        }
+        if( root->left ) helper( root->left, sum - root->val );
+        if( root->right ) helper( root->right, sum - root->val );
+        vi.pop_back();
+    }
+
+    vector< int > vi;
+    vector< vector< int > > vvi;
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 12 ms</p>
     
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="131" class="anchor" href="#131"></a>#131 Palindrome Partitioning (Medium)</h3>
+<p>DFS for all ways of partitioning.</p>
+<pre><code>class Solution {
+public:
+    vector<vector<string>> partition(string s) {
+
+        length = s.length();
+        vs.clear();
+        vvs.clear();
+        helper( s, 0 );
+
+        return vvs;
+    }
+
+private:
+    void helper( const string &s, int a ){
+
+        if( a == length ){ vvs.push_back( vs ); return; }
+
+        for( int i = a; i < length; ++i )
+            if( isPalindrome( s.substr( a, i - a + 1 ) ) ){
+                vs.push_back( s.substr( a, i - a + 1 ) );
+                helper( s, i + 1 );
+                vs.pop_back();
+            }
+    }
+
+    bool isPalindrome( const string &s ){
+
+        int length( s.length() );
+
+        for( int i = 0; i < length >> 1; ++i )
+            if( s[ i ] != s[ length - i - 1 ] )
+                return false;
+
+        return true;
+    }
+
+    int length;
+    vector< string > vs;
+    vector< vector< string > > vvs;
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 20 ms</p>
     
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="17" class="anchor" href="#17"></a>#17 Letter Combination of a Phone Number (Medium)</h3>
+<p>DFS for all combinations.</p>
+<pre><code>class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+
+        if( digits.empty() ) return vector< string >();
+
+        s = "";
+        vs.clear();
+        helper( digits, 0 );
+
+        return vs;
+    }
+
+private:
+    void helper( string &digits, int a ){
+
+        if( a == digits.length() ){ vs.push_back( s ); return; }
+
+        for( char ch : d2l[ digits[ a ] - '0' ] ){
+            s.push_back( ch );
+            helper( digits, a + 1 );
+            s.pop_back();
+        }
+    }
+
+    const vector< vector< char > > d2l{
+        {}, {}, { 'a', 'b', 'c' }, { 'd', 'e', 'f' }, { 'g', 'h', 'i' }, 
+        { 'j', 'k', 'l' }, { 'm', 'n', 'o' }, { 'p', 'q', 'r', 's' }, 
+        { 't', 'u', 'v' }, { 'w', 'x', 'y', 'z' }
+    };
+
+    string s;
+    vector< string > vs;
+};
 </code></pre>
 <p>Runtime: 0 ms</p>
     
