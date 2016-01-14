@@ -3839,6 +3839,74 @@ public:
 </code></pre>
 <p>Runtime: 16 ms</p>
     
+<h3><a name="50" class="anchor" href="#50"></a>#50 Pow( x, n ) (Medium)</h3>
+<p>Use binary optimization.</p>
+<pre><code>class Solution {
+public:
+    double myPow(double x, int n) {
+        
+        if( n == 1 << 31 ) return myPow( x * x, n >> 1 );
+        if( n < 0 ) return 1. / myPow( x, -n );
+        
+        double result( 1. );
+        
+        while( n ){
+            if( n & 1 ) result *= x;
+            x *= x;
+            n >>= 1;
+        }
+        
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+    
+<h3><a name="105" class="anchor" href="#105"></a>#105 Construct Binary Tree from Preorder and Inorder Traversal (Medium)</h3>
+<p>Recursively build tree.</p>
+<pre><code>class Solution {
+public:
+	TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+
+		if( inorder.empty() ) return NULL;
+
+		this->inorder = inorder;
+		this->preorder = preorder;
+
+		return build( 0, inorder.size() - 1, 0, preorder.size() - 1 );
+	}
+
+	TreeNode* build( int a, int b, int c, int d ){
+
+		if( a == b ) return new TreeNode( inorder[ a ] );
+
+		TreeNode *root = new TreeNode( preorder[ c ] );
+
+		int m; for( m = a; inorder[ m ] != preorder[ c ]; ++m );
+		if( m > a ) root->left = build( a, m - 1, c + 1, c + m - a );
+		if( m < b ) root->right = build( m + 1, b, c + 1 + m - a, d );
+
+		return root;
+	}
+
+	vector< int > inorder;
+	vector< int > preorder;
+};
+</code></pre>
+<p>Runtime: 48 ms</p>
+    
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+    
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+    
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
