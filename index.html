@@ -20,7 +20,7 @@
        <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
        <h1 id="project_title">My LeetCode Solutions</h1>
-       <h2 id="project_tagline">Problems Solved: 145</h2>
+       <h2 id="project_tagline">Problems Solved: 150</h2>
        <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
         <section id="downloads">
@@ -93,7 +93,7 @@ II) non-zero: add it to the tail and swap it with the first zero in the original
 Run the algorithm above with original sequence empty.</p>
 <pre><code>class Solution {
 public:
-   void moveZeroes(vector<int>& nums) {
+   void moveZeroes(vector< int >& nums) {
 
       int nNums( nums.size() );
       int nZeros( 0 );
@@ -184,7 +184,7 @@ public:
 <p>Use std::unordered_set.</p>
 <pre><code>class Solution {
 public:
-   bool containsDuplicate(vector<int>& nums) {
+   bool containsDuplicate(vector< int >& nums) {
       
       unordered_set< int > uset;
       
@@ -227,7 +227,7 @@ public:
 <p>Since we are given the condition "majority element always exists", its number of occurrence is greater than that of other numbers. Subtract the number of occurrence of the currently expected ME by number of occurrence of other numbers.</p>
 <pre><code>class Solution {
 public:
-   int majorityElement(vector<int>& nums) {
+   int majorityElement(vector< int >& nums) {
 
       int majorCount( 0 );
       int majorNum( 0 );
@@ -578,7 +578,7 @@ public:
 <p>Just remove element.</p>
 <pre><code>class Solution {
 public:
-   int removeElement(vector<int>& nums, int val) {
+   int removeElement(vector< int >& nums, int val) {
       
       int len( nums.size() );
       
@@ -598,7 +598,7 @@ public:
 <p>Use std::queue to implement BFS and use std::stack to print result in expected order.</p>
 <pre><code>class Solution {
 public:
-   vector<vector<int>> levelOrderBottom(TreeNode* root) {
+   vector< vector< int > > levelOrderBottom(TreeNode* root) {
 
       if( root == NULL ) return vector< vector< int > >();
 
@@ -647,7 +647,7 @@ a[i+1] = max{ a[i], b[i] }, without robbing (i+1)th house,<br>
 b[i+1] = a[i] + {value of (i+1)th house}, with robbing (i+1)th house.</p>
 <pre><code>class Solution {
 public:
-   int rob(vector<int>& nums) {
+   int rob(vector< int >& nums) {
 
       int nNums( nums.size() );
       vector< int > a( nNums + 1, 0 ), b( nNums + 1, 0 );
@@ -667,7 +667,7 @@ public:
 <p>Iterate and remove duplicates.</p>
 <pre><code>class Solution {
 public:
-   int removeDuplicates(vector<int>& nums) {
+   int removeDuplicates(vector< int >& nums) {
       
       if( nums.empty() ) return 0;
       
@@ -689,7 +689,7 @@ public:
 <p>Simple iteration. Increment from least significant digit and break if no carry.</p>
 <pre><code>class Solution {
 public:
-   vector<int> plusOne(vector<int>& digits) {
+   vector< int > plusOne(vector< int >& digits) {
       
       vector< int > result;
       int nDigits( digits.size() );
@@ -718,7 +718,7 @@ public:
 a[i,j] = a[i-1,j-1] + a[i-1,j].</p>
 <pre><code>class Solution {
 public:
-   vector<vector<int>> generate(int numRows) {
+   vector< vector< int > > generate(int numRows) {
       
       if( numRows == 0 ) return vector< vector< int > >();
       
@@ -766,7 +766,7 @@ public:
 <p>Reverse order of calculation so that next row can be produced in place.</p>
 <pre><code>class Solution {
 public:
-   vector<int> getRow(int rowIndex) {
+   vector< int > getRow(int rowIndex) {
       
       vector< int > result{ 1 };
       
@@ -787,7 +787,7 @@ public:
 <p>Use a queue to implement BFS.</p>
 <pre><code>class Solution {
 public:
-   vector<vector<int>> levelOrder(TreeNode* root) {
+   vector< vector< int > > levelOrder(TreeNode* root) {
 
       if( root == NULL ) return vector< vector< int > >();
 
@@ -1001,7 +1001,7 @@ public:
 <p>Merge from tail, so that no extra memory is needed.</p>
 <pre><code>class Solution {
 public:
-   void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+   void merge(vector< int >& nums1, int m, vector< int >& nums2, int n) {
       
       if( m == 0 ){ nums1 = nums2; return; }
       if( n == 0 ) return;
@@ -1040,7 +1040,7 @@ public:
 <p>Simple counting.</p>
 <pre><code>class Solution {
 public:
-   bool isValidSudoku(vector<vector<char>>& board) {
+   bool isValidSudoku(vector< vector<char>>& board) {
 
       vector< bool > flag;
       char tmp;
@@ -1100,7 +1100,7 @@ public:
 <p>Use std::unordered_set.</p>
 <pre><code>class Solution {
 public:
-   bool containsNearbyDuplicate(vector<int>& nums, int k) {
+   bool containsNearbyDuplicate(vector< int >& nums, int k) {
       
       if( k <= 0 ) return false;
       
@@ -1515,7 +1515,7 @@ public:
 <p>Precompute suffix sum array, then sumRange( i, j ) = suffixSum( j ) - suffixSum( i - 1 ).</p>
 <pre><code>class NumArray {
 public:
-   NumArray(vector<int> &nums) {
+   NumArray(vector< int > &nums) {
       for( int i = 0; i < nums.size(); ++i )
         v.push_back( v[ i ] + nums[ i ] );
    }
@@ -1660,7 +1660,7 @@ public:
 <p>Simple iteration. Append an end symbol to simplify situation.</p>
 <pre><code>class Solution {
 public:
-   vector<string> summaryRanges(vector<int>& nums) {
+   vector<string> summaryRanges(vector< int >& nums) {
 
       if( nums.empty() ) return vector< string >();
 
@@ -1761,7 +1761,7 @@ public:
 Note that k might be greater than size of nums.</p>
 <pre><code>class Solution {
 public:
-   void rotate(vector<int>& nums, int k) {
+   void rotate(vector< int >& nums, int k) {
       if( nums.empty() || ( k %= nums.size() ) < 1 ) return;
       reverse( nums, 0, nums.size() - k - 1 );
       reverse( nums, nums.size() - k, nums.size() - 1 );
@@ -1843,7 +1843,7 @@ public:
 <p>Idea similar to qsort. Choose a standard and make left part less than or equal to standard and right part greater than standard. The answer is in the part with odd number of elements.</p>
 <pre><code>class Solution {
 public:
-   int singleNumber(vector<int>& nums) {
+   int singleNumber(vector< int >& nums) {
 
       if( nums.empty() ) return 0;
       
@@ -1878,7 +1878,7 @@ public:
 <p>(Discussion) XOR! Genius!</p>
 <pre><code>class Solution {
 public:
-   int singleNumber(vector<int>& nums) {
+   int singleNumber(vector< int >& nums) {
 
       int result( 0 );
       
@@ -1893,7 +1893,7 @@ public:
 <p>XOR all numbers. Use a bit set of the result to classify all numbers into two parts. The answer is the XOR of each part.</p>
 <pre><code>class Solution {
 public:
-   vector<int> singleNumber(vector<int>& nums) {
+   vector< int > singleNumber(vector< int >& nums) {
       
       int all( 0 ), first( 0 ), second( 0 );
       
@@ -1910,7 +1910,7 @@ public:
 <p>If price today is higher than yesterday, "bought" yesterday and sell today.</p>
 <pre><code>class Solution {
 public:
-   int maxProfit(vector<int>& prices) {
+   int maxProfit(vector< int >& prices) {
       
       int result( 0 ), yesterday( 0x7fffffff );
       
@@ -1929,7 +1929,7 @@ public:
 <p>Use output to store prefix product and nums to store suffix product, then combine them together.</p>
 <pre><code>class Solution {
 public:
-   vector<int> productExceptSelf(vector<int>& nums) {
+   vector< int > productExceptSelf(vector< int >& nums) {
       
       vector< int > output( nums.size(), 1 );
       
@@ -1952,7 +1952,7 @@ public:
 <p>Use stack to solve it iteratively.</p>
 <pre><code>class Solution {
 public:
-   vector<int> preorderTraversal(TreeNode* root) {
+   vector< int > preorderTraversal(TreeNode* root) {
 
       if( root == NULL ) return vector< int >();
 
@@ -1992,7 +1992,7 @@ public:
 <p>Use stack to solve it iteratively. Add a flag to indicate inorder.</p>
 <pre><code>class Solution {
 public:
-   vector<int> inorderTraversal(TreeNode* root) {
+   vector< int > inorderTraversal(TreeNode* root) {
       
       if( root == NULL ) return vector< int >();
       
@@ -2022,7 +2022,7 @@ public:
 <p>All Hail XOR!!</p>
 <pre><code>class Solution {
 public:
-   int missingNumber(vector<int>& nums) {
+   int missingNumber(vector< int >& nums) {
       
       int result( 0 );
       
@@ -2092,7 +2092,7 @@ public:
 <p>(Discussion)Crazy XOR!!</p>
 <pre><code>class Solution {
 public:
-   int singleNumber(vector<int>& nums) {
+   int singleNumber(vector< int >& nums) {
       
       int ones( 0 ), twos( 0 );
       
@@ -2144,7 +2144,7 @@ public:
 <p>Recursively build tree using first half for left subtree and the other half for right subtree.</p>
 <pre><code>class Solution {
 public:
-   TreeNode* sortedArrayToBST(vector<int>& nums) {
+   TreeNode* sortedArrayToBST(vector< int >& nums) {
       return buildTree( nums, 0, nums.size() - 1 );
    }
    
@@ -2167,7 +2167,7 @@ public:
 <p>Greedy strategy. Add current number to sum. Set sum to zero if it is less than zero.</p>
 <pre><code>class Solution {
 public:
-   int maxSubArray(vector<int>& nums) {
+   int maxSubArray(vector< int >& nums) {
       
       int result( 1 << 31 ), sum( 0 );
       
@@ -2187,7 +2187,7 @@ public:
 <p>Binary search.</p>
 <pre><code>class Solution {
 public:
-   int findMin(vector<int>& nums) {
+   int findMin(vector< int >& nums) {
       
       int lower( 0 ), upper( nums.size() - 1 ), middle;
       
@@ -2252,7 +2252,7 @@ public:
 <p>First half is symmetric to second half except that LSB of first half is 0 while second half is 1.</p>
 <pre><code>class Solution {
 public:
-   vector<int> grayCode(int n) {
+   vector< int > grayCode(int n) {
 
       vector< int > vi{ 0 };
 
@@ -2308,7 +2308,7 @@ State C: can rest (goto A) only: C[i] = max( C[i-1], B[i-1] + today's price ).
 </p>
 <pre><code>class Solution {
 public:
-   int maxProfit(vector<int>& prices) {
+   int maxProfit(vector< int >& prices) {
       
       int nPrices( prices.size() );
       vector< int > a( nPrices + 1, 0 );
@@ -2331,7 +2331,7 @@ public:
 <p>Permutations of n numbers can be generated by inserting nth number into permutations of n-1 numbers.</p>
 <pre><code>class Solution {
 public:
-   vector<vector<int>> permute(vector<int>& nums) {
+   vector< vector< int > > permute(vector< int >& nums) {
       
       N = nums.size();
       vi.clear();
@@ -2401,7 +2401,7 @@ public:
 <p>Simple binary search. Mind edge case.</p>
 <pre><code>class Solution {
 public:
-   int searchInsert(vector<int>& nums, int target) {
+   int searchInsert(vector< int >& nums, int target) {
       
       if( target > nums.back() ) return nums.size();
       
@@ -2425,7 +2425,7 @@ public:
 <p>Record the lowest price before today and calculate profit you can make if you sell today. Maximize the profit.</p>
 <pre><code>class Solution {
 public:
-   int maxProfit(vector<int>& prices) {
+   int maxProfit(vector< int >& prices) {
       
       int minBefore( 1 << 30 ), result( 0 );
       
@@ -2520,7 +2520,7 @@ public:
 <p>Simple counting.</p>
 <pre><code>class Solution {
 public:
-   void sortColors(vector<int>& nums) {
+   void sortColors(vector< int >& nums) {
        
        int count[]{ 0, 0, 0, };
        
@@ -2537,7 +2537,7 @@ public:
 <p>DP: F[i,j] = min( F[i-1,j], F[i,j-1] ).</p>
 <pre><code>class Solution {
 public:
-   int minPathSum(vector<vector<int>>& grid) {
+   int minPathSum(vector< vector< int > >& grid) {
        
        int m( grid.size() ), n( grid[ 0 ].size() ), tmp;
        
@@ -2556,7 +2556,7 @@ public:
 <p>Flip along middle vertical, then flip along topright-bottomleft diagonal.</p>
 <pre><code>class Solution {
 public:
-   void rotate(vector<vector<int>>& matrix) {
+   void rotate(vector< vector< int > >& matrix) {
        
        int n( matrix.size() );
        
@@ -2599,7 +2599,7 @@ public:
 <p>Assume the answer is formed by line i and j, we can be sure that H[i] > H[k] where k > j, and H[j] > H[k] where k < i, so we can shrink left and right borders to cover the answer situation.</p>
 <pre><code>class Solution {
 public:
-   int maxArea(vector<int>& height) {
+   int maxArea(vector< int >& height) {
 
        int water( 0 );
        
@@ -2618,7 +2618,7 @@ public:
 <p>Recursively generate.</p>
 <pre><code>class Solution {
 public:
-   vector<vector<int>> combinationSum3(int k, int n) {
+   vector< vector< int > > combinationSum3(int k, int n) {
 
        N = n;
        K = k;
@@ -2654,7 +2654,7 @@ public:
 <p>Treat the matrix as array and use binary search.</p>
 <pre><code>class Solution {
 public:
-    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+    bool searchMatrix(vector< vector< int > >& matrix, int target) {
         
         int M( matrix.size() ), N( matrix[ 0 ].size() );
         int lower( 0 ), upper( M * N - 1 ), middle, i, j;
@@ -2677,7 +2677,7 @@ public:
 <p>Simple simulation. Use second LSB to record new state to solve it in-place.</p>
 <pre><code>class Solution {
 public:
-    void gameOfLife(vector<vector<int>>& board) {
+    void gameOfLife(vector< vector< int > >& board) {
 
         if( board.empty() || board[ 0 ].empty() ) return;
 
@@ -2711,7 +2711,7 @@ public:
 <p>Recursively generate.</p>
 <pre><code>class Solution {
 public:
-    vector<vector<int>> combine(int n, int k) {
+    vector< vector< int > > combine(int n, int k) {
         
         N = n; K = k;
         v.clear();
@@ -2743,7 +2743,7 @@ public:
 <p>Ternary search.</p>
 <pre><code>class Solution {
 public:
-    int findPeakElement(vector<int>& nums) {
+    int findPeakElement(vector< int >& nums) {
         
         int lower( 0 ), upper( nums.size() - 1 );
         int first, second, result;
@@ -2770,7 +2770,7 @@ public:
 <p>The idea is to find a row containing zero, and use it to mark columns to be set to zeroes.</p>
 <pre><code>class Solution {
 public:
-    void setZeroes(vector<vector<int>>& matrix) {
+    void setZeroes(vector< vector< int > >& matrix) {
 
         int zeroRow( -1 );
         int M( matrix.size() ), N( matrix[ 0 ].size() );
@@ -2811,7 +2811,7 @@ public:
 <p>Maintain a ascending list of numbers and use binary search to insert new number.</p>
 <pre><code>class Solution {
 public:
-    int lengthOfLIS(vector<int>& nums) {
+    int lengthOfLIS(vector< int >& nums) {
         
         vector< int > v{ 1 << 31 };
         
@@ -2841,7 +2841,7 @@ public:
 <p>Create a copy of this iterator and use it to call next().</p>
 <pre><code>class PeekingIterator : public Iterator {
 public:
-    PeekingIterator(const vector<int>& nums) : Iterator(nums) {
+    PeekingIterator(const vector< int >& nums) : Iterator(nums) {
     }
     
     int peek() {
@@ -2897,7 +2897,7 @@ public:
 <p>Perform binary search twice.</p>
 <pre><code>class Solution {
 public:
-    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+    bool searchMatrix(vector< vector< int > >& matrix, int target) {
 
         int m( 0 ), M( matrix.size() );
         int n( -1 ), N( matrix[ 0 ].size() );
@@ -2925,7 +2925,7 @@ public:
 <p>(Discussion) Different solution. Not necessarily faster.</p>
 <pre><code>class Solution {
 public:
-    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+    bool searchMatrix(vector< vector< int > >& matrix, int target) {
 
         int M( matrix.size() ), m( 0 );
         int N( matrix[ 0 ].size() ), n( N - 1 );
@@ -2945,7 +2945,7 @@ public:
 <p>Traverse right subtree first then left subtree. Record first met node of each layer.</p>
 <pre><code>class Solution {
 public:
-    vector<int> rightSideView(TreeNode* root) {
+    vector< int > rightSideView(TreeNode* root) {
         
         v.clear();
         if( root ) traverse( root, 1 );
@@ -2968,7 +2968,7 @@ public:
 <p>Sort citations and perform binary search.</p>
 <pre><code>class Solution {
 public:
-    int hIndex(vector<int>& citations) {
+    int hIndex(vector< int >& citations) {
 
         if( citations.empty() ) return 0;
 
@@ -3002,7 +3002,7 @@ public:
 <p>(Discussion) Citations greater that n can be treated as n.</p>
 <pre><code>class Solution {
 public:
-    int hIndex(vector<int>& citations) {
+    int hIndex(vector< int >& citations) {
 
         if( citations.empty() ) return 0;
 
@@ -3021,7 +3021,7 @@ public:
 <p>Binary search.</p>
 <pre><code>class Solution {
 public:
-    int hIndex(vector<int>& citations) {
+    int hIndex(vector< int >& citations) {
 
         if( citations.empty() ) return 0;
         if( citations.back() == 0 ) return 0;
@@ -3047,7 +3047,7 @@ public:
 <p>If the current number is equal to the third number from the current one, do not add it to result.</p>
 <pre><code>class Solution {
 public:
-    int removeDuplicates(vector<int>& nums) {
+    int removeDuplicates(vector< int >& nums) {
 
         int nNums( nums.size() ), j( 0 );
 
@@ -3066,7 +3066,7 @@ public:
 <p></p>
 <pre><code>class Solution {
 public:
-    int numIslands(vector<vector<char>>& grid) {
+    int numIslands(vector< vector<char>>& grid) {
 
         if( grid.empty() || grid[ 0 ].empty() ) return 0;
 
@@ -3170,7 +3170,7 @@ public:
 <p>Worst case time complexity: O(n).</p>
 <pre><code>class Solution {
 public:
-    bool search(vector<int>& nums, int target ) {
+    bool search(vector< int >& nums, int target ) {
         
         int lower( 0 ), upper( nums.size() - 1 ), mid;
         
@@ -3196,7 +3196,7 @@ public:
 <p>Idea of partition in qsort. Or use std::nth_element.</p>
 <pre><code>class Solution {
 public:
-    int findKthLargest(vector<int>& nums, int k) {
+    int findKthLargest(vector< int >& nums, int k) {
         return find( nums, k, 0, nums.size() - 1 );
     }
 
@@ -3282,7 +3282,7 @@ public:
 <p>Use an array to record the next ugly number to multiply with to produce a new ugly number.</p>
 <pre><code>class Solution {
 public:
-    int nthSuperUglyNumber(int n, vector<int>& primes) {
+    int nthSuperUglyNumber(int n, vector< int >& primes) {
 
         int nPrimes( primes.size() );
         vector< int > ugly( n, 0x7fffffff );
@@ -3307,7 +3307,7 @@ public:
 <p>Sort the numbers. Iterate a variable from 0 to 2^{# of numbers} and use its bitsets to indicate seletion of numbers.</p>
 <pre><code>class Solution {
 public:
-    vector<vector<int>> subsets(vector<int>& nums) {
+    vector< vector< int > > subsets(vector< int >& nums) {
         
         int nNums( nums.size() );
         vector< vector< int > > vv;
@@ -3332,7 +3332,7 @@ public:
 <p>Sort the numbers. DFS for all combinations.</p>
 <pre><code>class Solution {
 public:
-    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+    vector< vector< int > > combinationSum(vector< int >& candidates, int target) {
 
         sort( candidates.begin(), candidates.end() );
         v.clear(); vv.clear();
@@ -3399,7 +3399,7 @@ public:
 <p>DFS for all combinations.</p>
 <pre><code>class Solution {
 public:
-    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+    vector< vector< int > > subsetsWithDup(vector< int >& nums) {
 
         v.clear();
         vv.clear();
@@ -3438,7 +3438,7 @@ public:
 <p>Assume the first house is robbed or not and do DP as in #109.</p>
 <pre><code>class Solution {
 public:
-    int rob(vector<int>& nums) {
+    int rob(vector< int >& nums) {
     
         if( nums.empty() ) return 0;
         if( nums.size() == 1 ) return nums.back();
@@ -3479,7 +3479,7 @@ public:
 F[i, j] = min( F[i-1, j-1], F[i-1, j] ) + point[i, j].</p>
 <pre><code>class Solution {
 public:
-    int minimumTotal(vector<vector<int>>& triangle) {
+    int minimumTotal(vector< vector< int > >& triangle) {
         
         int n( triangle.size() ), result( 1 << 30 );
         
@@ -3546,7 +3546,7 @@ private:
 <p>Same as #62, except that the grid with obstacle should be set to 0.</p>
 <pre><code>class Solution {
 public:
-    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+    int uniquePathsWithObstacles(vector< vector< int > >& obstacleGrid) {
         
         int M( obstacleGrid.size() );
         int N( obstacleGrid[ 0 ].size() );
@@ -3613,7 +3613,7 @@ public:
 <p>Binary search twice.</p>
 <pre><code>class Solution {
 public:
-    vector<int> searchRange(vector<int>& nums, int target) {
+    vector< int > searchRange(vector< int >& nums, int target) {
         
         vector< int > result;
         int lower( 0 ), upper( nums.size() - 1 ), mid;
@@ -3681,7 +3681,7 @@ private:
 <p>Recursively build tree.</p>
 <pre><code>class Solution {
 public:
-    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+    TreeNode* buildTree(vector< int >& inorder, vector< int >& postorder) {
 
         if( inorder.empty() ) return NULL;
 
@@ -3714,7 +3714,7 @@ public:
 <p>Loop for first element, shrink range of second and third elements to make sum closer to target.</p>
 <pre><code>class Solution {
 public:
-    int threeSumClosest(vector<int>& nums, int target) {
+    int threeSumClosest(vector< int >& nums, int target) {
 
         int N( nums.size() );
         int result( 0x7fffffff );
@@ -3781,7 +3781,7 @@ public:
 
 class Solution {
 public:
-    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+    vector< vector< int > > zigzagLevelOrder(TreeNode* root) {
 
         if( !root ) return vector< vector< int > >();
 
@@ -3824,7 +3824,7 @@ public:
 <p>Record the maximal index so for can be jumped to. Return false if current index is less then the max index.</p>
 <pre><code>class Solution {
 public:
-    bool canJump(vector<int>& nums) {
+    bool canJump(vector< int >& nums) {
         
         int N( nums.size() ), M( 0 );
         
@@ -3866,7 +3866,7 @@ public:
 <p>Recursively build tree.</p>
 <pre><code>class Solution {
 public:
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+    TreeNode* buildTree(vector< int >& preorder, vector< int >& inorder) {
 
         if( inorder.empty() ) return NULL;
 
@@ -3899,7 +3899,7 @@ public:
 <p>DFS for all path.</p>
 <pre><code>class Solution {
 public:
-    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+    vector< vector< int > > pathSum(TreeNode* root, int sum) {
 
         if( !root ) return vector< vector< int > >();
 
@@ -3934,7 +3934,7 @@ public:
 <p>DFS for all ways of partitioning.</p>
 <pre><code>class Solution {
 public:
-    vector<vector<string>> partition(string s) {
+    vector< vector<string>> partition(string s) {
 
         length = s.length();
         vs.clear();
@@ -4013,6 +4013,164 @@ private:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
+    
+<h3><a name="47" class="anchor" href="#47"></a>#47 Permutations II (Medium)</h3>
+<p>Sort nums first. Insert the new number into previously generated permutations to prodece new permutations. Should not insert to positions prior to its previous appearance.</p>
+<pre><code>class Solution {
+public:
+    vector< vector< int > > permuteUnique( vector< int >& nums) {
+
+        sort( nums.begin(), nums.end() );
+        vi.clear();
+        vvi.clear();
+        vi.push_back( nums.front() );
+        helper( nums, 1 );
+
+        return vvi;
+    }
+    
+    void helper( vector< int > &nums, int a ){
+    
+        if( a == nums.size() ){
+            vvi.push_back( vi );
+            return;
+        }
+
+        vi.push_back( nums[ a ] );
+        helper( nums, a + 1 );
+        int i; for( i = a; i > 0; --i ){
+            if( vi[ i ] == vi[ i - 1 ] ) break;
+            swap( vi[ i ], vi[ i - 1 ] );
+            helper( nums, a + 1 );
+        }
+        for( ; i < a; ++i )
+            vi[ i ] = vi[ i + 1 ];
+        vi.pop_back();
+    }
+
+    vector< int > vi;
+    vector< vector< int > > vvi;
+};
+</code></pre>
+<p>Runtime: 32 ms</p>
+    
+<h3><a name="92" class="anchor" href="#92"></a>#92 Reverse Linked List II (Medium)</h3>
+<p>Linked list manipulation.</p>
+<pre><code>class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        
+        if( m == n ) return head;
+        
+        ListNode dummy( 0 ); dummy.next = head;
+        ListNode *ptrA( &dummy ), *ptrB( &dummy );
+        
+        for( int i = 0; i < m - 1; ++i, ptrA = ptrA->next );
+        for( int j = 0; j < n + 1; ++j, ptrB = ptrB->next );
+        
+        ListNode *pre( ptrA ), *cur( pre->next ), *nxt( cur->next );
+        
+        for( cur->next = pre; nxt != ptrB; cur->next = pre ){
+            pre = cur; cur = nxt; nxt = nxt->next;
+        }
+        
+        ptrA->next->next = ptrB;
+        ptrA->next = cur;
+        
+        return dummy.next;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+    
+<h3><a name="134" class="anchor" href="#134"></a>#134 Gas Station (Medium)</h3>
+<p>First simulate regardless of negative amount of gas. The station where the car has least amount of gas is the starting station.</p>
+<pre><code>class Solution {
+public:
+    int canCompleteCircuit(vector< int >& gas, vector< int >& cost) {
+        
+        int start, minGas( 0x7fffffff );
+        int sumGas( 0 ), sumCost( 0 );
+        
+        for( int i = 0; i < gas.size(); ++i ){
+            sumGas += gas[ i ];
+            sumCost += cost[ i ];
+            if( minGas > sumGas - sumCost ){
+                minGas = sumGas - sumCost;
+                start = i + 1;
+            }
+        }
+        
+        return sumGas < sumCost ? -1 : start == gas.size() ? 0 : start;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+    
+<h3><a name="40" class="anchor" href="#40"></a>#40 Combination Sum II (Medium)</h3>
+<p>DFS for all combinations.</p>
+<pre><code>class Solution {
+public:
+    vector< vector< int > > combinationSum2(vector< int >& candidates, int target) {
+
+        vi.clear();
+        vvi.clear();
+        sort( candidates.begin(), candidates.end() );
+        helper( candidates, 0, target );
+
+        return vvi;
+    }
+
+    void helper( vector< int > &nums, int a, int sum ){
+
+        if( !sum || a == nums.size() ){
+            if( !sum ) vvi.push_back( vi );
+            return;
+        }
+
+        int b; for( b = a; b < nums.size() && nums[ b ] == nums[ a ]; ++b );
+        int c; for( c = 1; c <= b - a && nums[ a ] * c <= sum; ++c ){
+            vi.push_back( nums[ a ] );
+            helper( nums, b, sum - nums[ a ] * c );
+        }
+        while( --c ) vi.pop_back();
+        helper( nums, b, sum );
+    }
+
+    vector< int > vi;
+    vector< vector< int > > vvi;
+};
+</code></pre>
+<p>Runtime: 16 ms</p>
+    
+<h3><a name="82" class="anchor" href="#82"></a>#82 Remove Duplicates from Sorted List iI (Medium)</h3>
+<p>Add a dummy head to simplify operation.</p>
+<pre><code>class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+
+        ListNode dummy( 0 ); dummy.next = head;
+        ListNode *ptr( &dummy );
+
+        while( ptr->next && ptr->next->next ){
+            if( ptr->next->val != ptr->next->next->val ){
+                ptr = ptr->next;
+                continue;
+            }
+
+            int val( ptr->next->val );
+            while( ptr->next && ptr->next->val == val ){
+                auto nnxt( ptr->next->next );
+                delete ptr->next;
+                ptr->next = nnxt;
+            }
+        }
+
+        return dummy.next;
+    }
+};
+</code></pre>
+<p>Runtime: 8 ms</p>
     
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
