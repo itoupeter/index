@@ -20,7 +20,7 @@
        <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
        <h1 id="project_title">My LeetCode Solutions</h1>
-       <h2 id="project_tagline">Problems Solved: 150</h2>
+       <h2 id="project_tagline">Problems Solved: 155</h2>
        <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
 <!-- 
         <section id="downloads">
@@ -1577,7 +1577,7 @@ public:
 <p>Runtime: 8 ms</p>
     
 <h3><a name="125" class="anchor" href="#125"></a>#125 Valid Palindrome (Easy)</h3>
-<p>.</p>
+<p>Extract alphanumerics and check palindrome.</p>
 <pre><code>class Solution {
 public:
    bool isPalindrome(string s) {
@@ -4171,6 +4171,209 @@ public:
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
+    
+<h3><a name="49" class="anchor" href="#49"></a>#49 Group Anagrams (Medium)</h3>
+<p>Hash function accounts for word length and letter components.</p>
+<pre><code>class Solution {
+public:
+    vector< vector< string > > groupAnagrams( vector< string >& strs) {
+
+        map< pair< int, int >, int > umap;
+        vector< vector< string > > vvs;
+
+        for( auto &s : strs ){
+            auto hashVal( s2pii( s ) );
+            if( umap.find( hashVal ) != umap.end() )
+                vvs[ umap[ hashVal ] ].push_back( s );
+            else{
+                umap[ hashVal ] = vvs.size();
+                vvs.push_back( vector< string >{ s } );
+            }
+        }
+
+        for( auto &vs : vvs ) sort( vs.begin(), vs.end() );
+
+        return vvs;
+    }
+
+    pair< int, int > s2pii( const string &s ){
+
+        int tmp1( 0 ), tmp2( 1 );
+
+        for( const char &ch : s ){
+            tmp1 |= 1 << ( ch - 'a' );
+            tmp2 *= ch - 'a' + 2;
+        }
+
+        return make_pair( tmp1, tmp2 );
+    }
+};
+</code></pre>
+<p>Runtime: 68 ms</p>
+    
+<h3><a name="31" class="anchor" href="#31"></a>#31 Nextr Permutation (Medium)</h3>
+<p>Locate the rightmost number we can augment and swap it with the smallest number that is greater that it behind and sort the whole following part.</p>
+<pre><code>class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+
+        int i; for( i = nums.size() - 2; i >= 0; --i )
+            if( nums[ i ] < nums[ i + 1 ] ) break;
+
+        if( i >= 0 ){
+            int k( i + 1 );
+            for( int j = k; j < nums.size(); ++j )
+                if( nums[ j ] > nums[ i ] && nums[ j ] < nums[ k ] ) k = j;
+            swap( nums[ i ], nums[ k ] );
+        }
+
+        sort( nums.begin() + i + 1, nums.end() );
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+    
+<h3><a name="209" class="anchor" href="#209"></a>#209 Minimum Size Subarray Sum (Medium)</h3>
+<p>Scan the array of numbers. When it comes a new number, add it to sum and try to subtract earliest numbers in the sum.</p>
+<pre><code>class Solution {
+public:
+    int minSubArrayLen(int s, vector<int>& nums) {
+        
+        int result( 0x7fffffff );
+        int sum( 0 );
+        
+        for( int i = 0, j = 0; j < nums.size(); ++j ){
+            sum += nums[ j ];
+            while( sum - nums[ i ] >= s ) sum -= nums[ i++ ];
+            if( sum >= s ) result = min( result, j - i + 1 );
+        }
+        
+        return result == 0x7fffffff ? 0 : result;
+    }
+};
+</code></pre>
+<p>Runtime: 4 ms</p>
+    
+<h3><a name="264" class="anchor" href="#264"></a>#Ugly Number II (Medium)</h3>
+<p></p>
+<pre><code>class Solution {
+public:
+    int nthUglyNumber(int n) {
+
+        vector< int > ugly( n, 0x7fffffff );
+        vector< int > next{ 0, 0, 0 };
+        vector< int > primes{ 2, 3, 5 };
+
+        ugly[ 0 ] = 1;
+
+        for( int i = 1; i < n; ++i ){
+            for( int j = 0; j < 3; ++j ) ugly[ i ] = min( ugly[ i ], ugly[ next[ j ] ] * primes[ j ] );
+            for( int j = 0; j < 3; ++j ) next[ j ] += ugly[ i ] == ugly[ next[ j ] ] * primes[ j ] ? 1 : 0;
+        }
+
+        return ugly.back();
+    }
+};
+</code></pre>
+<p>Runtime: 32 ms</p>
+    
+<h3><a name="297" class="anchor" href="#297"></a>#297 Serialize and Deserialize Binary Tree (Medium)</h3>
+<p>Use std::queue.</p>
+<pre><code>class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        
+        queue< TreeNode * > mqueue;
+        string result;
+
+        mqueue.push( root );
+
+        while( !mqueue.empty() ){
+            auto pNode( mqueue.front() ); mqueue.pop();
+            if( pNode == NULL ){ result += "# "; continue; }
+            result += to_string( pNode->val ) + " ";
+            mqueue.push( pNode->left ? pNode->left : NULL );
+            mqueue.push( pNode->right ? pNode->right : NULL );
+        }
+
+        while( result.back() == ' ' || result.back() == '#' )
+            result.pop_back();
+
+        return result;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+
+        TreeNode *root;
+        queue< TreeNode * > mqueue, mqueue2;
+        istringstream iss( data );
+        string s;
+        int i;
+
+        while( true ){
+            while( iss >> i ) mqueue.push( new TreeNode( i ) );
+            iss.clear(); if( !( iss >> s ) ) break;
+            mqueue.push( NULL );
+        }
+
+        if( mqueue.empty() ) return NULL;
+
+        root = mqueue.front();
+        mqueue.pop();
+        mqueue2.push( root );
+
+        while( !mqueue.empty() ){
+            auto pNode( mqueue2.front() ); mqueue2.pop();
+            pNode->left = mqueue.front(); mqueue.pop();
+            if( mqueue.empty() ) break;
+            pNode->right = mqueue.front(); mqueue.pop();
+            if( pNode->left ) mqueue2.push( pNode->left );
+            if( pNode->right ) mqueue2.push( pNode->right );
+        }
+
+        return root;
+    }
+};
+</code></pre>
+<p>Runtime: 48 ms</p>
+    
+<h3><a name="326" class="anchor" href="#326"></a>#326 Power of Three (Medium)</h3>
+<p>1162261467 can be divided by power of 3.</p>
+<pre><code>class Solution {
+public:
+    bool isPowerOfThree(int n) {
+        return n > 0 && 1162261467 % n == 0;
+    }
+};
+</code></pre>
+<p>Runtime: 124 ms</p>
+    
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+    
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+    
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+    
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
     
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
