@@ -36,6 +36,26 @@
    <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
     
+<h3><a name="344" class="anchor" href="#344"><span class="octicon octicon-link"></span></a>#344 Reverse String (Easy)</h3>
+<p>Scan first half and swap characters.</p>
+<pre><code>
+class Solution {
+public:
+    string reverseString(string s) {
+        
+        int length( s.length() );
+        char ch;
+        
+        for( int i = 0; i < length >> 1; ++i ){
+            swap( s[ i ], s[ length - i - 1 ] );
+        }
+        
+        return s;
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+    
 <h3><a name="292" class="anchor" href="#292"><span class="octicon octicon-link"></span></a>#292 Nim Game (Easy)</h3>
 <p>Determine if n can be exactly divided by 4. If yes, you lose, else you win.</p>
 <pre><code>class Solution {
