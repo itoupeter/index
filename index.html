@@ -56,6 +56,26 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="338" class="anchor" href="#338"><span class="octicon octicon-link"></span></a>#338 Counting Bits (Medium)</h3>
+<p>Number of 1 in i is: <br>1)number of 1 in i/2 if i is even<br>2)number of 1 in i/2 plus 1 if i is odd.</p>
+<pre><code>
+class Solution {
+public:
+    vector<int> countBits(int num) {
+
+        vector<int> result(num + 1);
+
+		result[0] = 0;
+		for (int i = 1; i <= num; ++i) {
+			result[i] = (i & 1) ? result[i >> 1] + 1: result[i >> 1];
+		}
+
+		return result;
+    }
+};
+</code></pre>
+<p>Runtime: 103 ms</p>
+
 <h3><a name="292" class="anchor" href="#292"><span class="octicon octicon-link"></span></a>#292 Nim Game (Easy)</h3>
 <p>Determine if n can be exactly divided by 4. If yes, you lose, else you win.</p>
 <pre><code>class Solution {
