@@ -56,6 +56,35 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="167" class="anchor" href="#167"><span class="octicon octicon-link"></span></a>#167 Two Sum II - Input array is sorted (Medium)</h3>
+<p>Pointer i, j scan from head to tail, tail to head respectively. If two sum is greater that target, move j backwards; else move i forwards.</p>
+<pre><code>
+class Solution {
+public:
+	vector<int> twoSum(vector<int>& numbers, int target) {
+		int n = numbers.size();
+
+		if (n < 2) {
+			return vector<int>{-1, -1};
+		}
+
+		int i = 0;
+		int j = n - 1;
+
+		while (i < j && numbers[i] + numbers[j] != target) {
+			if (numbers[i] + numbers[j] < target) {
+				++i;
+			} else {
+				--j;
+			}
+		}
+
+		return i < j ? vector<int>{i + 1, j + 1} : vector<int>{-1, -1};
+    }
+};
+</code></pre>
+<p>Runtime: 6 ms</p>
+
 <h3><a name="406" class="anchor" href="#406"><span class="octicon octicon-link"></span></a>#406 Queue Reconstruction by Height (Medium)</h3>
 <p>Sort by h (taller first) and k (smaller first), then for each person, shift him ahead until satisfying requirement on k.</p>
 <pre><code>class Solution {
@@ -88,7 +117,7 @@ private:
 <p>Runtime: 139 ms</p>
 
 <h3><a name="338" class="anchor" href="#338"><span class="octicon octicon-link"></span></a>#338 Counting Bits (Medium)</h3>
-<p>Number of 1 in i is: <br>1) number of 1 in i/2 if i is even<br>2) number of 1 in i/2 plus 1 if i is odd.</p>
+<p>Number of 1 in i is: <br>1) number of 1 in i/2 if i is even, <br>2) number of 1 in i/2 plus 1 if i is odd. </p>
 <pre><code>
 class Solution {
 public:
