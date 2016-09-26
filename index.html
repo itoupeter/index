@@ -56,6 +56,40 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="339" class="anchor" href="#339"><span class="octicon octicon-link"></span></a>#339 Shuffle an Array (Medium)</h3>
+<p>Let all numbers be in the pool, each time randomly pick a number from the pool and append it to the result list.</p>
+<pre><code>
+class Solution {
+public:
+	Solution(vector<int> nums) {
+	    this->nums = nums;
+		this->numsShuffled = nums;
+	}
+
+	/** Resets the array to its original configuration and return it. */
+	vector<int> reset() {
+		return nums;
+	}
+
+	/** Returns a random shuffling of the array. */
+	vector<int> shuffle() {
+	    int n = nums.size();
+
+		for (int i = 0; i < n - 1; ++i) {
+			int j = rand() % (n - i);
+			swap(numsShuffled[i], numsShuffled[j + i]);
+		}
+
+		return numsShuffled;
+	}
+
+private:
+    vector<int> nums;
+	vector<int> numsShuffled;
+};
+</code></pre>
+<p>Runtime: 339 ms</p>
+
 <h3><a name="167" class="anchor" href="#167"><span class="octicon octicon-link"></span></a>#167 Two Sum II - Input array is sorted (Medium)</h3>
 <p>Pointer i, j scan from head to tail, tail to head respectively. If two sum is greater that target, move j backwards; else move i forwards.</p>
 <pre><code>
