@@ -16,26 +16,26 @@
    <!-- HEADER -->
    <div id="header_wrap" class="outer">
       <header class="inner">
-<!--       
+<!--
        <a id="forkme_banner" href="https://github.com/itoupeter/blogtest">View on GitHub</a>
  -->
        <h1 id="project_title">Algorithm and Data Structure</h1>
        <h2 id="project_tagline">Problem Source: <a href="https://leetcode.com/problemset/algorithms/">LeetCode</a></h2>
        <!-- <h2 id="project_tagline">Problems Solved: 155</h2> -->
        <h2 id="project_tagline">Use Ctrl+F to find solution:)</h2>
-<!-- 
+<!--
         <section id="downloads">
           <a class="zip_download_link" href="https://github.com/itoupeter/blogtest/zipball/master">Download this project as a .zip file</a>
           <a class="tar_download_link" href="https://github.com/itoupeter/blogtest/tarball/master">Download this project as a tar.gz file</a>
         </section>
- -->        
+ -->
       </header>
    </div>
 
    <!-- MAIN CONTENT -->
    <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
-    
+
 <h3><a name="292" class="anchor" href="#292"><span class="octicon octicon-link"></span></a>#292 Nim Game (Easy)</h3>
 <p>Determine if n can be exactly divided by 4. If yes, you lose, else you win.</p>
 <pre><code>class Solution {
@@ -46,7 +46,155 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
+<h3><a name="389" class="anchor" href="#389"><span class="octicon octicon-link"></span></a>#389 Find the Difference (Easy)</h3>
+<p>Simply count letters in s and t.</p>
+<pre><code>class Solution {
+public:
+	char findTheDifference(string s, string t) {
+
+		int count[256];
+
+		memset(count, 0, sizeof count);
+
+		for (auto &ch : s) {
+			++count[(int)ch];
+		}
+
+		for (auto &ch : t) {
+			if (--count[(int)ch] == -1) {
+				return ch;
+			}
+		}
+
+		return 'A';
+	}
+};
+</code></pre>
+<p>Runtime: 3 ms</p>
+
+<h3><a name="345" class="anchor" href="#345"><span class="octicon octicon-link"></span></a>#345 Reverse Vowels of a String (Easy)</h3>
+<p>Scan from both ends and swap vowels.</p>
+<pre><code>class Solution {
+public:
+	string reverseVowels(string s) {
+
+		int length = s.length();
+		int i = 0;
+		int j = length - 1;
+		char tmp;
+
+		while( i < j ){
+			while( !isVowel( s[ i ] ) && i < j ) ++i;
+			while( !isVowel( s[ j ] ) && i < j ) --j;
+			if( i < j ){
+				tmp = s[ i ];
+				s[ i ] = s[ j ];
+				s[ j ] = tmp;
+			}
+			++i;
+			--j;
+		}
+
+		return s;
+	}
+
+private:
+	bool isVowel( char ch ){
+		return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u'
+			|| ch == 'A' || ch == 'E' || ch == 'I' || ch == 'O' || ch == 'U';
+	}
+};
+</code></pre>
+<p>Runtime: 16 ms</p>
+
+<h3><a name="350" class="anchor" href="#350"><span class="octicon octicon-link"></span></a>#350 Intersection of Two Arrays II (Easy)</h3>
+<p>Application of map.</p>
+<pre><code>class Solution {
+public:
+	vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+
+		map< int, int > map1;
+		vector< int > intersection;
+
+		for( auto i : nums1 ){
+
+			auto ite = map1.find( i );
+
+			if( ite == map1.end() ){
+				map1[ i ] = 1;
+			}else{
+				++ite->second;
+			}
+		}
+
+		for( auto i : nums2 ){
+
+			auto ite = map1.find( i );
+
+			if( ite != map1.end() ){
+				intersection.push_back( i );
+				if( --ite->second == 0 ){
+					map1.erase( ite );
+				}
+			}
+		}
+
+		return intersection;
+	}
+};
+</code></pre>
+<p>Runtime: 16 ms</p>
+
+<h3><a name="349" class="anchor" href="#349"><span class="octicon octicon-link"></span></a>#349 Intersection of Two Arrays (Easy)</h3>
+<p>Application of unordered_set.</p>
+<pre><code>class Solution {
+public:
+	vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+
+		vector< int > intersection;
+		unordered_set< int > uset1, uset2;
+
+		for( auto i : nums1 ){
+			uset1.insert( i );
+		}
+
+		for( auto i : nums2 ){
+			if( uset1.find( i ) != uset1.end() ){
+				uset2.insert( i );
+			}
+		}
+
+		for( auto i : uset2 ){
+			intersection.push_back( i );
+		}
+
+		return intersection;
+	}
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+
+<h3><a name="371" class="anchor" href="#371"><span class="octicon octicon-link"></span></a>#371 Sum of Two Integers (Easy)</h3>
+<p>Use AND to compute carry, lshift it by 1 bit and sum it to result of XOR till no carry.</p>
+<pre><code>class Solution {
+public:
+    int getSum(int a, int b) {
+
+		int c;
+
+        while( b ){
+			c = ( a & b ) << 1;
+			a = a ^ b;
+			b = c;
+		}
+
+		return a;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+
 <h3><a name="258" class="anchor" href="#258"></a>#258 Add Digits (Easy)</h3>
 <p>There are 10 possible results. If num is 0, print 0. Else if num can be exactly divided by 9, print 9. Else print the remainder.</p>
 <pre><code>class Solution {
@@ -57,7 +205,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="104" class="anchor" href="#104"></a>#104 Maximum Depth of Binary Tree (Easy)</h3>
 <p>Recursively find maximum depth of subtrees of the current node, return the larger one incremented by 1.</p>
 <pre><code>class Solution {
@@ -68,25 +216,25 @@ public:
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="237" class="anchor" href="#237"></a>#237 Delete Node in a Linked List (Easy)</h3>
 <p>Instead of delete the given node, replace it by its next node and delete the next node.</p>
 <pre><code>class Solution {
 public:
    void deleteNode(ListNode* node) {
-      
+
       ListNode *nextNode( node->next );
       ListNode *nextNextNode( nextNode->next );
-      
+
       node->val = nextNode->val;
       node->next = nextNextNode;
-      
+
       delete nextNode;
    }
 };
 </code></pre>
 <p>Runtime: 20 ms</p>
-    
+
 <h3><a name="283" class="anchor" href="#283"></a>#283 Move Zeroes (Easy)</h3>
 <p>Suppose we already have a "sorted" sequence in the form [num,...,num,0,...,0] and here comes a:<br>
 I) zero: simply add it to the tail<br>
@@ -114,7 +262,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 20 ms</p>
-    
+
 <h3><a name="100" class="anchor" href="#100"></a>#100 Same Tree (Easy)</h3>
 <p>Compare current node, then subtrees recursively. Mind null pointer error.</p>
 <pre><code>class Solution {
@@ -131,99 +279,99 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="226" class="anchor" href="#226"></a>#226 Invert Binary Tree (Easy)</h3>
 <p>Recursively swap left subtree and right subtree.</p>
 <pre><code>class Solution {
 public:
    TreeNode* invertTree(TreeNode* root) {
-      
+
       if( root == NULL ) return NULL;
-      
+
       TreeNode *tmp( root->left );
       root->left = root->right;
       root->right = tmp;
-      
+
       invertTree( root->left );
       invertTree( root->right );
-      
+
       return root;
    }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="242" class="anchor" href="#242"></a>#242 Valid Anagram (Easy)</h3>
 <p>Simply compare occurrence of letters in each word.</p>
 <pre><code>class Solution {
 public:
    bool isAnagram(string s, string t) {
-      
+
       if( s.length() != t.length() ) return false;
-      
+
       int len( s.length() );
       int count[ 26 ];
-      
+
       memset( count, 0, sizeof count );
-      
+
       for( int i = 0; i < len; ++i ){
         ++count[ s[ i ] - ( int )'a' ];
         --count[ t[ i ] - ( int )'a' ];
       }
-      
+
       for( int i = 0; i < 26; ++i ){
         if( count[ i ] ) return false;
       }
-      
+
       return true;
    }
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="217" class="anchor" href="#217"></a>#217 Contains Duplicate (Easy)</h3>
 <p>Use std::unordered_set.</p>
 <pre><code>class Solution {
 public:
    bool containsDuplicate(vector< int >& nums) {
-      
+
       unordered_set< int > uset;
-      
+
       for( int num : nums ){
-        
+
         if( uset.find( num ) != uset.end() )
           return true;
         else
           uset.insert( num );
       }
-      
+
       return false;
    }
 };
 </code></pre>
 <p>Runtime: 48 ms</p>
 <p>Runtime (using std::set): 104 ms</p>
-    
+
 <h3><a name="171" class="anchor" href="#171"></a>#171 Excel Sheet Column Number (Easy)</h3>
 <p>A new type of number with numerical base 26.</p>
 <pre><code>class Solution {
 public:
    int titleToNumber(string s) {
-      
+
       int len( s.length() );
       int result( 0 );
-      
+
       for( int i = 0; i < len; ++i ){
         if( i ) result *= 26;
         result += s[ i ] - ( int )'A' + 1;
       }
-      
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="169" class="anchor" href="#169"></a>#169 Majority Element (Easy)</h3>
 <p>Since we are given the condition "majority element always exists", its number of occurrence is greater than that of other numbers. Subtract the number of occurrence of the currently expected ME by number of occurrence of other numbers.</p>
 <pre><code>class Solution {
@@ -232,7 +380,7 @@ public:
 
       int majorCount( 0 );
       int majorNum( 0 );
-   
+
       for( int num : nums ){
         if( majorCount == 0 ){
           ++majorCount;
@@ -243,13 +391,13 @@ public:
           --majorCount;
         }
       }
-      
+
       return majorNum;
    }
 };
 </code></pre>
 <p>Runtime: 20 ms</p>
-    
+
 <h3><a name="235" class="anchor" href="#235"></a>#235 Lowest Common Ancestor of a Binary Search Tree (Easy)</h3>
 <p>Since the given tree is a BST, value of LCA must be between values of p and q.</p>
 <pre><code>class Solution {
@@ -264,9 +412,9 @@ public:
 
       if( root == p || root == q )
         return root;
-      else if( root->val > p->val && root->val <= q->val ) 
+      else if( root->val > p->val && root->val <= q->val )
         return root;
-      else if( q->val < root->val ) 
+      else if( q->val < root->val )
         return lowestCommonAncestor( root->left, p, q );
       else
         return lowestCommonAncestor( root->right, p, q );
@@ -275,7 +423,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 44 ms</p>
-    
+
 <h3><a name="191" class="anchor" href="#191"></a>#191 Number of 1 Bits (Easy)</h3>
 <p>Simple counting.</p>
 <pre><code>class Solution {
@@ -291,16 +439,16 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="13" class="anchor" href="#13"></a>#13 Roman to Integer (Easy)</h3>
 <p>If a digit is less than its following digit, subtract it from result, else add it to result.</p>
 <pre><code>class Solution {
 public:
    int romanToInt(string s) {
-      
+
       static const int r2d[ 26 ]{
-        0, 0, 100, 500, 0, 0, 0, 0, 1, 0, 0, 50, 1000, 
-        0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 10, 0, 0, 
+        0, 0, 100, 500, 0, 0, 0, 0, 1, 0, 0, 50, 1000,
+        0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 10, 0, 0,
       };
 
       int result( r2d[ s[ 0 ] - ( int )'A'] );
@@ -319,7 +467,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 36 ms</p>
-    
+
 <h3><a name="206" class="anchor" href="#206"></a>#206 Reverse Linked List (Easy)</h3>
 <p>Use a vector. OK I am cheating.</p>
 <pre><code>class Solution {
@@ -345,7 +493,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="70" class="anchor" href="#70"></a>#70 Climbing Stairs (Easy)</h3>
 <p>Number of ways to reach nth step can be added up by:<br>
 number of ways to reach (n-1)th step (climb 1 step from here) and<br>
@@ -353,29 +501,29 @@ number of ways to reach (n-2)th step (climb 2 steps from here).</p>
 <pre><code>class Solution {
 public:
    int climbStairs(int n) {
-      
+
       vector< int > v( 2, 1 );
-      
+
       for( int i = 2; i <= n; ++i ){
         v.push_back( v[ i - 1 ] + v[ i - 2 ] );
       }
-      
+
       return v[ n ];
    }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="83" class="anchor" href="#83"></a>#83 Remove Duplicates from Sorted List (Easy)</h3>
 <p>If next node has same value as current node, delete next node (and release memory).</p>
 <pre><code>class Solution {
 public:
    ListNode* deleteDuplicates(ListNode* head) {
-      
+
       for( ListNode *cur = head; cur != NULL; ){
-        
+
         ListNode *nxt( cur->next );
-        
+
         if( nxt == NULL ) break;
         if( nxt->val == cur->val ){
           cur->next = nxt->next;
@@ -384,13 +532,13 @@ public:
           cur = nxt;
         }
       }
-      
+
       return head;
    }
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
-    
+
 <h3><a name="263" class="anchor" href="#263"></a>#263 Ugly Number (Easy)</h3>
 <p>Divide the number by 2, 3, and 5 repeatedly. If 1 is left, the number is ugly.</p>
 <pre><code>class Solution {
@@ -408,7 +556,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="202" class="anchor" href="#202"></a>#202 Happy Number (Easy)</h3>
 <p>Use std::unordered_set to check if a cycle exists.</p>
 <pre><code>class Solution {
@@ -427,12 +575,12 @@ public:
           n = nextN( n );
         }
       }
-      
+
       return true;
    }
 
    int nextN( int n ){
-   
+
       int result( 0 ), tmp;
 
       while( n ){
@@ -446,7 +594,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="21" class="anchor" href="#21"></a>#21 Merge Two Sorted Lists (Easy)</h3>
 <p>Repeatedly take the larger head node of the lists.</p>
 <pre><code>class Solution {
@@ -459,7 +607,7 @@ public:
         return l1;
 
       ListNode head( 0 ), *tail( &head );
-      
+
       for( ; l1 != NULL && l2 != NULL; tail = tail->next ){
 
         if( l1->val < l2->val ){
@@ -481,7 +629,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="232" class="anchor" href="#232"></a>#232 Implement Queue using Stacks (Easy)</h3>
 <p>Take advantage of 2 stacks to get access to both head and tail.</p>
 <pre><code>class Queue {
@@ -513,7 +661,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="231" class="anchor" href="#231"></a>#231 Power of 2 (Easy)</h3>
 <p>In binary representation, (n & -n) is the rightmost 1 of n. Use it to cancel the rightmost 1 of n (by XOR) and n will be 0 if it is a power of 2.</p>
 <pre><code>class Solution {
@@ -524,35 +672,35 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="110" class="anchor" href="#110"></a>#110 Balanced Binary Tree (Easy)</h3>
 <p>Recursively compare depths of subtrees.</p>
 <pre><code>class Solution {
 public:
    bool isBalanced(TreeNode* root) {
-      
+
       int depth( 0 );
-      
+
       return isBalancedAndGetDepth( root, depth );
    }
-   
+
    bool isBalancedAndGetDepth( TreeNode *root, int &depth ){
-      
+
       if( root == NULL ) return true;
-      
+
       int lDepth( 0 ), rDepth( 0 );
-      
+
       if( !isBalancedAndGetDepth( root->left, lDepth ) ) return false;
       if( !isBalancedAndGetDepth( root->right, rDepth ) ) return false;
       if( lDepth - rDepth > 1 || lDepth - rDepth < -1 ) return false;
       depth = lDepth > rDepth ? lDepth + 1 : rDepth + 1;
-      
+
       return true;
    }
 };
 </code></pre>
 <p>Runtime: 20 ms</p>
-    
+
 <h3><a name="101" class="anchor" href="#101"></a>#101 Symmetric Tree (Easy)</h3>
 <p>For a symmetric tree, its right subtree is a mirror of its left subtree.<br>
 For two mirrored trees A and B, A's right subtree is a mirror of B's left subtree, and A's left subtree is a mirror of B's right subtree.</p>
@@ -561,12 +709,12 @@ public:
    bool isSymmetric(TreeNode* root) {
       return root == NULL || isMirror( root->left, root->right );
    }
-   
+
    bool isMirror( TreeNode *left, TreeNode *right ){
       if( left == NULL && right == NULL ) return true;
       if( left != NULL && right == NULL ) return false;
       if( left == NULL && right != NULL ) return false;
-      
+
       return left->val == right->val
         && isMirror( left->left, right->right )
         && isMirror( left->right, right->left );
@@ -574,27 +722,27 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="27" class="anchor" href="#27"></a>#27 Remove Element (Easy)</h3>
 <p>Just remove element.</p>
 <pre><code>class Solution {
 public:
    int removeElement(vector< int >& nums, int val) {
-      
+
       int len( nums.size() );
-      
+
       for( int i = 0; i < len; ++i ){
         if( nums[ i ] != val ) continue;
         while( i < len && nums[ len - 1 ] == val ) --len;
         if( i < len ) nums[ i ] = nums[ --len ];
       }
-      
+
       return len;
    }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="107" class="anchor" href="#107"></a>#107 Binary Tree Level Order Traversal II (Easy)</h3>
 <p>Use std::queue to implement BFS and use std::stack to print result in expected order.</p>
 <pre><code>class Solution {
@@ -608,9 +756,9 @@ public:
       stack< pair< TreeNode *, int > > mstack;
 
       mqueue.push( make_pair( root, 0 ) );
-      
+
       while( !mqueue.empty() ){
-        
+
         TreeNode *node( mqueue.front().first );
         int layer( mqueue.front().second );
 
@@ -621,7 +769,7 @@ public:
       }
 
       while( !mstack.empty() ){
-        
+
         vector< int > v;
         int maxLayer( mstack.top().second );
 
@@ -638,7 +786,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="198" class="anchor" href="#198"></a>#198 House Robber (Easy)</h3>
 <p>Dynamic Progromming<br>
 a[i] is the maximum value I can get from previous i houses without robbing the ith house,<br>
@@ -663,39 +811,39 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="26" class="anchor" href="#26"></a>#26 Remove Duplicates from Sorted Array (Easy)</h3>
 <p>Iterate and remove duplicates.</p>
 <pre><code>class Solution {
 public:
    int removeDuplicates(vector< int >& nums) {
-      
+
       if( nums.empty() ) return 0;
-      
+
       int nNums( nums.size() ), result( 1 );
-      
+
       for( int i = 1; i < nNums; ++i ){
         if( nums[ i ] != nums[ i - 1 ] ){
           nums[ result++ ] = nums[ i ];
         }
       }
-      
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 32 ms</p>
-    
+
 <h3><a name="66" class="anchor" href="#66"></a>#66 Plus One (Easy)</h3>
 <p>Simple iteration. Increment from least significant digit and break if no carry.</p>
 <pre><code>class Solution {
 public:
    vector< int > plusOne(vector< int >& digits) {
-      
+
       vector< int > result;
       int nDigits( digits.size() );
       bool carry( true );
-      
+
       for( int i = nDigits - 1; i >= 0; --i ){
         if( ++digits[ i ] > 9 ){
           digits[ i ] -= 10;
@@ -704,86 +852,86 @@ public:
           break;
         }
       }
-      
+
       if( carry ) result.push_back( 1 );
       result.insert( result.end(), digits.begin(), digits.end() );
-        
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="118" class="anchor" href="#118"></a>#118 Pascal's Triangle (Easy)</h3>
 <p>a[i,1] = a[i,i] = 1<br>
 a[i,j] = a[i-1,j-1] + a[i-1,j].</p>
 <pre><code>class Solution {
 public:
    vector< vector< int > > generate(int numRows) {
-      
+
       if( numRows == 0 ) return vector< vector< int > >();
-      
+
       vector< vector< int > > result{{1}};
-      
+
       for( int i = 2; i <= numRows; ++i ){
-        
+
         vector< int > v{1};
-        
+
         for( int j = 1; j <= i - 2; ++j ){
           v.push_back( result[ i - 2 ][ j - 1 ] + result[ i - 2 ][ j ] );
         }
-        
+
         v.push_back( 1 );
         result.push_back( v );
       }
-      
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="172" class="anchor" href="#172"></a>#172 Factorial Trailing Zeroes (Easy)</h3>
 <p>Since trailing zeroes are produced by 2 and 5 (2*5=10) in n!'s factors and 5 appears less frequently, simply count number of occurrence of 5 in n!'s factors.</p>
 <pre><code>class Solution {
 public:
    int trailingZeroes(int n) {
-      
+
       int result( 0 );
       long long N( n ), powerOf5( 5 );
-      
+
       while( N >= powerOf5 ){
         result += ( int )( N / powerOf5 );
         powerOf5 *= 5LL;
       }
-      
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="119" class="anchor" href="#119"></a>#119 Pascal's Triangle II (Easy)</h3>
 <p>Reverse order of calculation so that next row can be produced in place.</p>
 <pre><code>class Solution {
 public:
    vector< int > getRow(int rowIndex) {
-      
+
       vector< int > result{ 1 };
-      
+
       for( int i = 1; i <= rowIndex; ++i ){
         for( int j = i - 1; j > 0; --j ){
           result[ j ] += result[ j - 1 ];
         }
         result.push_back( 1 );
       }
-      
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="102" class="anchor" href="#102"></a>#102 Binary Tree Level Order Traversal (Easy)</h3>
 <p>Use a queue to implement BFS.</p>
 <pre><code>class Solution {
@@ -798,7 +946,7 @@ public:
       int currentLevel( 0 );
 
       mqueue.push( make_pair( root, 0 ) );
-          
+
       while( !mqueue.empty() ){
 
         TreeNode *node( mqueue.front().first );
@@ -809,7 +957,7 @@ public:
           v.clear();
           ++currentLevel;
         }
-        
+
         v.push_back( node->val );
 
         if( node->left != NULL ){
@@ -818,7 +966,7 @@ public:
         if( node->right != NULL ){
           mqueue.push( make_pair( node->right, currentLevel + 1 ) );
         }
-        
+
         mqueue.pop();
       }
 
@@ -829,13 +977,13 @@ public:
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="112" class="anchor" href="#112"></a>#112 Path Sum (Easy)</h3>
 <p>If there's a path from current node to leaf summed to {Sum}, there's a path from its child node to leaf Summed to {Sum - value of current node}.</p>
 <pre><code>class Solution {
 public:
    bool hasPathSum(TreeNode* root, int sum) {
-      
+
       if( root == NULL ) return false;
       if( root->left == NULL && root->right == NULL ){
         return root->val == sum;
@@ -849,7 +997,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="225" class="anchor" href="#225"></a>#225 Implement Stack using Queues (Easy)</h3>
 <p>Take advantage of 2 queues to get access to both head and tail.</p>
 <pre><code>class Stack {
@@ -890,45 +1038,45 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="9" class="anchor" href="#9"></a>#9 Panlindrome Number (Easy)</h3>
 <p>(Discussion) Reverse till half and compare.</p>
 <pre><code>class Solution {
 public:
    bool isPalindrome(int x) {
-      
+
       if( x < 0 || x != 0 && x % 10 == 0 ) return false;
-      
+
       int y( 0 );
-      
+
       while( x >= y ){
         if( x == y || x / 10 == y ) return true;
         y = y * 10 + x % 10;
         x /= 10;
       }
-      
+
       return false;
    }
 };
 </code></pre>
 <p>Runtime: 80 ms</p>
-    
+
 <h3><a name="111" class="anchor" href="#111"></a>#111 Minimum Depth of Binary Tree (Easy)</h3>
 <p>Recursively find min depth. Trim branches deeper than current min depth.</p>
 <pre><code>class Solution {
 public:
    int minDepth(TreeNode* root) {
-      
+
       if( root == NULL ) return 0;
-      
+
       result = 0x7fffffff;
       traverse( root, 1 );
-      
+
       return result;
    }
-   
+
    void traverse( TreeNode *root, int depth ){
-      
+
       if( root->left == NULL && root->right == NULL )
         result = depth;
       else if( result <= depth )
@@ -938,12 +1086,12 @@ public:
         if( root->right != NULL ) traverse( root->right, depth + 1 );
       }
    }
-   
+
    int result;
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="160" class="anchor" href="#160"></a>#160 Intersection of Two Linked Lists (Easy)</h3>
 <p>Calculate difference of length of the given lists D.<br>
 Two pointers walk on the lists, with the pointer on longer list walked D steps in advance.<br>
@@ -951,34 +1099,34 @@ The intersection is where they meet.</p>
 <pre><code>class Solution {
 public:
    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-      
+
       ListNode *ptrA( headA ), *ptrB( headB );
       ListNode *tailA( NULL ), *tailB( NULL );
       int lenA( 0 ), lenB( 0 );
-      
+
       for( ; ptrA != NULL; ptrA = ptrA->next ){
         if( ptrA->next == NULL ) tailA = ptrA;
         ++lenA;
       }
-      
+
       for( ; ptrB != NULL; ptrB = ptrB->next ){
         if( ptrB->next == NULL ) tailB = ptrB;
         ++lenB;
       }
-      
+
       if( tailA != tailB ) return NULL;
-      
+
       if( lenA < lenB ){
         auto tmp1( lenA ); lenA = lenB; lenB = tmp1;
         auto tmp2( headA ); headA = headB; headB = tmp2;
       }
-      
+
       ptrA = headA;
       ptrB = headB;
-      
+
       for( int i = lenA - lenB; i > 0; ptrA = ptrA->next, --i );
       for( ; ptrA != ptrB; ptrA = ptrA->next, ptrB = ptrB->next );
-      
+
       return ptrA;
    }
 };
@@ -989,7 +1137,7 @@ public:
 public:
    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
       ListNode *ptrA = headA, *ptrB = headB;
-      while (ptrA != ptrB) { 
+      while (ptrA != ptrB) {
         ptrA = ptrA ? ptrA->next : headB;
         ptrB = ptrB ? ptrB->next : headA;
       }
@@ -997,18 +1145,18 @@ public:
    }
 };
 </code></pre>
-    
+
 <h3><a name="88" class="anchor" href="#88"></a>#88 Merge Sorted Array (Easy)</h3>
 <p>Merge from tail, so that no extra memory is needed.</p>
 <pre><code>class Solution {
 public:
    void merge(vector< int >& nums1, int m, vector< int >& nums2, int n) {
-      
+
       if( m == 0 ){ nums1 = nums2; return; }
       if( n == 0 ) return;
-      
+
       nums1.resize( m + n );
-      
+
       for( int i = m - 1, j = n - 1, k = m + n - 1; k >= 0; --k ){
         if( i < 0 ){ nums1[ k ] = nums2[ j-- ]; continue; }
         if( j < 0 ){ nums1[ k ] = nums1[ i-- ]; continue; }
@@ -1018,7 +1166,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="190" class="anchor" href="#190"></a>#190 Reverse Bits (Easy)</h3>
 <p>Simple bits manipulation.</p>
 <pre><code>class Solution {
@@ -1036,7 +1184,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="36" class="anchor" href="#36"></a>#36 Valid Sudoku (Easy)</h3>
 <p>Simple counting.</p>
 <pre><code>class Solution {
@@ -1078,106 +1226,106 @@ public:
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
-    
+
 <h3><a name="223" class="anchor" href="#223"></a>#223 Rectangle Area (Easy)</h3>
 <p>Use long long to avoid int overflow.</p>
 <pre><code>class Solution {
 public:
    int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
-      
+
       long long a( ( 0LL + C - A ) * ( 0LL + D - B ) );
       long long b( ( 0LL + G - E ) * ( 0LL + H - F ) );
       long long c( 0LL + min( C, G ) - max( A, E ) );
       long long d( 0LL + min( D, H ) - max( B, F ) );
       long long e( c > 0LL && d > 0LL ? c * d : 0LL );
-      
+
       return ( int )( a + b - e );
    }
 };
 </code></pre>
 <p>Runtime: 32 ms</p>
-    
+
 <h3><a name="219" class="anchor" href="#219"></a>#219 Contains Duplicate II (Easy)</h3>
 <p>Use std::unordered_set.</p>
 <pre><code>class Solution {
 public:
    bool containsNearbyDuplicate(vector< int >& nums, int k) {
-      
+
       if( k <= 0 ) return false;
-      
+
       unordered_set< int > uset;
       int nNums( nums.size() );
-      
+
       for( int i = 0; i < nNums; ++i ){
         if( uset.find( nums[ i ] ) != uset.end() ) return true;
         if( i - k >= 0 ) uset.erase( nums[ i - k ] );
         uset.insert( nums[ i ] );
       }
-      
+
       return false;
    }
 };
 </code></pre>
 <p>Runtime: 32 ms</p>
-    
+
 <h3><a name="58" class="anchor" href="#58"></a>#58 Length of Last Word (Easy)</h3>
 <p>Simple counting.</p>
 <pre><code>class Solution {
 public:
    int lengthOfLastWord(string s) {
-      
+
       int len( s.length() );
       int result( 0 );
-      
+
       while( len > 0 && s[ len - 1 ] == ' ' ) --len;
       while( len > 0 && s[ len - 1 ] != ' ' ) --len, ++result;
-      
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="19" class="anchor" href="#19"></a>#19 Remove Nth Node From End of List (Easy)</h3>
 <p>2 pointers walk along the list with fast one ahead of slow one by N steps. Delete slow one when fast one meets the end.</p>
 <pre><code>class Solution {
 public:
    ListNode* removeNthFromEnd(ListNode* head, int &n) {
-      
+
       ListNode *fast( head ), *slow( head );
-      
+
       for( int i = 0; i < n; ++i, fast = fast->next );
-      
-      if( !fast ){ 
-        auto tmp( head ); 
-        head = head->next; 
-        delete tmp; 
+
+      if( !fast ){
+        auto tmp( head );
+        head = head->next;
+        delete tmp;
         return head;
-      }else{ 
+      }else{
         fast = fast->next;
         while( fast ){ slow = slow->next; fast = fast->next; }
         auto nxt( slow->next ); slow->next = nxt->next; delete nxt;
       }
-      
+
       return head;
    }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="20" class="anchor" href="#20"></a>#20 Valid Parentheses (Easy)</h3>
 <p>Use a stack. When it comes a left bracket, push into stack, or it comes a right bracket, check if it makes a pair with the top element in stack.</p>
 <pre><code>class Solution {
 public:
    bool isValid(string s) {
-   
+
       stack< int > mstack;
       unordered_map< char, int > umap{
-        { '(', 0 }, { ')', 1 }, 
-        { '{', 2 }, { '}', 3 }, 
-        { '[', 4 }, { ']', 5 }, 
+        { '(', 0 }, { ')', 1 },
+        { '{', 2 }, { '}', 3 },
+        { '[', 4 }, { ']', 5 },
       };
-      
+
       for( char ch : s ){
         int code( umap[ ch ] );
         if( code & 1 ){
@@ -1187,23 +1335,23 @@ public:
         }else
           mstack.push( code );
       }
-      
+
       return mstack.empty();
    }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="205" class="anchor" href="#205"></a>#205 Isomorphic Strings (Easy)</h3>
 <p>Check 1-to-1 mapping.</p>
 <pre><code>class Solution {
 public:
    bool isIsomorphic(string s, string t) {
-      
+
       char chmap[ 256 ]{ 0 };
       bool used[ 256 ]{ false };
       int len( s.length() );
-      
+
       for( int i = 0; i < len; ++i ){
         if( chmap[ s[ i ] ] ){
           if( chmap[ s[ i ] ] != t[ i ] ) return false;
@@ -1213,7 +1361,7 @@ public:
           used[ t[ i ] ] = true;
         }
       }
-      
+
       return true;
    }
 };
@@ -1223,21 +1371,21 @@ public:
 <pre><code>class Solution {
 public:
    bool isIsomorphic(string s, string t) {
-      
+
       char stmap[ 512 ]{ 0 };
       int len( s.length() );
-      
+
       for( int i = 0; i < len; ++i ){
         if( stmap[ s[ i ] ] != stmap[ t[ i ] + 256 ] return false;
         stmap[ s[ i ] ] = stmap[ t[ i ] + 256 ] = i + 1;
       }
-      
+
       return true;
    }
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="290" class="anchor" href="#290"></a>#290 Word Pattern (Easy)</h3>
 <p>1-to-1 map, similar idea as #205.<br>
 (Discussion) Use istringstream to read words from str.</p>
@@ -1258,9 +1406,9 @@ public:
         auto ite1( pmap.find( pattern[ i ] ) );
         auto ite2( smap.find( word ) );
 
-        if( ( ite1 == pmap.end() ) != ( ite2 == smap.end() ) ) 
+        if( ( ite1 == pmap.end() ) != ( ite2 == smap.end() ) )
           return false;
-        if( ( ite1 != pmap.end() ) && ( ite2 != smap.end() ) 
+        if( ( ite1 != pmap.end() ) && ( ite2 != smap.end() )
           && ( ite1->second != ite2->second ) ) return false;
 
         pmap[ pattern[ i ] ] = smap[ word ] = i;
@@ -1271,15 +1419,15 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="203" class="anchor" href="#203"></a>#203 Remove Linked List Elements (Easy)</h3>
 <p>Use a dummy head node to simplify situation.</p>
 <pre><code>class Solution {
 public:
    ListNode* removeElements(ListNode* head, int val) {
-      
+
       ListNode result( 0 ); result.next = head;
-      
+
       for( auto ptr = &result; ptr->next; ){
         if( ptr->next->val == val ){
           auto tmp( ptr->next->next );
@@ -1288,13 +1436,13 @@ public:
         }else
           ptr = ptr->next;
       }
-      
+
       return result.next;
    }
 };
 </code></pre>
 <p>Runtime: 32 ms</p>
-    
+
 <h3><a name="38" class="anchor" href="#38"></a>#38 Count and Say (Easy)</h3>
 <p>Use std::stringstream to simplify string manipulation.</p>
 <pre><code>class Solution {
@@ -1312,9 +1460,9 @@ public:
         int preCount( 0 );
 
         for( char cur : s ){
-          if( cur != pre ){ 
+          if( cur != pre ){
               if( preCount ) ss << preCount << pre;
-              pre = cur; 
+              pre = cur;
               preCount = 1;
           }else
               ++preCount;
@@ -1329,7 +1477,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="299" class="anchor" href="#299"></a>#299 Bulls and Cows (Easy)</h3>
 <p>Simple counting. Use std::stringstream or std::to_string.</p>
 <pre><code>class Solution {
@@ -1357,31 +1505,31 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="14" class="anchor" href="#14"></a>#14 Longest Common Prefix (Easy)</h3>
 <p>Simple counting.</p>
 <pre><code>class Solution {
 public:
    string longestCommonPrefix(vector<string>& strs) {
-      
+
       if( strs.empty() ) return string( "" );
-      
+
       int nStrs( strs.size() );
       int maxLen( strs[ 0 ].length() );
-      
+
       for( int i = 1; i < nStrs; ++i ){
         int len( strs[ i ].length() ), j;
         for( j = 0; j < len && j < maxLen; ++j )
           if( strs[ 0 ][ j ] != strs[ i ][ j ] ) break;
         maxLen = j;
       }
-      
+
       return strs[ 0 ].substr( 0, maxLen );
    }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="67" class="anchor" href="#67"></a>#67 Add Binary (Easy)</h3>
 <p>Split digits into vector and add.</p>
 <pre><code>class Solution {
@@ -1391,7 +1539,7 @@ public:
       vector< int > va, vb;
       string result;
 
-      split( a, va ); 
+      split( a, va );
       split( b, vb );
 
       int lenA( va.size() );
@@ -1442,58 +1590,58 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="234" class="anchor" href="#234"></a>#234 Palindrome Linked List (Easy)</h3>
 <p>Reverse first half and compare.</p>
 <pre><code>class Solution {
 public:
    bool isPalindrome(ListNode* head) {
-      
+
       if( head == NULL || head->next == NULL ) return true;
-      
+
       ListNode dummy( 0 ); dummy.next = head;
       ListNode *fast( &dummy ), *slow( &dummy );
       ListNode *l, *r;
-      
+
       while( fast->next && fast->next->next ){
         slow = slow->next;
         fast = fast->next->next;
       }
-      
+
       l = slow; r = slow->next;
       if( fast->next ) r = r->next;
       l->next = NULL;
-      
+
       for( auto p = &dummy, c = head, n = c->next; ; ){
         c->next = p;
         if( !n ){ head->next = NULL; break; }
         p = c; c = n; n = n->next;
       }
-      
+
       for( ; l && l->val == r->val; l = l->next, r = r->next );
       return l == NULL;
    }
 };
 </code></pre>
 <p>Runtime: 28 ms</p>
-    
+
 <h3><a name="257" class="anchor" href="#257"></a>#257 Binary Tree Paths (Easy)</h3>
 <p>Simple DFS. Use a vector to record nodes on current path.</p>
 <pre><code>class Solution {
 public:
    vector<string> binaryTreePaths(TreeNode* root) {
-      if( root == NULL ) 
+      if( root == NULL )
         return vector< string >();
-      else{ 
-        traverse( root ); 
-        return vs; 
+      else{
+        traverse( root );
+        return vs;
       }
    }
-   
+
    void traverse( TreeNode *root ){
-      
+
       vi.push_back( root->val );
-      
+
       if( root->left == NULL && root->right == NULL ){
         string s;
         for( int i : vi ) s += "->" + to_string( i );
@@ -1502,16 +1650,16 @@ public:
         if( root->left ) traverse( root->left );
         if( root->right ) traverse( root->right );
       }
-      
+
       vi.pop_back();
    }
-   
+
    vector< string > vs;
    vector< int > vi;
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="303" class="anchor" href="#303"></a>#303 Range Sum Query - Immutable (Easy)</h3>
 <p>Precompute suffix sum array, then sumRange( i, j ) = suffixSum( j ) - suffixSum( i - 1 ).</p>
 <pre><code>class NumArray {
@@ -1529,63 +1677,63 @@ public:
 };
 </code></pre>
 <p>Runtime: 596 ms</p>
-    
+
 <h3><a name="28" class="anchor" href="#28"></a>#28 Implement strStr() (Easy)</h3>
 <p>Compare by brute force.</p>
 <pre><code>class Solution {
 public:
    int strStr(string haystack, string needle) {
-      
+
       int lenH( haystack.length() );
       int lenN( needle.length() );
-      
+
       if( lenN == 0 ) return 0;
       if( lenH < lenN ) return -1;
-      
+
       for( int i = 0; i < lenH - lenN + 1; ++i ){
         for( int j = 0; ; ++j ){
           if( haystack[ i + j ] != needle[ j ] ) break;
           if( j == lenN - 1 ) return i;
         }
       }
-      
+
       return -1;
    }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="7" class="anchor" href="#7"></a>#7 Reverse Integer (Easy)</h3>
 <p>Mind tricky inputs like INT_MAX, INT_MIN.</p>
 <pre><code>class Solution {
 public:
    int reverse(int x) {
-      
+
       if( x == 1 << 31 ) return 0;
       if( x < 0 ) return -reverse( -x );
-      
+
       long long y( 0LL );
-      
+
       while( x ){
         y = y * 10LL + x % 10;
         x /= 10;
       }
-      
+
       return y <= 0x7fffffffLL ? ( int )y : 0;
    }
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="125" class="anchor" href="#125"></a>#125 Valid Palindrome (Easy)</h3>
 <p>Extract alphanumerics and check palindrome.</p>
 <pre><code>class Solution {
 public:
    bool isPalindrome(string s) {
-      
+
       string t;
       int len( 0 );
-      
+
       for( char ch : s ){
         if( ch >= '0' && ch <= '9'
           || ch >= 'a' && ch <= 'z'
@@ -1594,17 +1742,17 @@ public:
           ++len;
         }
       }
-      
+
       for( int i = 0; i < len >> 1; ++i ){
         if( t[ i ] != t[ len - i - 1 ] ) return false;
       }
-      
+
       return true;
    }
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
-    
+
 <h3><a name="6" class="anchor" href="#6"></a>#6 ZigZag Conversion (Easy)</h3>
 <p>Simple simulation.</p>
 <pre><code>class Solution {
@@ -1618,7 +1766,7 @@ public:
       string result;
 
       for( int i = 0, j = 0; i < len; ++i ){
-        j = i % loop; 
+        j = i % loop;
         if( j >= numRows ) j = ( numRows - 1 << 1 ) - j;
         vs[ j ] += s[ i ];
       }
@@ -1630,18 +1778,18 @@ public:
 };
 </code></pre>
 <p>Runtime: 48 ms</p>
-    
+
 <h3><a name="204" class="anchor" href="#204"></a>#Count Primes (Easy)</h3>
 <p>"Sift" non-primes out using known primes. Mind int range overflow.</p>
 <pre><code>class Solution {
 public:
    int countPrimes(int n) {
-      
+
       if( n < 2 ) return 0;
-      
+
       vector< bool > prime( n, true );
       int result( 0 );
-      
+
       for( int i = 2; i < n; ++i ){
         if( !prime[ i ] ) continue;
         ++result;
@@ -1650,13 +1798,13 @@ public:
           prime[ j ] = false;
         }
       }
-      
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 312 ms</p>
-    
+
 <h3><a name="228" class="anchor" href="#228"></a>#228 Summary Ranges (Easy)</h3>
 <p>Simple iteration. Append an end symbol to simplify situation.</p>
 <pre><code>class Solution {
@@ -1670,11 +1818,11 @@ public:
       int head( 0 ), tail( 0 );
 
       nums.push_back( nums[ nNums++ - 1 ] );
-      
+
       for( int i = 1; i < nNums; tail = i++ ){
         if( nums[ i ] != nums[ i - 1 ] + 1 ){
           if( tail - head )
-              result.push_back( to_string( nums[ head ] ) 
+              result.push_back( to_string( nums[ head ] )
                 + "->" + to_string( nums[ tail ] ) );
           else
               result.push_back( to_string( nums[ head ] ) );
@@ -1687,7 +1835,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="278" class="anchor" href="#278"></a>#278 First Bad Version (Easy)</h3>
 <p>Binary search. Mind int range overflow when computing middle.</p>
 <pre><code>bool isBadVersion(int version);
@@ -1695,9 +1843,9 @@ public:
 class Solution {
 public:
    int firstBadVersion(int n) {
-      
+
       int lower( 1 ), upper( n ), middle;
-      
+
       while( upper - lower ){
         middle = lower + ( upper - lower >> 1 );
         if( isBadVersion( middle ) )
@@ -1705,13 +1853,13 @@ public:
         else
           lower = middle + 1;
       }
-      
+
       return isBadVersion( upper ) ? upper : 0;
    }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="155" class="anchor" href="#155"></a>#155 Min Stack (Easy)</h3>
 <p>Use 2 stacks. One for normal use, the other to store mins.</p>
 <pre><code>class MinStack {
@@ -1738,7 +1886,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 28 ms</p>
-    
+
 <h3><a name="168" class="anchor" href="#168"></a>#168 Excel Sheet Column Title (Easy)</h3>
 <p>A new type of number with a numeral base of 26.</p>
 <pre><code>class Solution {
@@ -1756,7 +1904,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="189" class="anchor" href="#189"></a>#189 Rotate Array (Easy)</h3>
 <p>Reverse first part, reverse second part, then reverse whole.<br>
 Note that k might be greater than size of nums.</p>
@@ -1768,7 +1916,7 @@ public:
       reverse( nums, nums.size() - k, nums.size() - 1 );
       reverse( nums, 0, nums.size() - 1 );
    }
-   
+
    void reverse( vector< int > &nums, int a, int b ){
       for( int i = 0; i < b - a + 1 >> 1; ++i ){
         auto tmp( nums[ a + i ] );
@@ -1779,7 +1927,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="165" class="anchor" href="#165"></a>#165 Compare Version Numbers(Easy)</h3>
 <p>Use std::istringstream to ease string manipulation.</p>
 <pre><code>class Solution {
@@ -1796,7 +1944,7 @@ public:
 
       while( true ){
         a = b = 0;
-        getA = iss1 >> a ? true : false; 
+        getA = iss1 >> a ? true : false;
         getB = iss2 >> b ? true : false;
         if( !getA && !getB ) return 0;
         if( a != b ) return a > b ? 1 : -1;
@@ -1805,25 +1953,25 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="8" class="anchor" href="#8"></a>#8 String to Integer (Easy)</h3>
 <p>Simple state machine.</p>
 <pre><code>class Solution {
 public:
    int myAtoi(string str) {
-      
+
       bool positive( true );
       bool starting( true );
       long long result( 0 );
-      
+
       for( char ch : str ){
         if( starting ){
           if( ch == ' ' || ch == '\t' )  continue;
-          if( ch == '+' || ch == '-' || ch >= '0' && ch <= '9' ){ 
+          if( ch == '+' || ch == '-' || ch >= '0' && ch <= '9' ){
               if( ch == '-' ) positive = false;
               else if( ch != '+' ) result = ch - '0';
-              starting = false; 
-              continue; 
+              starting = false;
+              continue;
           }
           return 0;
         }else{
@@ -1833,13 +1981,13 @@ public:
           if( !positive && result > 0x80000000LL ) return 0x80000000;
         }
       }
-      
+
       return positive ? ( int )result : ( int )( -result );
    }
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="136" class="anchor" href="#136"></a>#136 Single Number (Medium)</h3>
 <p>Idea similar to qsort. Choose a standard and make left part less than or equal to standard and right part greater than standard. The answer is in the part with odd number of elements.</p>
 <pre><code>class Solution {
@@ -1847,12 +1995,12 @@ public:
    int singleNumber(vector< int >& nums) {
 
       if( nums.empty() ) return 0;
-      
+
       return find( nums, 0, nums.size() - 1 );
    }
 
    int find( vector< int > &nums, int l, int r ){
-   
+
       if( r == l ) return nums[ l ];
 
       int i( l ), j( r );
@@ -1882,73 +2030,73 @@ public:
    int singleNumber(vector< int >& nums) {
 
       int result( 0 );
-      
+
       for( int i : nums ) result ^= i;
-      
+
       return result;
    }
 };
 </code></pre>
-    
+
 <h3><a name="260" class="anchor" href="#260"></a>#260 Single Number III (Medium)</h3>
 <p>XOR all numbers. Use a bit set of the result to classify all numbers into two parts. The answer is the XOR of each part.</p>
 <pre><code>class Solution {
 public:
    vector< int > singleNumber(vector< int >& nums) {
-      
+
       int all( 0 ), first( 0 ), second( 0 );
-      
+
       for( int i : nums ) all ^= i; all &= -all;
-      for( int i : nums ) i & all ? first ^= i : second ^= i; 
-      
+      for( int i : nums ) i & all ? first ^= i : second ^= i;
+
       return vector< int >{ first, second };
    }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="122" class="anchor" href="#122"></a>#122 Best Time to Buy and Sell Stock II (Medium)</h3>
 <p>If price today is higher than yesterday, "bought" yesterday and sell today.</p>
 <pre><code>class Solution {
 public:
    int maxProfit(vector< int >& prices) {
-      
+
       int result( 0 ), yesterday( 0x7fffffff );
-      
+
       for( int today : prices ){
         result += today > yesterday ? today - yesterday : 0;
         yesterday = today;
       }
-      
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="238" class="anchor" href="#238"></a>#238 Product of Array Except Self (Medium)</h3>
 <p>Use output to store prefix product and nums to store suffix product, then combine them together.</p>
 <pre><code>class Solution {
 public:
    vector< int > productExceptSelf(vector< int >& nums) {
-      
+
       vector< int > output( nums.size(), 1 );
-      
+
       for( int i = 1; i < nums.size(); ++i ){
         output[ i ] = output[ i - 1] * nums[ i - 1 ];
       }
-      
+
       for( int i = nums.size() - 2; i >= 0; --i ){
         nums[ i ] *= nums[ i + 1 ];
         output[ i ] *= nums[ i + 1 ];
       }
-      
+
       return output;
    }
 };
 </code></pre>
 <p>Runtime: 60 ms</p>
-    
+
 <h3><a name="144" class="anchor" href="#144"></a>#144 Binary Tree Preorder Traversal (Medium)</h3>
 <p>Use stack to solve it iteratively.</p>
 <pre><code>class Solution {
@@ -1964,7 +2112,7 @@ public:
       mstack.push( root );
 
       while( !mstack.empty() ){
-        pNode = mstack.top(); 
+        pNode = mstack.top();
         mstack.pop();
         result.push_back( pNode->val );
         if( pNode->right ) mstack.push( pNode->right );
@@ -1977,7 +2125,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="319" class="anchor" href="#319"></a>#319 Bulb Switcher (Medium)</h3>
 <p>Lights at positions of perfect square will be on.</p>
 <pre><code>class Solution {
@@ -1988,21 +2136,21 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="94" class="anchor" href="#94"></a>#94 Binary Tree Inorder Traversal (Medium)</h3>
 <p>Use stack to solve it iteratively. Add a flag to indicate inorder.</p>
 <pre><code>class Solution {
 public:
    vector< int > inorderTraversal(TreeNode* root) {
-      
+
       if( root == NULL ) return vector< int >();
-      
+
       vector< int > result;
       stack< pair< TreeNode *, bool > > mstack;
       bool inorder;
-      
+
       mstack.push( make_pair( root, false ) );
-      
+
       while( !mstack.empty() ){
         root = mstack.top().first;
         inorder = mstack.top().second;
@@ -2012,30 +2160,30 @@ public:
         mstack.push( make_pair( root, true ) );
         if( root->left ) mstack.push( make_pair( root->left, false ) );
       }
-      
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="268" class="anchor" href="#268"></a>#268 Missing Number (Medium)</h3>
 <p>All Hail XOR!!</p>
 <pre><code>class Solution {
 public:
    int missingNumber(vector< int >& nums) {
-      
+
       int result( 0 );
-      
+
       for( int i = 0; i <= nums.size(); ++i ) result ^= i;
       for( int i : nums ) result ^= i;
-      
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 36 ms</p>
-    
+
 <h3><a name="318" class="anchor" href="#318"></a>#318 Maximum Product of Word Lengths (Medium)</h3>
 <p>Use bitset to indicate letter usage. Compare by brute force.</p>
 <pre><code>class Solution {
@@ -2064,60 +2212,60 @@ public:
 };
 </code></pre>
 <p>Runtime: 148 ms</p>
-    
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p>Fast pointer walks twice as fast as slow pointer. There is a loop if fast one meets slow one before it meets end.</p>
 <pre><code>class Solution {
 public:
    bool hasCycle(ListNode *head) {
-      
+
       if( head == NULL ) return false;
-      
+
       ListNode *slow( head ), *fast( head->next );
-      
+
       while( fast && slow != fast ){
         slow = slow->next;
         fast = fast->next;
         if( fast == NULL ) return false;
         fast = fast->next;
       }
-      
+
       return fast != NULL;
    }
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="137" class="anchor" href="#137"></a>#137 Single Number II (Medium)</h3>
 <p>Can be solved similarly to #136.</p>
 <p>(Discussion)Crazy XOR!!</p>
 <pre><code>class Solution {
 public:
    int singleNumber(vector< int >& nums) {
-      
+
       int ones( 0 ), twos( 0 );
-      
+
       for( int x : nums ){
         ones ^= x & ~twos;
         twos ^= x & ~ones;
       }
-      
+
       return ones;
    }
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="116" class="anchor" href="#116"></a>#116 Populating Next Right Pointers in Each Node (Medium)</h3>
 <p>Next of a left child is its parent's right child. Next of a right child is its parent's next node's left child. So we should populate the tree from right to left.</p>
 <pre><code>class Solution {
 public:
    void connect(TreeLinkNode *root) {
-      traverse( root, NULL, RIGHT );      
+      traverse( root, NULL, RIGHT );
    }
 
    void traverse( TreeLinkNode *root, TreeLinkNode *parent, int flag ){
-      
+
       if( root == NULL ) return;
       if( parent != NULL ){
         if( flag == LEFT ){
@@ -2140,7 +2288,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 24 ms</p>
-    
+
 <h3><a name="108" class="anchor" href="#108"></a>#108 Convert Sorted Array to Binary Search Tree (Medium)</h3>
 <p>Recursively build tree using first half for left subtree and the other half for right subtree.</p>
 <pre><code>class Solution {
@@ -2148,50 +2296,50 @@ public:
    TreeNode* sortedArrayToBST(vector< int >& nums) {
       return buildTree( nums, 0, nums.size() - 1 );
    }
-   
+
    TreeNode* buildTree( vector< int > &nums, int l, int r ){
-      
+
       if( l > r ) return NULL;
-      
+
       int m( r + l + 1 >> 1 );
-      TreeNode *root = new TreeNode( nums[ m ] ); 
+      TreeNode *root = new TreeNode( nums[ m ] );
       root->left = buildTree( nums, l, m - 1 );
       root->right = buildTree( nums, m + 1, r );
-      
+
       return root;
    }
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
-    
+
 <h3><a name="53" class="anchor" href="#53"></a>#53 Maximum Subarray (Medium)</h3>
 <p>Greedy strategy. Add current number to sum. Set sum to zero if it is less than zero.</p>
 <pre><code>class Solution {
 public:
    int maxSubArray(vector< int >& nums) {
-      
+
       int result( 1 << 31 ), sum( 0 );
-      
+
       for( int i : nums ){
         sum += i;
         result = max( result, sum );
         sum < 0 ? sum = 0 : 0;
       }
-      
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="153" class="anchor" href="#153"></a>#153 Find Minimum in Rotated Sorted Array (Medium)</h3>
 <p>Binary search.</p>
 <pre><code>class Solution {
 public:
    int findMin(vector< int >& nums) {
-      
+
       int lower( 0 ), upper( nums.size() - 1 ), middle;
-      
+
       while( upper - lower ){
         middle = lower + ( upper - lower >> 1 );
         if( nums[ middle ] <= nums[ upper ] )
@@ -2199,56 +2347,56 @@ public:
         else
           lower = middle + 1;
       }
-      
+
       return nums[ upper ];
    }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="22" class="anchor" href="#22"></a>#22 Generate Parentheses (Medium)</h3>
 <p>Recursively generate.</p>
 <pre><code>class Solution {
 public:
    vector<string> generateParenthesis(int n) {
-      
+
       result.clear();
       generate( "", 0, n );
-      
+
       return result;
    }
-   
+
    void generate( string str, int m, int n ){
       if( !n ){ result.push_back( str + string( m, ')' ) ); return; }
       if( m ) generate( str + ")", m - 1, n );
       generate( str + "(", m + 1, n - 1 );
    }
-   
+
    vector< string > result;
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="62" class="anchor" href="#62"></a>#62 Unique Paths (Medium)</h3>
 <p>Since grid(i,j) can be reached from grid(i-1,j) or grid(i,j-1), thus f[i,j] = f[i-1,j] + f[i,j-1]. Can use only an 1*n or m*1 array.</p>
 <pre><code>class Solution {
 public:
    int uniquePaths(int m, int n) {
-      
+
       vector< int > vi( n, 1 );
-      
+
       for( int i = 1; i < m; ++i ){
         for( int j = 1; j < n; ++j ){
           vi[ j ] += vi[ j - 1 ];
         }
       }
-      
+
       return vi[ n - 1 ];
    }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="89" class="anchor" href="#89"></a>#89 Gray Code (Medium)</h3>
 <p>First half is symmetric to second half except that LSB of first half is 0 while second half is 1.</p>
 <pre><code>class Solution {
@@ -2268,7 +2416,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="230" class="anchor" href="#230"></a>#230 Kth Smallest Element in a BST (Medium)</h3>
 <p>Recursively count number of nodes of tree and find kth smallest element.</p>
 <pre><code>class Solution {
@@ -2281,7 +2429,7 @@ public:
    }
 
    int kthAndNNodes( TreeNode *root, int k, int &nNodes ){
-      
+
       if( root == NULL ) return 0;
 
       int nLNodes( 0 ), nRNodes( 0 ), result;
@@ -2300,7 +2448,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="309" class="anchor" href="#309"></a>#309 Best Time to Buy and Sell Stock with Cooldown (Medium)</h3>
 <p>DP on state machine:<br>
 State A: can buy (goto B) or rest (goto A):   A[i] = max( A[i-1], C[i-1] ).<br>
@@ -2310,50 +2458,50 @@ State C: can rest (goto A) only: C[i] = max( C[i-1], B[i-1] + today's price ).
 <pre><code>class Solution {
 public:
    int maxProfit(vector< int >& prices) {
-      
+
       int nPrices( prices.size() );
       vector< int > a( nPrices + 1, 0 );
       vector< int > b( nPrices + 1, 1 << 31 );
       vector< int > c( nPrices + 1, 1 << 31 );
-      
+
       for( int i = 1; i <= nPrices; ++i ){
         a[ i ] = max( a[ i - 1 ], c[ i - 1 ] );
         b[ i ] = max( b[ i - 1 ], a[ i - 1 ] - prices[ i - 1 ] );
         c[ i ] = max( c[ i - 1 ], b[ i - 1 ] + prices[ i - 1 ] );
       }
-      
+
       return max( a[ nPrices ], c[ nPrices ] );
    }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="46" class="anchor" href="#46"></a>#46 Permutations (Medium)</h3>
 <p>Permutations of n numbers can be generated by inserting nth number into permutations of n-1 numbers.</p>
 <pre><code>class Solution {
 public:
    vector< vector< int > > permute(vector< int >& nums) {
-      
+
       N = nums.size();
       vi.clear();
       vi.push_back( 0 );
       result.clear();
       generatePermutations();
-      
+
       for( auto &i : result )
         for( auto &j: i )
           j = nums[ j ];
-      
+
       return result;
    }
-   
+
    void generatePermutations(){
-      
+
       if( vi.size() == N ){
         result.push_back( vi );
         return;
       }
-      
+
       vi.push_back( vi.size() );
       generatePermutations();
       for( int i = vi.size() - 1; i; --i ){
@@ -2364,50 +2512,50 @@ public:
         vi[ i ] = vi[ i + 1 ];
       vi.pop_back();
    }
-   
+
    void swap( int &a, int &b ){
       auto c = a; a = b; b = c;
    }
-   
+
    int N;
    vector< int > vi;
    vector< vector< int > > result;
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
-    
+
 <h3><a name="96" class="anchor" href="#96"></a>#96 Unique Binary Search Trees (Medium)</h3>
 <p>Let F[n] denote the number of different BSTs that store 1..n, and number of trees rooted at ith number is F[i-1] (number of left subtrees) times F[n-i] (number of right subtrees).<br>
 Thus, F[n] = F[0]*F[n-1] + F[1]*F[n-2] +...+ F[n-1]*F[0], where F[0] = 1.</p>
 <pre><code>class Solution {
 public:
    int numTrees(int n) {
-      
+
       vector< int > vi{ 1 };
-      
+
       for( int i = 1; i <= n; ++i ){
         vi.push_back( 0 );
         for( int j = 0; j < i; ++j ){
           vi[ i ] += vi[ j ] * vi[ i - j - 1 ];
         }
       }
-      
+
       return vi.back();
    }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="35" class="anchor" href="#35"></a>#35 Search Insert Position (Medium)</h3>
 <p>Simple binary search. Mind edge case.</p>
 <pre><code>class Solution {
 public:
    int searchInsert(vector< int >& nums, int target) {
-      
+
       if( target > nums.back() ) return nums.size();
-      
+
       int lower( 0 ), upper( nums.size() - 1 ), middle;
-      
+
       while( upper - lower ){
         middle = lower + ( upper - lower >> 1 );
         if( nums[ middle ] < target )
@@ -2415,40 +2563,40 @@ public:
         else
           upper = middle;
       }
-      
+
       return upper;
    }
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="121" class="anchor" href="#121"></a>#121 Best Time to Buy and Sell Stock (Medium)</h3>
 <p>Record the lowest price before today and calculate profit you can make if you sell today. Maximize the profit.</p>
 <pre><code>class Solution {
 public:
    int maxProfit(vector< int >& prices) {
-      
+
       int minBefore( 1 << 30 ), result( 0 );
-      
+
       for( int today : prices ){
         result = max( result, today - minBefore );
         minBefore = min( minBefore, today );
       }
-      
+
       return result;
    }
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="24" class="anchor" href="#24"></a>#24 Swap Nodes in Pairs (Medium)</h3>
 <p>Linked list manipulation.</p>
 <pre><code>class Solution {
 public:
    ListNode* swapPairs(ListNode* head) {
-      
+
       ListNode dummy( 0 ); dummy.next = head;
-      
+
       for( auto pNode = &dummy; pNode; pNode = pNode->next->next ){
         if( !pNode->next || !pNode->next->next ) break;
         auto pNN( pNode->next->next );
@@ -2456,13 +2604,13 @@ public:
         pNN->next = pNode->next;
         pNode->next = pNN;
       }
-      
+
       return dummy.next;
    }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="12" class="anchor" href="#12"></a>#12 Integer to Roman (Medium)</h3>
 <p>Add "M" to make x less than 1000.<br>
 For x within [100,1000): <br>
@@ -2476,8 +2624,8 @@ public:
    string intToRoman(int num) {
 
       static const vector< pair< char, int > > vp{
-        { 'I', 1 }, { 'V', 5 }, { 'X', 10 }, { 'L', 50 }, 
-        { 'C', 100, }, { 'D', 500 },  { 'M', 1000 }, 
+        { 'I', 1 }, { 'V', 5 }, { 'X', 10 }, { 'L', 50 },
+        { 'C', 100, }, { 'D', 500 },  { 'M', 1000 },
       };
 
       string result( num / 1000, 'M' ); num %= 1000;
@@ -2516,15 +2664,15 @@ public:
    return M[num/1000] + C[(num%1000)/100] + X[(num%100)/10] + I[num%10];
 }
 </code></pre>
-    
+
 <h3><a name="75" class="anchor" href="#75"></a>#75 Sort Colors (Medium)</h3>
 <p>Simple counting.</p>
 <pre><code>class Solution {
 public:
    void sortColors(vector< int >& nums) {
-       
+
        int count[]{ 0, 0, 0, };
-       
+
        for( int &num : nums ) ++count[ num ];
        for( int i = 0, j = 0; i < 3; ++i ){
           while( count[ i ]-- ) nums[ j++ ] = i;
@@ -2533,34 +2681,34 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="64" class="anchor" href="#64"></a>#64 Minimum Path Sum (Medium)</h3>
 <p>DP: F[i,j] = min( F[i-1,j], F[i,j-1] ).</p>
 <pre><code>class Solution {
 public:
    int minPathSum(vector< vector< int > >& grid) {
-       
+
        int m( grid.size() ), n( grid[ 0 ].size() ), tmp;
-       
+
        for( int i = 1; i < m; ++i ) grid[ i ][ 0 ] += grid[ i - 1 ][ 0 ];
        for( int i = 1; i < n; ++i ) grid[ 0 ][ i ] += grid[ 0 ][ i - 1 ];
        for( int i = 1; i < m; ++i ) for( int j = 1; j < n; ++j )
           grid[ i ][ j ] += min( grid[ i - 1 ][ j ], grid[ i ][ j - 1 ] );
-          
+
        return grid[ m - 1 ][ n - 1 ];
    }
 };
 </code></pre>
 <p>Runtime: 28 ms</p>
-    
+
 <h3><a name="48" class="anchor" href="#48"></a>#48 Rotate Image (Medium)</h3>
 <p>Flip along middle vertical, then flip along topright-bottomleft diagonal.</p>
 <pre><code>class Solution {
 public:
    void rotate(vector< vector< int > >& matrix) {
-       
+
        int n( matrix.size() );
-       
+
        for( int i = 0; i < n; ++i ) for( int j = 0; j < n >> 1; ++j )
           swap( matrix[ i ][ j ], matrix[ i ][ n - j - 1 ] );
        for( int i = 0; i < n; ++i ) for( int j = 0; j < n - i - 1; ++j )
@@ -2569,19 +2717,19 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="59" class="anchor" href="#59"></a>#59 Spiral Matrix II (Medium)</h3>
 <p>Simple simulation.</p>
 <pre><code>class Solution {
 public:
     vector< vector< int > > generateMatrix(int n) {
-       
-       static const int dx[]{ 0, 1, 0, -1 }; 
+
+       static const int dx[]{ 0, 1, 0, -1 };
        static const int dy[]{ 1, 0, -1, 0 };
-       
+
        int step( n ), x( 0 ), y( -1 ), k( 1 );
        vector< vector< int > > result( n, vector< int >( n, 0 ) );
-       
+
        while( step ){
           for( int i = 0; i < 4; ++i ){
               for( int j = 0; j < step; ++j )
@@ -2589,13 +2737,13 @@ public:
               if( ( i & 1 ) == 0 && --step == 0 ) break;
           }
        }
-       
+
        return result;
    }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="11" class="anchor" href="#11"></a>#11 Container With Most Water (Medium)</h3>
 <p>Assume the answer is formed by line i and j, we can be sure that H[i] > H[k] where k > j, and H[j] > H[k] where k < i, so we can shrink left and right borders to cover the answer situation.</p>
 <pre><code>class Solution {
@@ -2603,18 +2751,18 @@ public:
    int maxArea(vector< int >& height) {
 
        int water( 0 );
-       
+
        for( int i = 0, j = height.size() - 1; i < j; ){
           water = max( water, min( height[ i ], height[ j ] ) * ( j - i ) );
           height[ i ] < height[ j ] ? ++i : --j;
        }
-       
+
        return water;
    }
 };
 </code></pre>
 <p>Runtime: 24 ms</p>
-    
+
 <h3><a name="216" class="anchor" href="#216"></a>#216 Combination Sum III (Medium)</h3>
 <p>Recursively generate.</p>
 <pre><code>class Solution {
@@ -2626,12 +2774,12 @@ public:
        v.clear();
        result.clear();
        generate( 0, 0, 0 );
-       
+
        return result;
    }
 
    void generate( int num, int sum, int last ){
-       
+
        if( num == K || sum == N ){
           if( num == K && sum == N ) result.push_back( v );
           return ;
@@ -2650,16 +2798,16 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="74" class="anchor" href="#74"></a>#74 Search a 2D Matrix (Medium)</h3>
 <p>Treat the matrix as array and use binary search.</p>
 <pre><code>class Solution {
 public:
     bool searchMatrix(vector< vector< int > >& matrix, int target) {
-        
+
         int M( matrix.size() ), N( matrix[ 0 ].size() );
         int lower( 0 ), upper( M * N - 1 ), middle, i, j;
-        
+
         while( upper - lower ){
             middle = lower + ( upper - lower >> 1 );
             if( matrix[ middle / N ][ middle % N ] >= target )
@@ -2667,13 +2815,13 @@ public:
             else
                 lower = middle + 1;
         }
-        
+
         return matrix[ upper / N ][ upper % N ] == target;
     }
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
-    
+
 <h3><a name="289" class="anchor" href="#289"></a>#289 Game of Life (Medium)</h3>
 <p>Simple simulation. Use second LSB to record new state to solve it in-place.</p>
 <pre><code>class Solution {
@@ -2707,66 +2855,66 @@ public:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="77" class="anchor" href="#77"></a>#77 Combinations (Medium)</h3>
 <p>Recursively generate.</p>
 <pre><code>class Solution {
 public:
     vector< vector< int > > combine(int n, int k) {
-        
+
         N = n; K = k;
         v.clear();
         vv.clear();
         generate( 0, 0 );
-        
+
         return vv;
     }
-    
+
     void generate( int num, int last ){
-        
+
         if( num == K ){ vv.push_back( v ); return; }
-        
+
         for( int i = last + 1; i <= N; ++i ){
             v.push_back( i );
             generate( num + 1, i );
             v.pop_back();
         }
     }
-    
+
     int N, K;
     vector< int > v;
     vector< vector< int > > vv;
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="162" class="anchor" href="#162"></a>#162 Find Peak Element (Medium)</h3>
 <p>Ternary search.</p>
 <pre><code>class Solution {
 public:
     int findPeakElement(vector< int >& nums) {
-        
+
         int lower( 0 ), upper( nums.size() - 1 );
         int first, second, result;
-        
+
         while( upper - lower > 2 ){
             first = lower + ( upper - lower ) / 3;
             second = upper - first + lower;
             nums[ first ] < nums[ second ] ? lower = first : upper = second;
         }
-        
+
         result = lower;
-        if( upper - lower > 0 ) result = 
+        if( upper - lower > 0 ) result =
             nums[ result ] > nums[ lower + 1 ] ? result : lower + 1;
-        if( upper - lower > 1 ) result = 
+        if( upper - lower > 1 ) result =
             nums[ result ] > nums[ lower + 2 ] ? result : lower + 2;
-        
+
         return result;
     }
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="73" class="anchor" href="#73"></a>#73 Set Matrix Zeroes (Medium)</h3>
 <p>The idea is to find a row containing zero, and use it to mark columns to be set to zeroes.</p>
 <pre><code>class Solution {
@@ -2807,49 +2955,49 @@ public:
 };
 </code></pre>
 <p>Runtime: 88 ms</p>
-    
+
 <h3><a name="300" class="anchor" href="#300"></a>#300 Longest Increasing Subsequence (Medium)</h3>
 <p>Maintain a ascending list of numbers and use binary search to insert new number.</p>
 <pre><code>class Solution {
 public:
     int lengthOfLIS(vector< int >& nums) {
-        
+
         vector< int > v{ 1 << 31 };
-        
+
         for( int num : nums ) insert( v, num );
-        
+
         return v.size() - 1;
     }
-    
+
     void insert( vector< int > &v, int x ){
-        
+
         if( x > v.back() ){ v.push_back( x ); return; }
-        
+
         int lower( 0 ), upper( v.size() - 1 ), middle;
-        
+
         while( upper - lower ){
             middle = lower + ( upper - lower >> 1 );
             v[ middle ] >= x ? upper = middle : lower = middle + 1;
         }
-        
+
         v[ upper ] = x;
     }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="284" class="anchor" href="#284"></a>#284 Peeking Iterator (Medium)</h3>
 <p>Create a copy of this iterator and use it to call next().</p>
 <pre><code>class PeekingIterator : public Iterator {
 public:
     PeekingIterator(const vector< int >& nums) : Iterator(nums) {
     }
-    
+
     int peek() {
         Iterator iterator( *this );
         return iterator.next();
     }
-    
+
     int next() {
         return Iterator::next();
     }
@@ -2860,7 +3008,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="173" class="anchor" href="#173"></a>#173 Binary Search Tree Iterator (Medium)</h3>
 <p>Use a stack to implement pre-order traversal.</p>
 <pre><code>class BSTIterator {
@@ -2876,7 +3024,7 @@ public:
 
     /** @return the next smallest number */
     int next() {
-        
+
         auto top( vp.top() ); vp.pop();
 
         while( !top.second ){
@@ -2893,7 +3041,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 32 ms</p>
-    
+
 <h3><a name="240" class="anchor" href="#240"></a>#240 Search a 2D Matrix II (Medium)</h3>
 <p>Perform binary search twice.</p>
 <pre><code>class Solution {
@@ -2941,30 +3089,30 @@ public:
 };
 </code></pre>
 <p>Runtime: 360 ms</p>
-    
+
 <h3><a name="199" class="anchor" href="#199"></a>#199 Binary Tree Right Side View (Medium)</h3>
 <p>Traverse right subtree first then left subtree. Record first met node of each layer.</p>
 <pre><code>class Solution {
 public:
     vector< int > rightSideView(TreeNode* root) {
-        
+
         v.clear();
         if( root ) traverse( root, 1 );
-        
+
         return v;
     }
-    
+
     void traverse( TreeNode *root, int depth ){
         if( depth > v.size() ) v.push_back( root->val );
         if( root->right ) traverse( root->right, depth + 1 );
         if( root->left ) traverse( root->left, depth + 1 );
     }
-    
+
     vector< int > v;
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="274" class="anchor" href="#274"></a>#274 H-Index (Medium)</h3>
 <p>Sort citations and perform binary search.</p>
 <pre><code>class Solution {
@@ -2974,10 +3122,10 @@ public:
         if( citations.empty() ) return 0;
 
         sort( citations.begin(), citations.end() );
-        
+
         int nCitations( citations.size() );
         int lower( 0 ), upper( citations.back() ), mid;
-        
+
         while( upper - lower ){
             mid = lower + ( upper - lower + 1 >> 1 );
             if( nCitations - find( citations, mid ) >= mid )
@@ -3043,7 +3191,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="80" class="anchor" href="#80"></a>#80 Remove Duplicates from Sorted Array II (Medium)</h3>
 <p>If the current number is equal to the third number from the current one, do not add it to result.</p>
 <pre><code>class Solution {
@@ -3062,7 +3210,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 20 ms</p>
-    
+
 <h3><a name="200" class="anchor" href="#200"></a>#200 Number of Islands (Medium)</h3>
 <p></p>
 <pre><code>class Solution {
@@ -3104,54 +3252,54 @@ public:
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
-    
+
 <h3><a name="241" class="anchor" href="#241"></a>#241 Different Ways to Add Parentheses (Medium)</h3>
 <p>DFS.</p>
 <pre><code>[ugly code]
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="142" class="anchor" href="#142"></a>#142 Linked List Cycle II (Medium)</h3>
 <p>Fast pointer walks twice as fast as slow pointer. When they meet, let one of them point to head then they walk at same speed. The entry is where they meet.</p>
 <pre><code>class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
-        
+
         ListNode dummy( 0 ); dummy.next = head;
         ListNode *slow( &dummy ), *fast( &dummy );
-        
+
         while( fast == &dummy || fast && slow != fast ){
             slow = slow->next;
             fast = fast->next;
             if( fast == NULL ) return NULL;
             fast = fast->next;
         }
-        
+
         if( !fast ) return NULL;
-        
+
         slow = &dummy;
-        
+
         while( slow != fast ){
             slow = slow->next;
             fast = fast->next;
         }
-        
+
         return fast;
     }
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="129" class="anchor" href="#129"></a>#129 Sum Root to Leaf Numbers (Medium)</h3>
 <p>DFS.</p>
 <pre><code>class Solution {
 public:
     int sumNumbers(TreeNode* root) {
-        
+
         if( !root ) return 0;
         result = 0;
         traverse( root, 0 );
-        
+
         return result;
     }
     <!--  -->
@@ -3161,20 +3309,20 @@ public:
         if( root->left ) traverse( root->left, a );
         if( root->right ) traverse( root->right, a );
     }
-    
+
     int result;
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="81" class="anchor" href="#81"></a>#81 Search in Rotated Sorted Array II (Medium)</h3>
 <p>Worst case time complexity: O(n).</p>
 <pre><code>class Solution {
 public:
     bool search(vector< int >& nums, int target ) {
-        
+
         int lower( 0 ), upper( nums.size() - 1 ), mid;
-        
+
         while( upper - lower ){
             mid = lower + ( upper - lower >> 1 );
             if( nums[ mid ] == nums[ upper ] ) --upper;
@@ -3186,13 +3334,13 @@ public:
                     ( lower = mid + 1 ) : ( upper = mid );
             }
         }
-        
+
         return nums[ upper ] == target;
     }
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="215" class="anchor" href="#215"></a>#215 Kth Largest Element in an Array (Medium)</h3>
 <p>Idea of partition in qsort. Or use std::nth_element.</p>
 <pre><code>class Solution {
@@ -3224,34 +3372,34 @@ public:
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="279" class="anchor" href="#279"></a>#279 Perfect Squares (Medium)</h3>
 <p>Recursively search for solutions with least number of squares that sum to n.</p>
 <pre><code>class Solution {
 public:
     int numSquares(int n) {
-        
+
         for( int i = 1; ; ++i )
-            if( helper( i, n ) ) 
+            if( helper( i, n ) )
                 return i;
     }
 
     bool helper( int a, int s ){
-        
+
         int r( sqrt( s + 0. ) );
-        
+
         if( a == 1 ) return s == r * r ? true : false;
-        
+
         for( int i = r; r >= 1; --r )
             if( helper( a - 1, s - r * r ) )
                 return true;
-        
+
         return false;
     }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="114" class="anchor" href="#114"></a>#114 Flatten Binary Tree to Linked List (Medium)</h3>
 <p>Recursively flatten the left subtree and right subtree, connect right subtree to tail of left subtree and make left subtree into right, finally return tail of whole tree.</p>
 <pre><code>class Solution {
@@ -3278,7 +3426,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="313" class="anchor" href="#313"></a>#313 Super Ugly Number (Medium)</h3>
 <p>Use an array to record the next ugly number to multiply with to produce a new ugly number.</p>
 <pre><code>class Solution {
@@ -3299,36 +3447,36 @@ public:
         }
 
         return ugly[ n - 1 ];
-    }   
+    }
 };
 </code></pre>
 <p>Runtime: 140 ms</p>
-    
+
 <h3><a name="78" class="anchor" href="#78"></a>#78 Subsets (Medium)</h3>
 <p>Sort the numbers. Iterate a variable from 0 to 2^{# of numbers} and use its bitsets to indicate seletion of numbers.</p>
 <pre><code>class Solution {
 public:
     vector< vector< int > > subsets(vector< int >& nums) {
-        
+
         int nNums( nums.size() );
         vector< vector< int > > vv;
         vector< int > v;
-        
+
         sort( nums.begin(), nums.end() );
-        
+
         for( int i = 0; i < 1 << nNums; ++i ){
             v.clear();
             for( int j = 0; j < nNums; ++j )
                 if( 1 << j & i ) v.push_back( nums[ j ] );
             vv.push_back( v );
         }
-        
+
         return vv;
     }
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="39" class="anchor" href="#39"></a>#39 Combination Sum (Medium)</h3>
 <p>Sort the numbers. DFS for all combinations.</p>
 <pre><code>class Solution {
@@ -3358,7 +3506,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
-    
+
 <h3><a name="109" class="anchor" href="#109"></a>#109 Convert Sorted List to Binary Search Tree (Medium)</h3>
 <p>Find middle node and create root then recursively build left and right subtrees.</p>
 <pre><code>class Solution {
@@ -3395,7 +3543,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 28 ms</p>
-    
+
 <h3><a name="90" class="anchor" href="#90"></a>#90 Subsets II (Medium)</h3>
 <p>DFS for all combinations.</p>
 <pre><code>class Solution {
@@ -3406,7 +3554,7 @@ public:
         vv.clear();
         m.clear();
         for( int num : nums )
-            m.find( num ) == m.end() ? 
+            m.find( num ) == m.end() ?
                 m[ num ] = 1 : m[ num ] += 1;
         ite = m.begin();
         generate( nums );
@@ -3434,74 +3582,74 @@ public:
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="213" class="anchor" href="#213"></a>#213 House Robber II (Medium)</h3>
 <p>Assume the first house is robbed or not and do DP as in #109.</p>
 <pre><code>class Solution {
 public:
     int rob(vector< int >& nums) {
-    
+
         if( nums.empty() ) return 0;
         if( nums.size() == 1 ) return nums.back();
-        
+
         int result1, result2;
         int nNums( nums.size() );
         vector< int > a( nNums );
         vector< int > b( nNums );
-        
+
         a[ 0 ] = nums[ 0 ];
         b[ 0 ] = 1 << 31;
-        
+
         for( int i = 1; i < nNums; ++i ){
             a[ i ] = max( a[ i - 1 ], b[ i - 1 ] + nums[ i ] );
             b[ i ] = max( a[ i - 1 ], b[ i - 1 ] );
         }
-        
+
         result1 = b.back();
-        
+
         a[ 0 ] = 1 << 31;
         b[ 0 ] = 0;
-        
+
         for( int i = 1; i < nNums; ++i ){
             a[ i ] = max( a[ i - 1 ], b[ i - 1 ] + nums[ i ] );
             b[ i ] = max( a[ i - 1 ], b[ i - 1 ] );
         }
-        
+
         result2 = max( a.back(), b.back() );
-        
+
         return max( result1, result2 );
     }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="120" class="anchor" href="#120"></a>#120 Triangle (Medium)</h3>
 <p>Simple DP. Let F[i,j] denote minimum points can be gained arriving at position(i, j), then we have:<br>
 F[i, j] = min( F[i-1, j-1], F[i-1, j] ) + point[i, j].</p>
 <pre><code>class Solution {
 public:
     int minimumTotal(vector< vector< int > >& triangle) {
-        
+
         int n( triangle.size() ), result( 1 << 30 );
-        
+
         for( int i = 1; i < n; ++i ){
             triangle[ i ].front() += triangle[ i - 1 ].front();
             triangle[ i ].back() += triangle[ i - 1 ].back();
             for( int j = 1; j < i; ++j )
-                triangle[ i ][ j ] += min( 
-                    triangle[ i - 1 ][ j - 1 ], 
+                triangle[ i ][ j ] += min(
+                    triangle[ i - 1 ][ j - 1 ],
                     triangle[ i - 1 ][ j ]
                 );
         }
-        
+
         for( int i : triangle.back() ) result = min( result, i );
-        
+
         return result;
     }
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
-    
+
 <h3><a name="95" class="anchor" href="#95"></a>#95 Unique Binary Search Trees II (Medium)</h3>
 <p>Generate using DP.</p>
 <pre><code>class Solution {
@@ -3542,33 +3690,33 @@ private:
 };
 </code></pre>
 <p>Runtime: 24 ms</p>
-    
+
 <h3><a name="63" class="anchor" href="#63"></a>#63 Unique Paths II (Medium)</h3>
 <p>Same as #62, except that the grid with obstacle should be set to 0.</p>
 <pre><code>class Solution {
 public:
     int uniquePathsWithObstacles(vector< vector< int > >& obstacleGrid) {
-        
+
         int M( obstacleGrid.size() );
         int N( obstacleGrid[ 0 ].size() );
         vector< vector< int > >& f( obstacleGrid );
-        
+
         if( f[ 0 ][ 0 ] == 1 ) return 0;
         f[ 0 ][ 0 ] = 1;
-        
+
         for( int i = 0; i < M; ++i )
         for( int j = i == 0; j < N; ++j ){
             if( f[ i ][ j ] == 1 ){ f[ i ][ j ] = 0; continue; }
             if( i > 0 ) f[ i ][ j ] += f[ i - 1 ][ j ];
             if( j > 0 ) f[ i ][ j ] += f[ i ][ j - 1 ];
         }
-        
+
         return f.back().back();
     }
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="201" class="anchor" href="#201"></a>#201 Bitwise AND of Numbers Range (Medium)</h3>
 <p>The result shares the same suffix with n and m in binary representation.</p>
 <pre><code>class Solution {
@@ -3582,13 +3730,13 @@ public:
             n >>= 1;
             ++shift;
         }
-        
+
         return m ? ( m & n ) << shift : 0;
     }
 };
 </code></pre>
 <p>Runtime: 68 ms</p>
-    
+
 <h3><a name="86" class="anchor" href="#86"></a>#86 Partition List (Medium)</h3>
 <p>Simple linked list operations.</p>
 <pre><code>class Solution {
@@ -3609,37 +3757,37 @@ public:
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="34" class="anchor" href="#34"></a>#34 Search for a Range (Medium)</h3>
 <p>Binary search twice.</p>
 <pre><code>class Solution {
 public:
     vector< int > searchRange(vector< int >& nums, int target) {
-        
+
         vector< int > result;
         int lower( 0 ), upper( nums.size() - 1 ), mid;
-        
+
         while( upper - lower ){
             mid = lower + ( upper - lower >> 1 );
             nums[ mid ] < target ? ( lower = mid + 1 ) : ( upper = mid );
         }
-        
+
         if( nums[ upper ] != target ) return vector< int >{ -1, -1 };
         result.push_back( upper );
         lower = 0; upper = nums.size() - 1;
-        
+
         while( upper - lower ){
             mid = lower + ( upper - lower + 1 >> 1 );
             nums[ mid ] > target ? ( upper = mid - 1 ) : ( lower = mid );
         }
-        
+
         result.push_back( upper );
         return result;
     }
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="147" class="anchor" href="#147"></a>#147 Insertion Sort List (Medium)</h3>
 <p>Sort recursively.</p>
 <pre><code>class Solution {
@@ -3661,7 +3809,7 @@ private:
     }
 
     void insert( ListNode* head ){
-        
+
         if( !head->next || !head->next->next ) return;
 
         auto nxt( head->next );
@@ -3677,7 +3825,7 @@ private:
 };
 </code></pre>
 <p>Runtime: 80 ms</p>
-    
+
 <h3><a name="106" class="anchor" href="#106"></a>#106 Construct Binary Tree from Inorder and Postorder Traversal (Medium)</h3>
 <p>Recursively build tree.</p>
 <pre><code>class Solution {
@@ -3701,7 +3849,7 @@ public:
         int m; for( m = a; inorder[ m ] != postorder[ d ]; ++m );
         if( m > a ) root->left = build( a, m - 1, c, c - 1 + m - a );
         if( m < b ) root->right = build( m + 1, b, c + m - a, d - 1 );
-        
+
         return root;
     }
 
@@ -3710,7 +3858,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 48 ms</p>
-    
+
 <h3><a name="16" class="anchor" href="#16"></a>#16 3Sum Closest (Medium)</h3>
 <p>Loop for first element, shrink range of second and third elements to make sum closer to target.</p>
 <pre><code>class Solution {
@@ -3737,7 +3885,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
-    
+
 <h3><a name="236" class="anchor" href="#236"></a>#236 Lowest Common Ancestor of a Binary Tree (Medium)</h3>
 <p>During traversal the first root whose tree contains v and w is LCA.</p>
 <pre><code>class Solution {
@@ -3756,9 +3904,9 @@ public:
 
         if( !root ) return 0;
 
-        int count{ 
+        int count{
             ( root == p ) + ( root == q )
-            + helper( root->left ) 
+            + helper( root->left )
             + helper( root->right )
         };
 
@@ -3775,7 +3923,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 24 ms</p>
-    
+
 <h3><a name="103" class="anchor" href="#103"></a>#103 Binary Tree Zigzag Level Order Traversal (Medium)</h3>
 <p>Search and print in layers. Print order corresponds to parity of layer.</p>
 <pre><code>typedef pair< TreeNode*, int > PTI;
@@ -3798,7 +3946,7 @@ public:
             int start( depth & 1 ? q.size() - 1 : lastSize );
             int end( depth & 1 ? lastSize - 1 : q.size() );
             int step( depth & 1 ? -1 : 1 );
-            
+
             for( int i = start; i != end; i += step )
                 v.push_back( q[ i ].first->val );
 
@@ -3809,7 +3957,7 @@ public:
                 if( p->left ) q.push_back( PTI( p->left, depth + 1 ) );
                 if( p->right ) q.push_back( PTI( p->right, depth + 1 ) );
             }
-            
+
             vv.push_back( v );
             v.clear();
             ++depth;
@@ -3820,49 +3968,49 @@ public:
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="55" class="anchor" href="#55"></a>#55 Jump Game (Medium)</h3>
 <p>Record the maximal index so for can be jumped to. Return false if current index is less then the max index.</p>
 <pre><code>class Solution {
 public:
     bool canJump(vector< int >& nums) {
-        
+
         int N( nums.size() ), M( 0 );
-        
+
         for( int i = 0; i < N; ++i ){
             if( i > M ) return false;
             M = max( M, nums[ i ] + i );
         }
-        
+
         return true;
     }
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
-    
+
 <h3><a name="50" class="anchor" href="#50"></a>#50 Pow( x, n ) (Medium)</h3>
 <p>Use binary optimization.</p>
 <pre><code>class Solution {
 public:
     double myPow(double x, int n) {
-        
+
         if( n == 1 << 31 ) return myPow( x * x, n >> 1 );
         if( n < 0 ) return 1. / myPow( x, -n );
-        
+
         double result( 1. );
-        
+
         while( n ){
             if( n & 1 ) result *= x;
             x *= x;
             n >>= 1;
         }
-        
+
         return result;
     }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="105" class="anchor" href="#105"></a>#105 Construct Binary Tree from Preorder and Inorder Traversal (Medium)</h3>
 <p>Recursively build tree.</p>
 <pre><code>class Solution {
@@ -3895,7 +4043,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 48 ms</p>
-    
+
 <h3><a name="113" class="anchor" href="#113"></a>#113 Path Sum II (Medium)</h3>
 <p>DFS for all path.</p>
 <pre><code>class Solution {
@@ -3930,7 +4078,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="131" class="anchor" href="#131"></a>#131 Palindrome Partitioning (Medium)</h3>
 <p>DFS for all ways of partitioning.</p>
 <pre><code>class Solution {
@@ -3975,7 +4123,7 @@ private:
 };
 </code></pre>
 <p>Runtime: 20 ms</p>
-    
+
 <h3><a name="17" class="anchor" href="#17"></a>#17 Letter Combination of a Phone Number (Medium)</h3>
 <p>DFS for all combinations.</p>
 <pre><code>class Solution {
@@ -4004,8 +4152,8 @@ private:
     }
 
     const vector< vector< char > > d2l{
-        {}, {}, { 'a', 'b', 'c' }, { 'd', 'e', 'f' }, { 'g', 'h', 'i' }, 
-        { 'j', 'k', 'l' }, { 'm', 'n', 'o' }, { 'p', 'q', 'r', 's' }, 
+        {}, {}, { 'a', 'b', 'c' }, { 'd', 'e', 'f' }, { 'g', 'h', 'i' },
+        { 'j', 'k', 'l' }, { 'm', 'n', 'o' }, { 'p', 'q', 'r', 's' },
         { 't', 'u', 'v' }, { 'w', 'x', 'y', 'z' }
     };
 
@@ -4014,7 +4162,7 @@ private:
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="47" class="anchor" href="#47"></a>#47 Permutations II (Medium)</h3>
 <p>Sort nums first. Insert the new number into previously generated permutations to prodece new permutations. Should not insert to positions prior to its previous appearance.</p>
 <pre><code>class Solution {
@@ -4029,9 +4177,9 @@ public:
 
         return vvi;
     }
-    
+
     void helper( vector< int > &nums, int a ){
-    
+
         if( a == nums.size() ){
             vvi.push_back( vi );
             return;
@@ -4054,45 +4202,45 @@ public:
 };
 </code></pre>
 <p>Runtime: 32 ms</p>
-    
+
 <h3><a name="92" class="anchor" href="#92"></a>#92 Reverse Linked List II (Medium)</h3>
 <p>Linked list manipulation.</p>
 <pre><code>class Solution {
 public:
     ListNode* reverseBetween(ListNode* head, int m, int n) {
-        
+
         if( m == n ) return head;
-        
+
         ListNode dummy( 0 ); dummy.next = head;
         ListNode *ptrA( &dummy ), *ptrB( &dummy );
-        
+
         for( int i = 0; i < m - 1; ++i, ptrA = ptrA->next );
         for( int j = 0; j < n + 1; ++j, ptrB = ptrB->next );
-        
+
         ListNode *pre( ptrA ), *cur( pre->next ), *nxt( cur->next );
-        
+
         for( cur->next = pre; nxt != ptrB; cur->next = pre ){
             pre = cur; cur = nxt; nxt = nxt->next;
         }
-        
+
         ptrA->next->next = ptrB;
         ptrA->next = cur;
-        
+
         return dummy.next;
     }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="134" class="anchor" href="#134"></a>#134 Gas Station (Medium)</h3>
 <p>First simulate regardless of negative amount of gas. The station where the car has least amount of gas is the starting station.</p>
 <pre><code>class Solution {
 public:
     int canCompleteCircuit(vector< int >& gas, vector< int >& cost) {
-        
+
         int start, minGas( 0x7fffffff );
         int sumGas( 0 ), sumCost( 0 );
-        
+
         for( int i = 0; i < gas.size(); ++i ){
             sumGas += gas[ i ];
             sumCost += cost[ i ];
@@ -4101,13 +4249,13 @@ public:
                 start = i + 1;
             }
         }
-        
+
         return sumGas < sumCost ? -1 : start == gas.size() ? 0 : start;
     }
 };
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="40" class="anchor" href="#40"></a>#40 Combination Sum II (Medium)</h3>
 <p>DFS for all combinations.</p>
 <pre><code>class Solution {
@@ -4143,7 +4291,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
-    
+
 <h3><a name="82" class="anchor" href="#82"></a>#82 Remove Duplicates from Sorted List iI (Medium)</h3>
 <p>Add a dummy head to simplify operation.</p>
 <pre><code>class Solution {
@@ -4172,7 +4320,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 8 ms</p>
-    
+
 <h3><a name="49" class="anchor" href="#49"></a>#49 Group Anagrams (Medium)</h3>
 <p>Hash function accounts for word length and letter components.</p>
 <pre><code>class Solution {
@@ -4211,7 +4359,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 68 ms</p>
-    
+
 <h3><a name="31" class="anchor" href="#31"></a>#31 Nextr Permutation (Medium)</h3>
 <p>Locate the rightmost number we can augment and swap it with the smallest number that is greater that it behind and sort the whole following part.</p>
 <pre><code>class Solution {
@@ -4233,28 +4381,28 @@ public:
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
-    
+
 <h3><a name="209" class="anchor" href="#209"></a>#209 Minimum Size Subarray Sum (Medium)</h3>
 <p>Scan the array of numbers. When it comes a new number, add it to sum and try to subtract earliest numbers in the sum.</p>
 <pre><code>class Solution {
 public:
     int minSubArrayLen(int s, vector<int>& nums) {
-        
+
         int result( 0x7fffffff );
         int sum( 0 );
-        
+
         for( int i = 0, j = 0; j < nums.size(); ++j ){
             sum += nums[ j ];
             while( sum - nums[ i ] >= s ) sum -= nums[ i++ ];
             if( sum >= s ) result = min( result, j - i + 1 );
         }
-        
+
         return result == 0x7fffffff ? 0 : result;
     }
 };
 </code></pre>
 <p>Runtime: 4 ms</p>
-    
+
 <h3><a name="264" class="anchor" href="#264"></a>#Ugly Number II (Medium)</h3>
 <p></p>
 <pre><code>class Solution {
@@ -4277,7 +4425,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 32 ms</p>
-    
+
 <h3><a name="297" class="anchor" href="#297"></a>#297 Serialize and Deserialize Binary Tree (Medium)</h3>
 <p>Use std::queue.</p>
 <pre><code>class Codec {
@@ -4285,7 +4433,7 @@ public:
 
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
-        
+
         queue< TreeNode * > mqueue;
         string result;
 
@@ -4340,7 +4488,7 @@ public:
 };
 </code></pre>
 <p>Runtime: 48 ms</p>
-    
+
 <h3><a name="326" class="anchor" href="#326"></a>#326 Power of Three (Medium)</h3>
 <p>1162261467 can be divided by power of 3.</p>
 <pre><code>class Solution {
@@ -4351,31 +4499,31 @@ public:
 };
 </code></pre>
 <p>Runtime: 124 ms</p>
-    
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
 </code></pre>
 <p>Runtime: 0 ms</p>
-    
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
@@ -4393,7 +4541,7 @@ public:
     </footer>
    </div>
 
-   
+
 
   </body>
 </html>
