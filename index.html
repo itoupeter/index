@@ -56,8 +56,39 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="406" class="anchor" href="#406"><span class="octicon octicon-link"></span></a>#406 Queue Reconstruction by Height (Medium)</h3>
+<p>Sort by h (taller first) and k (smaller first), then for each person, shift him ahead until satisfying requirement on k.</p>
+<pre><code>class Solution {
+public:
+	vector<pair<int, int>> reconstructQueue(vector<pair<int, int>>& people) {
+
+		int n = people.size();
+
+		if (n == 0) {
+			return vector<pair<int, int>>();
+		}
+
+	    sort(people.begin(), people.end(), comparePeople);
+
+		for (int i = 1; i < n; ++i) {
+			for (int j = i; people[j].second < j; --j) {
+				swap(people[j], people[j - 1]);
+			}
+		}
+
+		return people;
+	}
+
+private:
+	static bool comparePeople(const pair<int, int> &a, const pair<int, int> &b) {
+		return (a.first == b.first) ? (a.second < b.second) : (a.first > b.first);
+	}
+};
+</code></pre>
+<p>Runtime: 139 ms</p>
+
 <h3><a name="338" class="anchor" href="#338"><span class="octicon octicon-link"></span></a>#338 Counting Bits (Medium)</h3>
-<p>Number of 1 in i is: <br>1)number of 1 in i/2 if i is even<br>2)number of 1 in i/2 plus 1 if i is odd.</p>
+<p>Number of 1 in i is: <br>1) number of 1 in i/2 if i is even<br>2) number of 1 in i/2 plus 1 if i is odd.</p>
 <pre><code>
 class Solution {
 public:
