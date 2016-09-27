@@ -56,6 +56,30 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="343" class="anchor" href="#343"><span class="octicon octicon-link"></span></a>#343 Integer Break (Medium)</h3>
+<p>Dynamic Programming.</p>
+<pre><code>
+class Solution {
+public:
+    int integerBreak(int n) {
+        vector<int> f(n + 1, 0);
+
+		f[1] = 1;
+		for (int i = 2; i <= n; ++i) {
+			for (int j = 1; j <= (i >> 1); ++j) {
+				f[i] = max(f[i], j * (i - j));
+				f[i] = max(f[i], f[j] * (i - j));
+				f[i] = max(f[i], j * f[i - j]);
+				f[i] = max(f[i], f[j] * f[i - j]);
+			}
+		}
+
+		return f[n];
+    }
+};
+</code></pre>
+<p>Runtime: 3 ms</p>
+
 <h3><a name="357" class="anchor" href="#357"><span class="octicon octicon-link"></span></a>#357 Count Numbers with Unique Digits (Medium)</h3>
 <p>Number of unique numbers using i digits can be computed based on number of unique numbers using i-1 digits.</p>
 <pre><code>
