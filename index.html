@@ -56,6 +56,155 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="65" class="anchor" href="#65"><span class="octicon octicon-link"></span></a>#65 Valid Number (Hard)</h3>
+<p>Complex state machine.</p>
+<img src="images/NO65.jpg" width="650"></img>
+<pre><code>
+class Solution {
+public:
+    bool isNumber(string s) {
+
+		if (s.empty()) {
+			return false;
+		}
+
+		int length = (s += "#END#").length();
+		int ptr = 0;
+		enum state {
+			START, DECIMAL_SIGN, INTEGER_DIGIT, DECIMAL_POINT, FRACTIONAL_DIGIT,
+			E, EXPONENT_SIGN, EXPONENT_DIGIT, SPACE, TERMINATION, INVALID
+		} stateId;
+		bool isDecimalPointOnlyError = false;
+
+		while (ptr < length && s[ptr] == ' ') {
+			++ptr;
+		}
+
+		stateId = START;
+		while (ptr < length) {
+			char nxt = s[ptr];
+
+			if (stateId == START) {
+				if (nxt == '+' || nxt == '-') {
+					stateId = DECIMAL_SIGN;
+				} else if (nxt >= '0' && nxt <= '9') {
+					stateId = INTEGER_DIGIT;
+				} else if (nxt == '.') {
+					isDecimalPointOnlyError = true;
+					stateId = DECIMAL_POINT;
+				} else {
+					break;
+				}
+
+			} else if (stateId == DECIMAL_SIGN) {
+				if (nxt >= '0' && nxt <= '9') {
+					stateId = INTEGER_DIGIT;
+				}else if (nxt == '.') {
+					isDecimalPointOnlyError = true;
+					stateId = DECIMAL_POINT;
+				} else {
+					break;
+				}
+
+			} else if (stateId == INTEGER_DIGIT) {
+				if (nxt == ' ') {
+					stateId = SPACE;
+				} else if (nxt >= '0' && nxt <= '9') {
+					// state unchanged
+				} else if (nxt == '.') {
+					stateId = DECIMAL_POINT;
+				} else if (nxt == 'e' || nxt == 'E') {
+					stateId = E;
+				} else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
+					stateId = TERMINATION;
+					break;
+				} else {
+					break;
+				}
+
+			} else if (stateId == DECIMAL_POINT) {
+				if (nxt == ' ') {
+					stateId = SPACE;
+				} else if (nxt >= '0' && nxt <= '9') {
+					isDecimalPointOnlyError = false;
+					stateId = FRACTIONAL_DIGIT;
+				} else if (nxt == 'e' || nxt == 'E') {
+					stateId = E;
+				} else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
+					stateId = TERMINATION;
+					break;
+				} else {
+					break;
+				}
+
+				if (isDecimalPointOnlyError) {
+					break;
+				}
+
+			} else if (stateId == FRACTIONAL_DIGIT) {
+				if (nxt == 'e' || nxt == 'E') {
+					stateId = E;
+				} else if (nxt >= '0' && nxt <= '9') {
+					// state unchanged
+				} else if (nxt == ' ') {
+					stateId = SPACE;
+				} else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
+					stateId = TERMINATION;
+					break;
+				} else {
+					break;
+				}
+
+			} else if (stateId == E) {
+				if (nxt == '+' || nxt == '-') {
+					stateId = EXPONENT_SIGN;
+				} else if (nxt >= '0' && nxt <= '9') {
+					stateId = EXPONENT_DIGIT;
+				} else {
+					break;
+				}
+
+			} else if (stateId == EXPONENT_SIGN) {
+				if (nxt >= '0' && nxt <= '9') {
+					stateId = EXPONENT_DIGIT;
+				} else if (nxt == ' ') {
+					stateId = SPACE;
+				} else {
+					break;
+				}
+
+			} else if (stateId == EXPONENT_DIGIT) {
+				if (nxt >= '0' && nxt <= '9') {
+					// state unchanged
+				} else if (nxt == ' ') {
+					stateId = SPACE;
+				} else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
+					stateId = TERMINATION;
+					break;
+				} else {
+					break;
+				}
+
+			} else if (stateId == SPACE) {
+				if (nxt == ' ') {
+					// state unchanged
+				} else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
+					stateId = TERMINATION;
+					break;
+				} else {
+					break;
+				}
+			}
+
+			++ptr;
+		}
+
+		return stateId == TERMINATION && !isDecimalPointOnlyError;
+    }
+};
+</code></pre>
+<p>Runtime: 6 ms</p>
+
 <h3><a name="343" class="anchor" href="#343"><span class="octicon octicon-link"></span></a>#343 Integer Break (Medium)</h3>
 <p>Dynamic Programming.</p>
 <pre><code>
