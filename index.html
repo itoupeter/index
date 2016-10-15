@@ -56,6 +56,113 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="126" class="anchor" href="#126"><span class="octicon octicon-link"></span></a>#126 Word Ladder II (Hard)</h3>
+<p>Build graph using BFS starting from endWord, for each node record its distance to endWord, then find all solutions using DFS from beginWord to endWord with decreasing distance.</p>
+<pre><code>
+struct Node {
+	Node(string word, int dist) {
+		this->word = word;
+		this->dist = dist;
+	}
+
+	int dist;
+	string word;
+	vector<int> next;
+};
+
+class Solution {
+public:
+    vector<vector<string>> findLadders(string beginWord, string endWord, unordered_set<string> &wordList) {
+        if (beginWord.length() != endWord.length()) {
+			return vector<vector<string>>();
+		}
+
+        current.clear();
+        result.clear();
+		graph.clear();
+		id.clear();
+		for(; !q.empty(); q.pop());
+
+		wordList.insert(beginWord);
+		wordList.insert(endWord);
+		buildGraph(endWord, wordList);
+
+		if (id.find(beginWord) == id.end()) {
+		    return result;
+		}
+
+		findPath(beginWord, endWord);
+
+		return result;
+    }
+
+	void buildGraph(string endWord, unordered_set<string> &dict) {
+		q.push(make_pair(endWord, 0));
+		id[endWord] = graph.size();
+		graph.push_back(Node(endWord, 0));
+
+		while (!q.empty()) {
+			string word = q.front().first;
+			int dist = q.front().second;
+			int len = word.length();
+
+			for (int i = 0; i < len; ++i) {
+				// change one (ith) character
+				for (char ch = 'a'; ch <= 'z'; ++ch) {
+					string newWord = word;
+
+					newWord[i] = ch;
+					if (dict.find(newWord) == dict.end()) {
+						// not in dict
+						continue;
+					}
+					if (id.find(newWord) == id.end()) {
+					    // new word
+			            id[newWord] = graph.size();
+                        graph.push_back(Node(newWord, dist + 1));
+    					q.push(make_pair(newWord, dist + 1));
+					}
+					if (newWord != word) {
+    			    	graph[id[word]].next.push_back(id[newWord]);
+					}
+				}
+			}
+
+			q.pop();
+		}
+	}
+
+	void findPath(string beginWord, string endWord) {
+	    current.push_back(beginWord);
+	    helper(id[beginWord], graph[id[beginWord]].dist);
+	}
+
+	void helper(int id, int dist) {
+	    if (dist == 0) {
+	       result.push_back(current);
+	       return;
+	    }
+
+	    for (int i : graph[id].next) {
+	        if (graph[i].dist >= dist) {
+	            continue;
+	        }
+	        current.push_back(graph[i].word);
+	        helper(i, dist - 1);
+	        current.pop_back();
+	    }
+	}
+
+private:
+	vector<Node> graph;
+	unordered_map<string, int> id;
+	queue<pair<string, int>> q;
+	vector<vector<string>> result;
+	vector<string> current;
+};
+</code></pre>
+<p>Runtime: 565 ms</p>
+
 <h3><a name="65" class="anchor" href="#65"><span class="octicon octicon-link"></span></a>#65 Valid Number (Hard)</h3>
 <p>Complex state machine.</p>
 <img src="images/NO65.jpg" width="650"></img>
