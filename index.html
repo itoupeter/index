@@ -56,6 +56,71 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="68" class="anchor" href="#68"><span class="octicon octicon-link"></span></a>#68 Text Justification (Hard)</h3>
+<p>String manipulation.</p>
+<pre><code>class Solution {
+public:
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+        if (words.empty()) {
+            return vector<string>{""};
+        }
+
+        int numWords = words.size();
+        vector<string> result;
+
+        for (int i = 0, j = 0; i < numWords; i = j) {
+            int numCharacters = 0;
+
+            numCharacters += words[j++].length();
+            for (; j < numWords; ++j) {
+                if (numCharacters + 1 + words[j].length() <= maxWidth) {
+                    numCharacters += 1 + words[j].length();
+                } else {
+                    break;
+                }
+            }
+
+            string line;
+
+            if (j == numWords) {
+                // last line
+                for (int k = 0; k < j - i; ++k) {
+                    if (k != 0) {
+                        line += " ";
+                    }
+                    line += words[i + k];
+                }
+                line += string(maxWidth - line.length(), ' ');
+            } else if (j - i == 1) {
+                // not last line but only one word
+                line += words[i];
+                line += string(maxWidth - line.length(), ' ');
+            } else {
+                numCharacters -= j - i - 1;
+
+                int space = (maxWidth - numCharacters) / (j - i - 1);
+                int more = (maxWidth - numCharacters) % (j - i - 1);
+
+                for (int k = i; k < j; ++k) {
+                    if (k != i) {
+                        line += string(space, ' ');
+                        if (more-- > 0) {
+                            line += " ";
+                        }
+                    }
+                    line += words[k];
+                }
+            }
+
+            result.push_back(line);
+        }
+
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+
 <h3><a name="146" class="anchor" href="#146"><span class="octicon octicon-link"></span></a>#146 LRU Cache (Hard)</h3>
 <p>Use doubly linked list to store list of cache, and a hashmap to store the (key, pointer pointing to the cache list node) pair.</p>
 <pre><code>
@@ -86,8 +151,9 @@ public:
     void set(int key, int value) {
 		if (umap.find(key) == umap.end()) {
 			if (cache.size() >= capacity) {
-				umap.erase(cache.rbegin()->first);
-				cache.erase(cache.rbegin().base());
+			    auto lru = cache.end(); --lru;
+				umap.erase(lru->first);
+				cache.erase(lru);
 			}
 		} else {
 			cache.erase(umap[key]);
