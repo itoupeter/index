@@ -56,6 +56,49 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="421" class="anchor" href="#421"><span class="octicon octicon-link"></span></a>#421 Maximum XOR of Two Numbers in an Array (Medium)</h3>
+<p>Find max answer from MSB to LSB: say nums = [3, 1, 8, 10] = [0011, 0001, 1000, 1010]<br>
+Assume max = 1000, for each num, insert its first bit into set, resulting in [0000, 1000]. For each num a in set, find whether max^a exists. If yes, assume max = 1100, else assume max = 0100, and test next bit. In this case, max = 1000.<br>
+Assume max = 1100, take first 2 bits, resulting set = [0000, 1000], 0000^1100 not in set, 1000^1100 not in set, thus second MSB in answer is not set.<br>
+Assume max = 1010, take first 3 bits, resulting set = [0010, 0000, 1000, 1010], 0010^1010 in set, third bit in answer is set.<br>
+Assume max = 1011, take first 4 bits, resulting set = [0011, 0001, 1000, 1010], 0011^1011 in set, fourth bit in answer is set.<br>
+Thus max = 1011 = 11.</p>
+<pre><code>
+	class Solution {
+	public:
+	    int findMaximumXOR(vector<int>& nums) {
+			if (nums.empty()) {
+				return 0;
+			}
+
+			int mask = 0;
+			int result = 0;
+	    	unordered_set<int> uset;
+
+			for (int i = 30; i >= 0; --i) {
+	    		uset.clear();
+				mask |= (1 << i);
+
+				for (int i : nums) {
+					uset.insert(i & mask);
+				}
+
+				int test = result | (1 << i);
+
+				for (int i : uset) {
+					if (uset.find(test ^ i) != uset.end()) {
+						result = test;
+						break;
+					}
+				}
+			}
+
+			return result;
+	    }
+	};
+</code></pre>
+<p>Runtime: 985 ms</p>
+
 <h3><a name="126" class="anchor" href="#126"><span class="octicon octicon-link"></span></a>#126 Word Ladder II (Hard)</h3>
 <p>Build graph using BFS starting from endWord, for each node record its distance to endWord, then find all solutions using DFS from beginWord to endWord with decreasing distance.</p>
 <pre><code>
