@@ -56,8 +56,55 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
-<h3><a name="149" class="anchor" href="#344"><span class="octicon octicon-link"></span></a>#149 Max Points on a Line (Hard)</h3>
-<p>Use a hashmap to record number of colinear lines. For each point, calculate the slope of the line formed of that point with other points and insert into hashmap, whose key is slope and value is number of points. Note coincident points.</p>
+<h3><a name="146" class="anchor" href="#146"><span class="octicon octicon-link"></span></a>#146 LRU Cache (Hard)</h3>
+<p>Use doubly linked list to store list of cache, and a hashmap to store the (key, pointer pointing to the cache list node) pair.</p>
+<pre><code>
+typedef pair<int, int> PII;
+class LRUCache{
+public:
+    LRUCache(int capacity) {
+		this->capacity = capacity;
+		while (!cache.empty()) {
+			cache.pop_back();
+		}
+		umap.clear();
+    }
+
+    int get(int key) {
+		if (umap.find(key) == umap.end()) {
+			return -1;
+		} else {
+			auto ite = umap[key];
+
+			cache.push_front(PII(key, ite->second));
+			cache.erase(ite);
+			umap[key] = cache.begin();
+			return cache.front().second;
+		}
+    }
+
+    void set(int key, int value) {
+		if (umap.find(key) == umap.end()) {
+			if (cache.size() >= capacity) {
+				umap.erase(cache.rbegin()->first);
+				cache.erase(cache.rbegin().base());
+			}
+		} else {
+			cache.erase(umap[key]);
+		}
+		cache.push_front(PII(key, value));
+		umap[key] = cache.begin();
+    }
+private:
+	int capacity;
+	list<PII> cache;
+	unordered_map<int, list<PII>::iterator> umap;
+};
+</code></pre>
+<p>Runtime: 76 ms</p>
+
+<h3><a name="149" class="anchor" href="#149"><span class="octicon octicon-link"></span></a>#149 Max Points on a Line (Hard)</h3>
+<p>Use a hashmap to record number of colinear points. For each point, calculate the slope of the line formed of that point with other points and insert into hashmap, whose key is slope and value is number of points. Note coincident points.</p>
 <pre><code>class Solution {
 public:
     int maxPoints(vector<Point>& points) {
