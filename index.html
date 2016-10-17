@@ -56,6 +56,65 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="44" class="anchor" href="#44"><span class="octicon octicon-link"></span></a>#44 Wildcard Matching (Hard)</h3>
+<p>Dynamic Programming.</p>
+<pre><code>class Solution {
+public:
+    bool isMatch(string s, string p) {
+        if (s.empty() && p.empty()) {
+			return true;
+		} else if (s.empty()) {
+			bool isAllAsterisk = true;
+
+			for (char ch : p) {
+				if (ch != '*') {
+					isAllAsterisk = false;
+					break;
+				}
+			}
+
+			return isAllAsterisk;
+		} else if (p.empty()) {
+			return false;
+		}
+
+		int lengthS = s.length();
+		int lengthP = p.length();
+		int input = 0;
+		int *f[2] = {new int [lengthP + 1], new int [lengthP + 1]};
+		bool *star = new bool [lengthP + 1];
+
+        memset(f[0], 0, sizeof(int) * (lengthP + 1));
+        memset(f[1], 0, sizeof(int) * (lengthP + 1));
+        memset(star, 0, sizeof(bool) * (lengthP + 1));
+
+		f[input][0] = star[0] = true;
+		for (int i = 1; i <= lengthP; ++i) {
+			if (p[i - 1] != '*') {
+				break;
+			}
+			f[input][i] = star[i] = true;
+		}
+		for (int i = 1; i <= lengthS; ++i) {
+		    f[input ^ 1][0] = false;
+			for (int j = 1; j <= lengthP; ++j) {
+			    f[input ^ 1][j] = false;
+				if (p[j - 1] == '*') {
+					f[input ^ 1][j] = star[j - 1];
+				} else {
+					f[input ^ 1][j] = f[input][j - 1] && (p[j - 1] == '?' || s[i - 1] == p[j - 1]);
+				}
+				star[j] = star[j] || f[input ^ 1][j];
+			}
+			input ^= 1;
+		}
+
+		return f[input][lengthP];
+    }
+};
+</code></pre>
+<p>Runtime: 262 ms</p>
+
 <h3><a name="68" class="anchor" href="#68"><span class="octicon octicon-link"></span></a>#68 Text Justification (Hard)</h3>
 <p>String manipulation.</p>
 <pre><code>class Solution {
