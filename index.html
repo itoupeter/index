@@ -56,11 +56,63 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="273" class="anchor" href="#273"><span class="octicon octicon-link"></span></a>#273 Integer to English Words (Hard)</h3>
+<p>Split into chunks of 3 digits and map to words.</p>
+<pre><code>class Solution {
+public:
+    string numberToWords(int num) {
+        if (num == 0) {
+            return "Zero";
+        }
+
+        const vector<string> units = {"", "Thousand", "Million", "Billion"};
+        const vector<string> ones = {"", "One", "Two", "Three", "Four", "Five",
+                "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
+                "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen",
+                "Eighteen", "Nineteen"};
+        const vector<string> tens = {"", "", "Twenty", "Thirty", "Forty", "Fifty",
+                "Sixty", "Seventy", "Eighty", "Ninety", "Hundred"};
+        vector<int> parts;
+        string result;
+
+        while(num) {
+            parts.push_back(num % 1000);
+            num /= 1000;
+        }
+
+        for (int i = parts.size() - 1; i >= 0; --i) {
+            int part = parts[i];
+            if (part > 99 ) {
+                result += ones[part / 100] + " " + tens[10] + " ";
+            }
+            if (part % 100 >= 20) {
+                result += tens[part % 100 / 10] + " ";
+                if (part % 10) {
+                    result += ones[part % 10] + " ";
+                }
+            } else if (part % 100) {
+                result += ones[part % 100] + " ";
+            }
+            if (part) {
+                result += units[i] + " ";
+            }
+        }
+
+        while (result.back() == ' ') {
+            result.pop_back();
+        }
+
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 3 ms</p>
+
 <h3><a name="4" class="anchor" href="#4"><span class="octicon octicon-link"></span></a>#4 Median of Two Sorted Arrays (Hard)</h3>
 <p>Generalize to find Kth element.<br>
-Compare arr1[k/2] and arr2[k/2]:<br>
-Greater: discard arr1[0]...arr1[k/2], find (K - K/2)th element,<br>
-Less: discard arr2[0]...arr2[k/2], find(K - K/2)th element.</p>
+Compare arr1[k/2] and arr2[k/2], if:<br>
+[1] Less: discard arr1[0]...arr1[k/2], find (K - K/2)th element,<br>
+[2] Greater: discard arr2[0]...arr2[k/2], find(K - K/2)th element.</p>
 <pre><code>
 class Solution {
 public:
@@ -115,8 +167,8 @@ private:
 <p>Sweep line.<br>
 Create a list of all vertical borders and sort them according to x coordinate.<br>
 Iterate on the list, if the vertical border is a:<br>
-Left border: try to insert its [bottom, top] interval to set {active}. Before inserting, check if it conflicts with other intervals in the set.<br>
-Right border: remove its [bottom, top] interval from set{active}.</p>
+[1] Left border: try to insert its [bottom, top] interval to set {active}. Before inserting, check if it conflicts with other intervals in the set.<br>
+[2] Right border: remove its [bottom, top] interval from set{active}.</p>
 <pre><code>
 struct Node {
 	Node(int id, int x, int b, int t, int type) {
