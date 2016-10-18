@@ -56,6 +56,86 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="391" class="anchor" href="#391"><span class="octicon octicon-link"></span></a>#391 Perfect Rectangle (Hard)</h3>
+<p>Sweep line. Create a list of all vertical borders and sort them according to x coordinate.</p>
+<pre><code>
+struct Node {
+	Node(int id, int x, int b, int t, int type) {
+		this->id = id;
+		this->x = x;
+		this->b = b;
+		this->t = t;
+		this->type = type;
+	}
+
+	int id;
+	int x, b, t;
+	int type;
+};
+
+bool cmp(const Node &a, const Node &b) {
+	return a.x == b.x ? a.type > b.type : a.x < b.x;
+}
+
+class Solution {
+public:
+    bool isRectangleCover(vector<vector<int>>& rectangles) {
+        if (rectangles.empty()) {
+			return true;
+		}
+
+		int size = rectangles.size();
+		int area = 0;
+		int xMax = INT_MIN;
+		int xMin = INT_MAX;
+		int yMax = INT_MIN;
+		int yMin = INT_MAX;
+		vector<Node> nodes;
+		map<int, int> active;
+
+		nodes.reserve(size << 1);
+
+		for (auto &v : rectangles) {
+			xMax = max(xMax, v[2]);
+			xMin = min(xMin, v[0]);
+			yMax = max(yMax, v[3]);
+			yMin = min(yMin, v[1]);
+			area += (v[2] - v[0]) * (v[3] - v[1]);
+			nodes.push_back(Node(nodes.size() >> 1, v[0], v[1], v[3], 0));
+			nodes.push_back(Node(nodes.size() >> 1, v[2], v[1], v[3], 1));
+		}
+
+		sort(nodes.begin(), nodes.end(), cmp);
+
+		for (Node &node : nodes) {
+			if (node.type == 1) {
+				// right border of a rectangle
+				active.erase(node.b);
+				continue;
+			}
+
+			auto ite = active.find(node.b);
+			// left border of a rectangles
+			if (ite != active.end()) {
+				return false;
+			}
+			if ((ite = active.lower_bound(node.b)) != active.begin()
+					&& (--ite)->second > node.b) {
+				return false;
+			}
+			if ((ite = active.upper_bound(node.b)) != active.end()
+					&& ite->first < node.t) {
+				return false;
+			}
+			active.insert(make_pair(node.b, node.t));
+		}
+
+		return area == (xMax - xMin) * (yMax - yMin);
+    }
+};
+</code></pre>
+<p>Runtime: 242 ms</p>
+
 <h3><a name="44" class="anchor" href="#44"><span class="octicon octicon-link"></span></a>#44 Wildcard Matching (Hard)</h3>
 <p>Dynamic Programming.</p>
 <pre><code>class Solution {
