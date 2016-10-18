@@ -1019,6 +1019,39 @@ public:
 </code></pre>
 <p>Runtime: 0 ms</p>
 
+<h3><a name="401" class="anchor" href="#401"><span class="octicon octicon-link"></span></a>#401 Binary Watch (Easy)</h3>
+<p>Enumerate time from 0:00 to 11:59, check number of bits set and append to result list if equal to num.</p>
+<pre><code>class Solution {
+public:
+    vector<string> readBinaryWatch(int num) {
+        vector<string> result;
+
+        for (int i = 0; i <= 11; ++i) {
+            for (int j = 0; j <= 5; ++j) {
+                for (int k = 0; k <= 9; ++k) {
+                    if (num == numBitOnes(i) + numBitOnes(j * 10 + k)) {
+                        stringstream ss;
+                        ss << i << ":" << j << k;
+                        result.push_back(ss.str());
+                    }
+                }
+            }
+        }
+        return result;
+    }
+private:
+    int numBitOnes(int x) {
+        int result = 0;
+        while(x) {
+            result += 1;
+            x = x & (x - 1);
+        }
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+
 <h3><a name="258" class="anchor" href="#258"></a>#258 Add Digits (Easy)</h3>
 <p>There are 10 possible results. If num is 0, print 0. Else if num can be exactly divided by 9, print 9. Else print the remainder.</p>
 <pre><code>class Solution {
