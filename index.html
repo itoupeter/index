@@ -56,6 +56,67 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="140" class="anchor" href="#140"><span class="octicon octicon-link"></span></a>#140 Word Break II (Hard)</h3>
+<p>Use dynamic programming to find if prefixs of s are breakable, then recursively find all breaks.</p>
+<pre><code>
+class Solution {
+public:
+    vector<string> wordBreak(string s, unordered_set<string>& wordDict) {
+        if (s.empty() || wordDict.empty()) {
+			return vector<string>();
+		}
+
+		int length = s.length();
+		vector<bool> f(length + 1, false);
+
+		maxLen = 0;
+		for (const string &s : wordDict) {
+		    maxLen = max(maxLen, (int)s.length());
+		}
+
+		f[0] = true;
+		for (int i = 1; i <= length; ++i) {
+			for (int j = i - 1; j >= 0 && i - j <= maxLen; --j) {
+				if (f[j] && wordDict.find(s.substr(j, i - j)) != wordDict.end()) {
+					f[i] = true;
+					break;
+				}
+			}
+		}
+
+		result.clear();
+
+		if (f[length]) {
+			helper(f, s, length - 1, "", wordDict);
+		}
+
+		return result;
+    }
+private:
+	void helper(const vector<bool> &f, const string &s, int b, string cur,
+			const unordered_set<string> &dict){
+		if (b < 0) {
+			result.push_back(cur.substr(1));
+			return;
+		}
+
+		for (int a = b; a >= 0 && b - a < maxLen; --a) {
+			if (!f[a]) {
+				continue;
+			}
+			string sub = s.substr(a, b - a + 1);
+			if (dict.find(sub) != dict.end()) {
+				helper(f, s, a - 1, " " + sub + cur, dict);
+			}
+		}
+	}
+
+	int maxLen;
+	vector<string> result;
+};
+</code></pre>
+<p>Runtime: 3 ms</p>
+
 <h3><a name="273" class="anchor" href="#273"><span class="octicon octicon-link"></span></a>#273 Integer to English Words (Hard)</h3>
 <p>Split into chunks of 3 digits and map to words.</p>
 <pre><code>class Solution {
@@ -168,7 +229,8 @@ private:
 Create a list of all vertical borders and sort them according to x coordinate.<br>
 Iterate on the list, if the vertical border is a:<br>
 [1] Left border: try to insert its [bottom, top] interval to set {active}. Before inserting, check if it conflicts with other intervals in the set.<br>
-[2] Right border: remove its [bottom, top] interval from set{active}.</p>
+[2] Right border: remove its [bottom, top] interval from set{active}.<br>
+If no conflict exists, check whether the area of all rectangles sum to area of their bounding box.</p>
 <pre><code>
 struct Node {
 	Node(int id, int x, int b, int t, int type) {
