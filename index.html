@@ -56,6 +56,45 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="214" class="anchor" href="#214"><span class="octicon octicon-link"></span></a>#214 Shortest Palindrome (Hard)</h3>
+<p>Given s, first find the longest palindrome prefix of s, then append the rest part reversed to the beginning.<br>
+Construct t = reverse(s) + "#" + s.<br>
+Use KMP algorithm us compute the next array of t, which also means the longest common prefix-suffix.<br>
+By the construction, it is also the longest palindrome prefix of s.</p>
+<pre><code>
+class Solution {
+public:
+    string shortestPalindrome(string s) {
+		if (s.length() < 2) {
+			return s;
+		}
+
+		string t(s.rbegin(), s.rend());
+		t = s + "#" + t;
+		cout << t << endl;
+
+		int lenS = s.length();
+		int lenT = t.length();
+		vector<int> next(lenT + 1, 0);
+
+		next[0] = -1;
+		for (int i = 1; i <= lenT; ++i) {
+			int preNext = next[i - 1];
+			while (preNext != -1 && t[preNext] != t[i - 1]) {
+				preNext = next[preNext];
+			}
+			next[i] = preNext + 1;
+		}
+
+		t = s.substr(next.back());
+		reverse(t.begin(), t.end());
+
+		return t + s;
+    }
+};
+</code></pre>
+<p>Runtime: 6 ms</p>
+
 <h3><a name="30" class="anchor" href="#30"><span class="octicon octicon-link"></span></a>#30 Substring with Concatenation (Hard)</h3>
 <p>Two pointers. Start scanning from [0, wordLength - 1] to account for all substrings in s.</p>
 <pre><code>class Solution {
