@@ -56,6 +56,119 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="212" class="anchor" href="#212"><span class="octicon octicon-link"></span></a>#212 Word Search II (Hard)</h3>
+<p>Build a trie of all words, search the board for words in the trie.<br>
+Optimization: when a word is found, remove it from the trie.</p>
+<pre><code>
+struct Node {
+	Node() {
+		next = vector<int>(26, -1);
+		isWord = false;
+	}
+
+	vector<int> next;
+	bool isWord;
+};
+
+class Solution {
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        if (board.empty() || board.front().empty() || words.empty()) {
+			return vector<string>();
+		}
+
+		n = board.size();
+		m = board.front().size();
+
+		trie.clear();
+		trie.push_back(Node());
+		for (const string &word : words) {
+			trieAdd(0, word, 0);
+		}
+
+		result.clear();
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < m; ++j) {
+				if (trie.front().next[board[i][j] - 'a'] != -1) {
+					isVisited.clear();
+					isVisited.insert(i << 16 | j);
+					searchWord(trie.front().next[board[i][j] - 'a'], string(1, board[i][j]), board, i, j);
+				}
+			}
+		}
+
+		return vector<string>(result.begin(), result.end());
+    }
+private:
+	void trieAdd(int id, const string &word, int a) {
+		if (a >= word.length()) {
+			trie[id].isWord = true;
+			return;
+		}
+
+		int nid = trie[id].next[word[a] - 'a'];
+
+		if (nid == -1) {
+			trie.push_back(Node());
+			nid = trie.size() - 1;
+			trie[id].next[word[a] - 'a'] = nid;
+		}
+
+		trieAdd(nid, word, a + 1);
+	}
+
+	void trieRemove(int id, const string &word, int a, int &numNext) {
+		int numNextChild = 0;
+		if (a < word.length()) {
+			trieRemove(trie[id].next[word[a] - 'a'], word, a + 1, numNextChild);
+		} else {
+			trie[id].isWord = false;
+		}
+
+		if (a < word.length() && numNextChild == 0) {
+			trie[id].next[word[a] - 'a'] = -1;
+		}
+		for (int i : trie[id].next) {
+			numNext += (i == -1 ? 0 : 1);
+		}
+	}
+
+	void searchWord(int id, string s, const vector<vector<char>> &board, int x, int y) {
+		if (trie[id].isWord) {
+			result.insert(s);
+		    int tmp; trieRemove(0, s, 0, tmp);
+		}
+
+		for (int i = 0; i < 4; ++i) {
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+
+			if (nx < 0 || nx >= n || ny < 0 || ny >= m
+					|| isVisited.find(nx << 16 | ny) != isVisited.end()
+					|| trie[id].next[board[nx][ny] - 'a'] == -1) {
+				continue;
+			}
+
+			s += board[nx][ny];
+			isVisited.insert(nx << 16 | ny);
+			searchWord(trie[id].next[board[nx][ny] - 'a'], s, board, nx, ny);
+			isVisited.erase(nx << 16 | ny);
+			s.pop_back();
+		}
+	}
+
+	const int dx[4] = {0, 1, 0, -1};
+	const int dy[4] = {1, 0, -1, 0};
+
+	int n;
+	int m;
+	vector<Node> trie;
+	unordered_set<int> isVisited;
+	unordered_set<string> result;
+};
+</code></pre>
+<p>Runtime: 199 ms</p>
+
 <h3><a name="140" class="anchor" href="#140"><span class="octicon octicon-link"></span></a>#140 Word Break II (Hard)</h3>
 <p>Use dynamic programming to find if prefixs of s are breakable, then recursively find all breaks.</p>
 <pre><code>
