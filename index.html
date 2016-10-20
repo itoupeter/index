@@ -56,6 +56,61 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="30" class="anchor" href="#30"><span class="octicon octicon-link"></span></a>#30 Substring with Concatenation (Hard)</h3>
+<p>Two pointers. Start scanning from [0, wordLength - 1] to account for all substrings in s.</p>
+<pre><code>class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+        vector<int> result;
+        unordered_map<string, int> dict;
+        int wordLength = words.front().length();
+        int sLength = s.length();
+
+        for (const string &word : words) {
+            ++dict[word];
+        }
+
+        for (int i = 0; i < wordLength; ++i) {
+            unordered_map<string, int> count;
+            int target = 0;
+            for (int j = i, k = i; k + wordLength <= sLength; ) {
+                string sub = s.substr(k, wordLength);
+
+                k += wordLength;
+
+                if (dict.find(sub) == dict.end()) {
+                    j = k;
+                    target = 0;
+                    count.clear();
+                    continue;
+                }
+
+                ++count[sub];
+                if (count[sub] == dict[sub]) {
+                    ++target;
+                } else if (count[sub] > dict[sub]) {
+                    while (count[sub] > dict[sub]) {
+                        string sub2 = s.substr(j, wordLength);
+                        if (count[sub2] == dict[sub2]) {
+                            --target;
+                        }
+                        --count[sub2];
+                        j += wordLength;
+                    }
+                }
+                if (target == dict.size()) {
+                    // got a solution
+                    result.push_back(j);
+                }
+            }
+        }
+
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 53 ms</p>
+
 <h3><a name="212" class="anchor" href="#212"><span class="octicon octicon-link"></span></a>#212 Word Search II (Hard)</h3>
 <p>Build a trie of all words, search the board for words in the trie.<br>
 Optimization: when a word is found, remove it from the trie.</p>
