@@ -56,10 +56,90 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="174" class="anchor" href="#174"><span class="octicon octicon-link"></span></a>#174 Dungeon Game (Hard)</h3>
+<p>Binary search for the initial health from 1 to LARGE_NUMBER.<br>
+Given a initial health, perform dynamic programming to compute the maximal health left when reaching the each grid, and decide if the last grid is reachable.</p>
+<pre><code>
+class Solution {
+public:
+	int calculateMinimumHP(vector<vector<int>>& dungeon) {
+		if (dungeon.empty() || dungeon.front().empty()) {
+			return 0;
+		}
+
+		n = dungeon.size();
+		m = dungeon.front().size();
+		f = new int * [n];
+		for (int i = 0; i < n; ++i) {
+			f[i] = new int [m];
+		}
+
+		// binary search health
+		int lower = 1;
+		int upper = 1;
+
+		for (auto &v : dungeon) {
+			for (int i : v) {
+				upper += max(0, -i);
+			}
+		}
+
+		while (upper != lower) {
+			int mid = lower + (upper - lower >> 1);
+			if (isFoundPath(dungeon, mid)) {
+				upper = mid;
+			} else {
+				lower = mid + 1;
+			}
+		}
+
+		return upper;
+	}
+private:
+	bool isFoundPath(vector<vector<int>> &dungeon, int health) {
+		for (int i = 0; i < n; ++i) {
+			memset(f[i], 0, m << 2);
+		}
+		f[0][0] = dungeon[0][0] + health > 0 ? dungeon[0][0] + health : INT_MIN;
+		for (int i = 1; i < n; ++i) {
+			if (f[i - 1][0] == INT_MIN || dungeon[i][0] + f[i - 1][0] <= 0) {
+				f[i][0] = INT_MIN;
+			} else {
+				f[i][0] = dungeon[i][0] + f[i - 1][0];
+			}
+		}
+		for (int i = 1; i < m; ++i) {
+			if (f[0][i - 1] == INT_MIN || dungeon[0][i] + f[0][i - 1] <= 0) {
+				f[0][i] = INT_MIN;
+			} else {
+				f[0][i] = dungeon[0][i] + f[0][i - 1];
+			}
+		}
+		for (int i = 1; i < n; ++i) {
+			for (int j = 1; j < m; ++j) {
+				int maxPre = max(f[i - 1][j], f[i][j - 1]);
+				if (maxPre == INT_MIN || dungeon[i][j] + maxPre <= 0) {
+					f[i][j] = INT_MIN;
+				} else {
+					f[i][j] = dungeon[i][j] + maxPre;
+				}
+			}
+		}
+
+		return f[n - 1][m - 1] > 0;
+	}
+
+	int n;
+	int m;
+	int **f;
+};
+</code></pre>
+<p>Runtime: 19 ms</p>
+
 <h3><a name="214" class="anchor" href="#214"><span class="octicon octicon-link"></span></a>#214 Shortest Palindrome (Hard)</h3>
 <p>Given s, first find the longest palindrome prefix of s, then append the rest part reversed to the beginning.<br>
 Construct t = reverse(s) + "#" + s.<br>
-Use KMP algorithm us compute the next array of t, which also means the longest common prefix-suffix.<br>
+Use KMP algorithm to compute the next array of t, which also means the longest common prefix-suffix.<br>
 By the construction, it is also the longest palindrome prefix of s.</p>
 <pre><code>
 class Solution {
@@ -71,7 +151,6 @@ public:
 
 		string t(s.rbegin(), s.rend());
 		t = s + "#" + t;
-		cout << t << endl;
 
 		int lenS = s.length();
 		int lenT = t.length();
