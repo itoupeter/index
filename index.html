@@ -57,6 +57,33 @@ public:
 <p>Runtime: 12 ms</p>
 
 <h3><a name="174" class="anchor" href="#174"><span class="octicon octicon-link"></span></a>#174 Dungeon Game (Hard)</h3>
+<p>Dynamic programming from lower right to upper left.<br>
+Initial health needed to reach [i, j] is dp[i, j], where<br>
+dp[i, j] = max(min(dp[i + 1, j], dp[i, j + 1]) - dungeon[i, j], 1).</p>
+<pre><code>
+class Solution {
+public:
+	int calculateMinimumHP(vector<vector<int>>& dungeon) {
+		if (dungeon.empty() || dungeon.front().empty()) {
+			return 0;
+		}
+
+		int n = dungeon.size();
+		int m = dungeon.front().size();
+		vector<vector<int>> dp(n + 1, vector<int>(m + 1, INT_MAX));
+
+		dp[n][m - 1] = 1;
+		for (int i = n - 1; i >= 0; --i) {
+			for (int j = m - 1; j >= 0; --j) {
+				dp[i][j] = max(min(dp[i + 1][j], dp[i][j + 1]) - dungeon[i][j], 1);
+			}
+		}
+
+		return max(dp[0][0], 1);
+	}
+};
+</code></pre>
+<p>Runtime: 9 ms</p>
 <p>Binary search for the initial health from 1 to LARGE_NUMBER.<br>
 Given a initial health, perform dynamic programming to compute the maximal health left when reaching the each grid, and decide if the last grid is reachable.</p>
 <pre><code>
