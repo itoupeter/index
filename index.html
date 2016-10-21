@@ -56,6 +56,48 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="179" class="anchor" href="#179"><span class="octicon octicon-link"></span></a>#179 Largest Number (Medium)</h3>
+<p>Sort all numbers and concatenate them.<br>
+Compare function: a comes before b if a + b > b + a, where a, b are stringified numbers.</p>
+<pre><code>class Solution {
+public:
+    string largestNumber(vector<int>& nums) {
+        vector<string> s;
+        bool isAllZero = true;
+
+        for (int i : nums) {
+            stringstream ss;
+            ss << i;
+            s.push_back(ss.str());
+            if (i) {
+                isAllZero = false;
+            }
+        }
+
+        sort(s.begin(), s.end(), cmp);
+
+        if (isAllZero) {
+            return "0";
+        } else {
+            return concatenate(s);
+        }
+    }
+private:
+    string concatenate(vector<string> &s) {
+        string result = "";
+        for (string &e : s) {
+            result += e;
+        }
+        return result;
+    }
+
+    static bool cmp(const string &a, const string &b) {
+        return a + b > b + a;
+    }
+};
+</code></pre>
+<p>Runtime: 6 ms</p>
+
 <h3><a name="174" class="anchor" href="#174"><span class="octicon octicon-link"></span></a>#174 Dungeon Game (Hard)</h3>
 <p>Dynamic programming from lower right to upper left.<br>
 Initial health needed to reach [i, j] is dp[i, j], where<br>
