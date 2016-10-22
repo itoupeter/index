@@ -47,7 +47,7 @@ public:
         char ch;
 
         for( int i = 0; i < length >> 1; ++i ){
-            swap( s[ i ], s[ length - i - 1 ] );
+            swap(s[i], s[length - i - 1]);
         }
 
         return s;
@@ -256,7 +256,7 @@ private:
 
 <h3><a name="214" class="anchor" href="#214"><span class="octicon octicon-link"></span></a>#214 Shortest Palindrome (Hard)</h3>
 <p>Given s, first find the longest palindrome prefix of s, then append the rest part reversed to the beginning.<br>
-Construct t = reverse(s) + "#" + s.<br>
+Construct t =  s + '#' + reverse(s).<br>
 Use KMP algorithm to compute the next array of t, which also means the longest common prefix-suffix.<br>
 By the construction, it is also the longest palindrome prefix of s.</p>
 <pre><code>
