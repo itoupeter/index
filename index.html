@@ -56,6 +56,55 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="222" class="anchor" href="#222"><span class="octicon octicon-link"></span></a>#222 Count Complete Tree Nodes (Medium)</h3>
+<p>Binary search for the last node in the level traversal of the tree.</p>
+<pre><code>
+class Solution {
+public:
+	int countNodes(TreeNode* root) {
+		if (root == NULL) {
+			return 0;
+		}
+
+		int depth = findDepth(root);
+		int lower = 0;
+		int upper = (1 << depth >> 1) - 1;
+
+		while (lower != upper) {
+			int mid = lower + (upper - lower + 1 >> 1);
+			if (checkPath(root, depth - 2, mid)) {
+				lower = mid;
+			} else {
+				upper = mid - 1;
+			}
+		}
+
+		return (1 << depth >> 1) + upper;
+	}
+private:
+	int findDepth(TreeNode *root) {
+		int result = 0;
+		while (root) {
+			root = root->left;
+			++result;
+		}
+		return result;
+	}
+
+	bool checkPath(TreeNode *root, int p, int target) {
+		if (p < 0) {
+			return true;
+		}
+		if (target & (1 << p)) {
+			return root->right != NULL && checkPath(root->right, p - 1, target);
+		} else {
+			return root->left != NULL && checkPath(root->left, p - 1, target);
+		}
+	}
+};
+</code></pre>
+<p>Runtime: 232 ms</p>
+
 <h3><a name="179" class="anchor" href="#179"><span class="octicon octicon-link"></span></a>#179 Largest Number (Medium)</h3>
 <p>Sort all numbers and concatenate them.<br>
 Compare function: a comes before b if a + b > b + a, where a, b are stringified numbers.</p>
