@@ -56,6 +56,38 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="32" class="anchor" href="#32"><span class="octicon octicon-link"></span></a>#32 Longest Valid Parentheses (Hard)</h3>
+<p>Use stack to detect valid parentheses, dynamic programming to count longest substring length.<br>
+*validSuffix[i] denotes the length of longest valid parentheses suffix of preceding i characters.</p>
+<pre><code>class Solution {
+public:
+    int longestValidParentheses(string s) {
+        if (s.empty()) {
+			return 0;
+		}
+
+		int len = s.length();
+		int result = 0;
+		stack<int> st;
+		vector<int> validSuffix(len + 1, 0);
+
+		for (int i = 1; i <= len; ++i) {
+			char ch = s[i - 1];
+			if (ch == '(') {
+				st.push(i - 1);
+			} else if (!st.empty()){
+				result = max(result, i - st.top() + validSuffix[st.top()]);
+				validSuffix[i] = i - st.top() + validSuffix[st.top()];
+				st.pop();
+			}
+		}
+
+		return result;
+    }
+};
+</code></pre>
+<p>Runtime: 12 ms</p>
+
 <h3><a name="222" class="anchor" href="#222"><span class="octicon octicon-link"></span></a>#222 Count Complete Tree Nodes (Medium)</h3>
 <p>Binary search for the last node in the level traversal of the tree.</p>
 <pre><code>
