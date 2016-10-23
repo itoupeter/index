@@ -56,6 +56,64 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="76" class="anchor" href="#76"><span class="octicon octicon-link"></span></a>#76 Minimum Window Substring (Hard)</h3>
+<p>Two pointers i, j iterate on s.<br>
+First move j forward.<br>
+If s[i, j] contains t, move i forward til s[i, j] does not contain t.</p>
+<pre><code>class Solution {
+public:
+    string minWindow(string s, string t) {
+        if (s.empty() || t.empty()) {
+			return "";
+		}
+
+		int sLength = s.length();
+		int tLength = t.length();
+		int target[256];
+		int count[256];
+		int given = 0;
+		int current = 0;
+		int rBegin = 0;
+		int rEnd = INT_MAX;
+
+		memset(target, 0, sizeof target);
+		memset(count, 0, sizeof count);
+
+		for (char ch : t) {
+			target[ch] += 1;
+			if (target[ch] == 1) {
+				given += 1;
+			}
+		}
+
+		for (int i = 0, j = 0; j < sLength; ++j) {
+			count[s[j]] += 1;
+			if (target[s[j]] && count[s[j]] == target[s[j]]) {
+				current += 1;
+			}
+			if (current == given) {
+				int begin = 0;
+				int end = j + 1;
+				while (current == given) {
+					begin = i;
+					if (target[s[i]] && target[s[i]] == count[s[i]]) {
+						--current;
+					}
+					--count[s[i++]];
+				}
+				if (rEnd - rBegin > end - begin) {
+					rBegin = begin;
+					rEnd = end;
+				}
+			}
+		}
+
+		return rEnd == INT_MAX ? "" : s.substr(rBegin, rEnd - rBegin);
+    }
+};
+</code></pre>
+<p>Runtime: 9 ms</p>
+
 <h3><a name="32" class="anchor" href="#32"><span class="octicon octicon-link"></span></a>#32 Longest Valid Parentheses (Hard)</h3>
 <p>Use stack to detect valid parentheses, dynamic programming to count longest substring length.<br>
 *validSuffix[i] denotes the length of longest valid parentheses suffix of preceding i characters.</p>
