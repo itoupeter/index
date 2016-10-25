@@ -54,8 +54,53 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="440" class="anchor" href="#440"><span class="octicon octicon-link"></span></a>#440 K-th Smallest in Lexicographical Order (Hard)</h3>
+<p>Philosophy: figure out k-th smallest number from prefix.<br>
+Given N, K, find count of numbers with prefix 1, let's say X, if<br>
+[1] X is Greater than or equal to K, find count of numbers with prefix 10, then 11, then 12...<br>
+[2] X is Less than K, find count of numbers with prefix 2, then 3, then 4...</p>
+<pre><code>
+class Solution {
+public:
+	int findKthNumber(int n, int k) {
+		return helper(0, k + 1, n);
+	}
+private:
+	int helper(int prefix, int k, int bound) {
+		if (k == 1) {
+			return prefix;
+		}
+		for (int i = 0; i < 10; ++i) {
+			int newPrefix = prefix * 10 + i;
+			if (newPrefix == 0) continue;
+			int numPrefix = countPrefix(newPrefix, bound);
+
+			if (numPrefix >= k - 1) {
+				return helper(newPrefix, k - 1, bound);
+			} else {
+				k -= numPrefix;
+			}
+		}
+		return 0;
+	}
+	int countPrefix(int prefix, int bound) {
+		int result = 1;
+		long long range = 10;
+		while (prefix * range <= bound) {
+			result += min(bound, prefix * range + range - 1) - prefix * range + 1;
+			range *= 10LL;
+		}
+		return result;
+	}
+	inline long long min(long long a, long long b) {
+	    return a < b ? a : b;
+	}
+};
+</code></pre>
+<p>Runtime: 3 ms</p>
+
 <h3><a name="316" class="anchor" href="#316"><span class="octicon octicon-link"></span></a>#316 Remove Duplicate Letters (Hard)</h3>
-<p>Use a stack to build the answer. If an incoming character is less than the top element in stack and the top element is not the last element in the string, pop top element from stack and push the incoming character into stack.</p>
+<p>Use a stack to build the answer. If an incoming character is less than the top element in stack and the top element is not its last appearance in the string, pop top element from stack and push the incoming character into stack.</p>
 <pre><code>class Solution {
 public:
     string removeDuplicateLetters(string s) {
