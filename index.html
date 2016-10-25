@@ -42,9 +42,7 @@
 class Solution {
 public:
     string reverseString(string s) {
-
         int length( s.length() );
-        char ch;
 
         for( int i = 0; i < length >> 1; ++i ){
             swap(s[i], s[length - i - 1]);
@@ -55,6 +53,51 @@ public:
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
+
+<h3><a name="316" class="anchor" href="#316"><span class="octicon octicon-link"></span></a>#316 Remove Duplicate Letters (Hard)</h3>
+<p>Use a stack to build the answer. If an incoming character is less than the top element in stack and the top element is not the last element in the string, pop top element from stack and push the incoming character into stack.</p>
+<pre><code>class Solution {
+public:
+    string removeDuplicateLetters(string s) {
+        if (s.empty()) {
+			return "";
+		}
+
+		int size = s.length();
+		int count[26] = {0};
+		int used[26] = {0};
+		bool present[26] = {false};
+		stack<char> st;
+
+		for (char ch : s) {
+			count[ch - 'a'] += 1;
+		}
+
+		for (char ch : s) {
+			while(!present[ch - 'a'] && !st.empty() && ch < st.top()
+					&& used[st.top() - 'a'] < count[st.top() - 'a']) {
+			    present[st.top() - 'a'] = false;
+				st.pop();
+			}
+			if (!present[ch - 'a']) {
+				st.push(ch);
+				present[ch - 'a'] = true;
+			}
+			used[ch - 'a'] += 1;
+		}
+
+		string result;
+
+		while (!st.empty()) {
+			result = st.top() + result;
+			st.pop();
+		}
+
+		return result;
+    }
+};
+</code></pre>
+<p>Runtime: 3 ms</p>
 
 <h3><a name="295" class="anchor" href="#295"><span class="octicon octicon-link"></span></a>#295 Find Median from Data Stream (Hard)</h3>
 <p>Use max heap to store left half, and min heap to store right half.<br>
