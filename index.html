@@ -54,6 +54,48 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="132" class="anchor" href="#132"><span class="octicon octicon-link"></span></a>#132 Palindrome Partitioning II (Hard)</h3>
+<p>Step 1: Preprocess a bool array recording if s[i..j] is a palindrome using dynamic programming.<br>
+Step 2: Find min cut using dynamic programming. DP[i] denotes min cut of prefix of lenght i, which can be obtained by DP[j] + 1 if s[j + 1, i] is a palindrome.</p>
+<pre><code>class Solution {
+public:
+    int minCut(string s) {
+        if (s.empty()) {
+			return 0;
+		}
+
+		int len = s.length();
+		vector<vector<bool>> b(len, vector<bool>(len + 1, false));
+		vector<int> dp(len + 1, INT_MAX);
+
+		preprocess(s, b);
+		dp[0] = -1;
+		for (int i = 1; i <= len; ++i) {
+			for (int j = 0; j < i; ++j) {
+				if (!b[j][i - j]) continue;
+				dp[i] = min(dp[i], dp[j] + 1);
+			}
+		}
+
+		return dp[len];
+    }
+private:
+	void preprocess(const string &s, vector<vector<bool>> &b) {
+		int len = s.length();
+
+		for (int i = 0; i < len; ++i) {
+			b[i][0] = b[i][1] = true;
+		}
+		for (int i = 2; i <= len; ++i) {
+			for (int j = 0; j + i <= len; ++j) {
+				b[j][i] = (b[j + 1][i - 2] && s[j] == s[j + i - 1]);
+			}
+		}
+	}
+};
+</code></pre>
+<p>Runtime: 159 ms</p>
+
 <h3><a name="440" class="anchor" href="#440"><span class="octicon octicon-link"></span></a>#440 K-th Smallest in Lexicographical Order (Hard)</h3>
 <p>Philosophy: figure out k-th smallest number from prefix.<br>
 Given N, K, find count of numbers with prefix 1, let's say X, if<br>
