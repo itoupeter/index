@@ -54,6 +54,29 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="335" class="anchor" href="#335"><span class="octicon octicon-link"></span></a>#335 Self Crossing (Hard)</h3>
+<p>Interestingly, a segment will only intersects with another segment 3, 4, or 5 steps before.<br></p>
+<img src="images/NO335.jpg" width="650"></img>
+<pre><code>class Solution {
+public:
+    bool isSelfCrossing(vector<int>& v) {
+        int size = v.size();
+
+		for (int i = 3; i < size; ++i) {
+			// intersects with 3 steps before
+			if (i >= 3 && v[i - 1] <= v[i - 3] && v[i] >= v[i - 2]) return true;
+			// intersects with 4 steps before
+			if (i >= 4 && v[i - 1] == v[i - 3] && v[i] + v[i - 4] >= v[i - 2]) return true;
+			// intersects with 5 steps before
+			if (i >= 5 && v[i - 1] >= v[i - 3] - v[i - 5] && v[i - 1] <= v[i - 3] && v[i - 2] >= v[i - 4] && v[i] >= v[i - 2] - v[i - 4]) return true;
+		}
+
+		return false;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+
 <h3><a name="132" class="anchor" href="#132"><span class="octicon octicon-link"></span></a>#132 Palindrome Partitioning II (Hard)</h3>
 <p>Step 1: Preprocess a bool array recording if s[i..j] is a palindrome using dynamic programming.<br>
 Step 2: Find min cut using dynamic programming. DP[i] denotes min cut of prefix of lenght i, which can be obtained by DP[j] + 1 if s[j + 1, i] is a palindrome.</p>
