@@ -54,6 +54,40 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
+<h3><a name="3" class="anchor" href="#3"><span class="octicon octicon-link"></span></a>#LintCode 3 Digit Counts (Medium)</h3>
+<p>Count occurence of k on each digit.</p>
+<pre><code>class Solution {
+public:
+    int digitCounts(int k, int n) {
+		int base = 1;
+		int result = (k == 0 ? 1 : 0);
+
+		while (base <= n) {
+			int cur = n % (base * 10) / base;
+			int pre = n / (base * 10);
+			int suf = n % base;
+
+			if (k == cur) {
+				result += max(0, pre - 1) * base;
+				result += (pre == 0 ? 0 : suf + 1);
+				result += (k == 0 ? 0 : (pre == 0 ? suf + 1 : base));
+			} else if (k < cur) {
+				result += pre * base;
+				result += (k == 0 ? 0 : base);
+			} else {
+				result += max(0, pre - 1) * base;
+				result += (pre == 0 ? 0 : base);
+			}
+
+			base *= 10;
+		}
+
+		return result;
+    }
+};
+</code></pre>
+<p>Runtime: 23 ms</p>
+
 <h3><a name="10" class="anchor" href="#10"><span class="octicon octicon-link"></span></a>#10 Regular Expression Matching (Hard)</h3>
 <p>Dynamic Programming.<br>
 *Note: An '*' is handled along with its preceding character.</p>
@@ -62,29 +96,29 @@ class Solution {
 public:
     bool isMatch(string s, string p) {
         int lens = s.length();
-		int lenp = p.length();
-		vector<vector<bool>> dp(lens + 1, vector<bool>(lenp + 1, false));
+        int lenp = p.length();
+        vector<vector<bool>> dp(lens + 1, vector<bool>(lenp + 1, false));
 
-		dp[0][0] = true;
-		for (int i = 2; i <= lenp; i += 2) {
-			if (p[i - 1] != '*') break;
-			dp[0][i] = true;
-		}
-		for (int i = 1; i <= lens; ++i) {
-			for (int j = 1; j <= lenp; ++j) {
-				if (j < lenp && p[j] == '*') {
-					continue;
-				} else if (p[j - 1] != '*') {
-					dp[i][j] = dp[i - 1][j - 1] && (p[j - 1] == '.' || p[j - 1] == s[i - 1]);
-				} else if (p[j - 2] == '.'){
-					dp[i][j] = dp[i][j - 2] || dp[i - 1][j];
-				} else {
-					dp[i][j] = dp[i][j - 2] || (dp[i - 1][j] && s[i - 1] == p[j - 2]);
-				}
-			}
-		}
+        dp[0][0] = true;
+        for (int i = 2; i <= lenp; i += 2) {
+            if (p[i - 1] != '*') break;
+            dp[0][i] = true;
+        }
+        for (int i = 1; i <= lens; ++i) {
+            for (int j = 1; j <= lenp; ++j) {
+                if (j < lenp && p[j] == '*') {
+                    continue;
+                } else if (p[j - 1] != '*') {
+                    dp[i][j] = dp[i - 1][j - 1] && (p[j - 1] == '.' || p[j - 1] == s[i - 1]);
+                } else if (p[j - 2] == '.'){
+                    dp[i][j] = dp[i][j - 2] || dp[i - 1][j];
+                } else {
+                    dp[i][j] = dp[i][j - 2] || (dp[i - 1][j] && s[i - 1] == p[j - 2]);
+                }
+            }
+        }
 
-		return dp[lens][lenp];
+        return dp[lens][lenp];
     }
 };
 </code></pre>
@@ -98,16 +132,16 @@ public:
     bool isSelfCrossing(vector<int>& v) {
         int size = v.size();
 
-		for (int i = 3; i < size; ++i) {
-			// intersects with 3 steps before
-			if (i >= 3 && v[i - 1] <= v[i - 3] && v[i] >= v[i - 2]) return true;
-			// intersects with 4 steps before
-			if (i >= 4 && v[i - 1] == v[i - 3] && v[i] + v[i - 4] >= v[i - 2]) return true;
-			// intersects with 5 steps before
-			if (i >= 5 && v[i - 1] >= v[i - 3] - v[i - 5] && v[i - 1] <= v[i - 3] && v[i - 2] >= v[i - 4] && v[i] >= v[i - 2] - v[i - 4]) return true;
-		}
+        for (int i = 3; i < size; ++i) {
+            // intersects with 3 steps before
+            if (i >= 3 && v[i - 1] <= v[i - 3] && v[i] >= v[i - 2]) return true;
+            // intersects with 4 steps before
+            if (i >= 4 && v[i - 1] == v[i - 3] && v[i] + v[i - 4] >= v[i - 2]) return true;
+            // intersects with 5 steps before
+            if (i >= 5 && v[i - 1] >= v[i - 3] - v[i - 5] && v[i - 1] <= v[i - 3] && v[i - 2] >= v[i - 4] && v[i] >= v[i - 2] - v[i - 4]) return true;
+        }
 
-		return false;
+        return false;
     }
 };
 </code></pre>
@@ -120,37 +154,37 @@ Step 2: Find min cut using dynamic programming. DP[i] denotes min cut of prefix 
 public:
     int minCut(string s) {
         if (s.empty()) {
-			return 0;
-		}
+            return 0;
+        }
 
-		int len = s.length();
-		vector<vector<bool>> b(len, vector<bool>(len + 1, false));
-		vector<int> dp(len + 1, INT_MAX);
+        int len = s.length();
+        vector<vector<bool>> b(len, vector<bool>(len + 1, false));
+        vector<int> dp(len + 1, INT_MAX);
 
-		preprocess(s, b);
-		dp[0] = -1;
-		for (int i = 1; i <= len; ++i) {
-			for (int j = 0; j < i; ++j) {
-				if (!b[j][i - j]) continue;
-				dp[i] = min(dp[i], dp[j] + 1);
-			}
-		}
+        preprocess(s, b);
+        dp[0] = -1;
+        for (int i = 1; i <= len; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (!b[j][i - j]) continue;
+                dp[i] = min(dp[i], dp[j] + 1);
+            }
+        }
 
-		return dp[len];
+        return dp[len];
     }
 private:
-	void preprocess(const string &s, vector<vector<bool>> &b) {
-		int len = s.length();
+    void preprocess(const string &s, vector<vector<bool>> &b) {
+        int len = s.length();
 
-		for (int i = 0; i < len; ++i) {
-			b[i][0] = b[i][1] = true;
-		}
-		for (int i = 2; i <= len; ++i) {
-			for (int j = 0; j + i <= len; ++j) {
-				b[j][i] = (b[j + 1][i - 2] && s[j] == s[j + i - 1]);
-			}
-		}
-	}
+        for (int i = 0; i < len; ++i) {
+            b[i][0] = b[i][1] = true;
+        }
+        for (int i = 2; i <= len; ++i) {
+            for (int j = 0; j + i <= len; ++j) {
+                b[j][i] = (b[j + 1][i - 2] && s[j] == s[j + i - 1]);
+            }
+        }
+    }
 };
 </code></pre>
 <p>Runtime: 159 ms</p>
@@ -163,39 +197,39 @@ Given N, K, find count of numbers with prefix 1, let's say X, if<br>
 <pre><code>
 class Solution {
 public:
-	int findKthNumber(int n, int k) {
-		return helper(0, k + 1, n);
-	}
+    int findKthNumber(int n, int k) {
+        return helper(0, k + 1, n);
+    }
 private:
-	int helper(int prefix, int k, int bound) {
-		if (k == 1) {
-			return prefix;
-		}
-		for (int i = 0; i < 10; ++i) {
-			int newPrefix = prefix * 10 + i;
-			if (newPrefix == 0) continue;
-			int numPrefix = countPrefix(newPrefix, bound);
+    int helper(int prefix, int k, int bound) {
+        if (k == 1) {
+            return prefix;
+        }
+        for (int i = 0; i < 10; ++i) {
+            int newPrefix = prefix * 10 + i;
+            if (newPrefix == 0) continue;
+            int numPrefix = countPrefix(newPrefix, bound);
 
-			if (numPrefix >= k - 1) {
-				return helper(newPrefix, k - 1, bound);
-			} else {
-				k -= numPrefix;
-			}
-		}
-		return 0;
-	}
-	int countPrefix(int prefix, int bound) {
-		int result = 1;
-		long long range = 10;
-		while (prefix * range <= bound) {
-			result += min(bound, prefix * range + range - 1) - prefix * range + 1;
-			range *= 10LL;
-		}
-		return result;
-	}
-	inline long long min(long long a, long long b) {
-	    return a < b ? a : b;
-	}
+            if (numPrefix >= k - 1) {
+                return helper(newPrefix, k - 1, bound);
+            } else {
+                k -= numPrefix;
+            }
+        }
+        return 0;
+    }
+    int countPrefix(int prefix, int bound) {
+        int result = 1;
+        long long range = 10;
+        while (prefix * range <= bound) {
+            result += min(bound, prefix * range + range - 1) - prefix * range + 1;
+            range *= 10LL;
+        }
+        return result;
+    }
+    inline long long min(long long a, long long b) {
+        return a < b ? a : b;
+    }
 };
 </code></pre>
 <p>Runtime: 3 ms</p>
@@ -206,40 +240,40 @@ private:
 public:
     string removeDuplicateLetters(string s) {
         if (s.empty()) {
-			return "";
-		}
+            return "";
+        }
 
-		int size = s.length();
-		int count[26] = {0};
-		int used[26] = {0};
-		bool present[26] = {false};
-		stack<char> st;
+        int size = s.length();
+        int count[26] = {0};
+        int used[26] = {0};
+        bool present[26] = {false};
+        stack<char> st;
 
-		for (char ch : s) {
-			count[ch - 'a'] += 1;
-		}
+        for (char ch : s) {
+            count[ch - 'a'] += 1;
+        }
 
-		for (char ch : s) {
-			while(!present[ch - 'a'] && !st.empty() && ch < st.top()
-					&& used[st.top() - 'a'] < count[st.top() - 'a']) {
-			    present[st.top() - 'a'] = false;
-				st.pop();
-			}
-			if (!present[ch - 'a']) {
-				st.push(ch);
-				present[ch - 'a'] = true;
-			}
-			used[ch - 'a'] += 1;
-		}
+        for (char ch : s) {
+            while(!present[ch - 'a'] && !st.empty() && ch < st.top()
+                    && used[st.top() - 'a'] < count[st.top() - 'a']) {
+                present[st.top() - 'a'] = false;
+                st.pop();
+            }
+            if (!present[ch - 'a']) {
+                st.push(ch);
+                present[ch - 'a'] = true;
+            }
+            used[ch - 'a'] += 1;
+        }
 
-		string result;
+        string result;
 
-		while (!st.empty()) {
-			result = st.top() + result;
-			st.pop();
-		}
+        while (!st.empty()) {
+            result = st.top() + result;
+            st.pop();
+        }
 
-		return result;
+        return result;
     }
 };
 </code></pre>
@@ -250,31 +284,31 @@ public:
 *Max/Min heap trick: store negative of num in max heap to implement min heap.</p>
 <pre><code>class MedianFinder {
 public:
-	MedianFinder() {
-		while (!lpq.empty()) lpq.pop();
-		while (!spq.empty()) spq.pop();
-	}
+    MedianFinder() {
+        while (!lpq.empty()) lpq.pop();
+        while (!spq.empty()) spq.pop();
+    }
 
     void addNum(int num) {
-		if (lpq.size() == spq.size()) {
-			spq.push(-num);
-			lpq.push(-spq.top());
-			spq.pop();
-		} else {
-			lpq.push(num);
-			spq.push(-lpq.top());
-			lpq.pop();
-		}
+        if (lpq.size() == spq.size()) {
+            spq.push(-num);
+            lpq.push(-spq.top());
+            spq.pop();
+        } else {
+            lpq.push(num);
+            spq.push(-lpq.top());
+            lpq.pop();
+        }
     }
 
     double findMedian() {
-		return lpq.size() == spq.size()
-				? (lpq.top() - spq.top()) * .5
-				: lpq.top();
+        return lpq.size() == spq.size()
+                ? (lpq.top() - spq.top()) * .5
+                : lpq.top();
     }
 private:
-	priority_queue<int> lpq;
-	priority_queue<int> spq;
+    priority_queue<int> lpq;
+    priority_queue<int> spq;
 };
 
 </code></pre>
@@ -288,51 +322,51 @@ If s[i, j] contains t, move i forward til s[i, j] does not contain t.</p>
 public:
     string minWindow(string s, string t) {
         if (s.empty() || t.empty()) {
-			return "";
-		}
+            return "";
+        }
 
-		int sLength = s.length();
-		int tLength = t.length();
-		int target[256];
-		int count[256];
-		int given = 0;
-		int current = 0;
-		int rBegin = 0;
-		int rEnd = INT_MAX;
+        int sLength = s.length();
+        int tLength = t.length();
+        int target[256];
+        int count[256];
+        int given = 0;
+        int current = 0;
+        int rBegin = 0;
+        int rEnd = INT_MAX;
 
-		memset(target, 0, sizeof target);
-		memset(count, 0, sizeof count);
+        memset(target, 0, sizeof target);
+        memset(count, 0, sizeof count);
 
-		for (char ch : t) {
-			target[ch] += 1;
-			if (target[ch] == 1) {
-				given += 1;
-			}
-		}
+        for (char ch : t) {
+            target[ch] += 1;
+            if (target[ch] == 1) {
+                given += 1;
+            }
+        }
 
-		for (int i = 0, j = 0; j < sLength; ++j) {
-			count[s[j]] += 1;
-			if (target[s[j]] && count[s[j]] == target[s[j]]) {
-				current += 1;
-			}
-			if (current == given) {
-				int begin = 0;
-				int end = j + 1;
-				while (current == given) {
-					begin = i;
-					if (target[s[i]] && target[s[i]] == count[s[i]]) {
-						--current;
-					}
-					--count[s[i++]];
-				}
-				if (rEnd - rBegin > end - begin) {
-					rBegin = begin;
-					rEnd = end;
-				}
-			}
-		}
+        for (int i = 0, j = 0; j < sLength; ++j) {
+            count[s[j]] += 1;
+            if (target[s[j]] && count[s[j]] == target[s[j]]) {
+                current += 1;
+            }
+            if (current == given) {
+                int begin = 0;
+                int end = j + 1;
+                while (current == given) {
+                    begin = i;
+                    if (target[s[i]] && target[s[i]] == count[s[i]]) {
+                        --current;
+                    }
+                    --count[s[i++]];
+                }
+                if (rEnd - rBegin > end - begin) {
+                    rBegin = begin;
+                    rEnd = end;
+                }
+            }
+        }
 
-		return rEnd == INT_MAX ? "" : s.substr(rBegin, rEnd - rBegin);
+        return rEnd == INT_MAX ? "" : s.substr(rBegin, rEnd - rBegin);
     }
 };
 </code></pre>
@@ -345,26 +379,26 @@ public:
 public:
     int longestValidParentheses(string s) {
         if (s.empty()) {
-			return 0;
-		}
+            return 0;
+        }
 
-		int len = s.length();
-		int result = 0;
-		stack<int> st;
-		vector<int> validSuffix(len + 1, 0);
+        int len = s.length();
+        int result = 0;
+        stack<int> st;
+        vector<int> validSuffix(len + 1, 0);
 
-		for (int i = 1; i <= len; ++i) {
-			char ch = s[i - 1];
-			if (ch == '(') {
-				st.push(i - 1);
-			} else if (!st.empty()){
-				result = max(result, i - st.top() + validSuffix[st.top()]);
-				validSuffix[i] = i - st.top() + validSuffix[st.top()];
-				st.pop();
-			}
-		}
+        for (int i = 1; i <= len; ++i) {
+            char ch = s[i - 1];
+            if (ch == '(') {
+                st.push(i - 1);
+            } else if (!st.empty()){
+                result = max(result, i - st.top() + validSuffix[st.top()]);
+                validSuffix[i] = i - st.top() + validSuffix[st.top()];
+                st.pop();
+            }
+        }
 
-		return result;
+        return result;
     }
 };
 </code></pre>
@@ -375,46 +409,46 @@ public:
 <pre><code>
 class Solution {
 public:
-	int countNodes(TreeNode* root) {
-		if (root == NULL) {
-			return 0;
-		}
+    int countNodes(TreeNode* root) {
+        if (root == NULL) {
+            return 0;
+        }
 
-		int depth = findDepth(root);
-		int lower = 0;
-		int upper = (1 << depth >> 1) - 1;
+        int depth = findDepth(root);
+        int lower = 0;
+        int upper = (1 << depth >> 1) - 1;
 
-		while (lower != upper) {
-			int mid = lower + (upper - lower + 1 >> 1);
-			if (checkPath(root, depth - 2, mid)) {
-				lower = mid;
-			} else {
-				upper = mid - 1;
-			}
-		}
+        while (lower != upper) {
+            int mid = lower + (upper - lower + 1 >> 1);
+            if (checkPath(root, depth - 2, mid)) {
+                lower = mid;
+            } else {
+                upper = mid - 1;
+            }
+        }
 
-		return (1 << depth >> 1) + upper;
-	}
+        return (1 << depth >> 1) + upper;
+    }
 private:
-	int findDepth(TreeNode *root) {
-		int result = 0;
-		while (root) {
-			root = root->left;
-			++result;
-		}
-		return result;
-	}
+    int findDepth(TreeNode *root) {
+        int result = 0;
+        while (root) {
+            root = root->left;
+            ++result;
+        }
+        return result;
+    }
 
-	bool checkPath(TreeNode *root, int p, int target) {
-		if (p < 0) {
-			return true;
-		}
-		if (target & (1 << p)) {
-			return root->right != NULL && checkPath(root->right, p - 1, target);
-		} else {
-			return root->left != NULL && checkPath(root->left, p - 1, target);
-		}
-	}
+    bool checkPath(TreeNode *root, int p, int target) {
+        if (p < 0) {
+            return true;
+        }
+        if (target & (1 << p)) {
+            return root->right != NULL && checkPath(root->right, p - 1, target);
+        } else {
+            return root->left != NULL && checkPath(root->left, p - 1, target);
+        }
+    }
 };
 </code></pre>
 <p>Runtime: 232 ms</p>
@@ -468,24 +502,24 @@ dp[i, j] = max(min(dp[i + 1, j], dp[i, j + 1]) - dungeon[i, j], 1).</p>
 <pre><code>
 class Solution {
 public:
-	int calculateMinimumHP(vector<vector<int>>& dungeon) {
-		if (dungeon.empty() || dungeon.front().empty()) {
-			return 0;
-		}
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        if (dungeon.empty() || dungeon.front().empty()) {
+            return 0;
+        }
 
-		int n = dungeon.size();
-		int m = dungeon.front().size();
-		vector<vector<int>> dp(n + 1, vector<int>(m + 1, INT_MAX));
+        int n = dungeon.size();
+        int m = dungeon.front().size();
+        vector<vector<int>> dp(n + 1, vector<int>(m + 1, INT_MAX));
 
-		dp[n][m - 1] = 1;
-		for (int i = n - 1; i >= 0; --i) {
-			for (int j = m - 1; j >= 0; --j) {
-				dp[i][j] = max(min(dp[i + 1][j], dp[i][j + 1]) - dungeon[i][j], 1);
-			}
-		}
+        dp[n][m - 1] = 1;
+        for (int i = n - 1; i >= 0; --i) {
+            for (int j = m - 1; j >= 0; --j) {
+                dp[i][j] = max(min(dp[i + 1][j], dp[i][j + 1]) - dungeon[i][j], 1);
+            }
+        }
 
-		return max(dp[0][0], 1);
-	}
+        return max(dp[0][0], 1);
+    }
 };
 </code></pre>
 <p>Runtime: 9 ms</p>
@@ -494,76 +528,76 @@ Given a initial health, perform dynamic programming to compute the maximal healt
 <pre><code>
 class Solution {
 public:
-	int calculateMinimumHP(vector<vector<int>>& dungeon) {
-		if (dungeon.empty() || dungeon.front().empty()) {
-			return 0;
-		}
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        if (dungeon.empty() || dungeon.front().empty()) {
+            return 0;
+        }
 
-		n = dungeon.size();
-		m = dungeon.front().size();
-		f = new int * [n];
-		for (int i = 0; i < n; ++i) {
-			f[i] = new int [m];
-		}
+        n = dungeon.size();
+        m = dungeon.front().size();
+        f = new int * [n];
+        for (int i = 0; i < n; ++i) {
+            f[i] = new int [m];
+        }
 
-		// binary search health
-		int lower = 1;
-		int upper = 1;
+        // binary search health
+        int lower = 1;
+        int upper = 1;
 
-		for (auto &v : dungeon) {
-			for (int i : v) {
-				upper += max(0, -i);
-			}
-		}
+        for (auto &v : dungeon) {
+            for (int i : v) {
+                upper += max(0, -i);
+            }
+        }
 
-		while (upper != lower) {
-			int mid = lower + (upper - lower >> 1);
-			if (isFoundPath(dungeon, mid)) {
-				upper = mid;
-			} else {
-				lower = mid + 1;
-			}
-		}
+        while (upper != lower) {
+            int mid = lower + (upper - lower >> 1);
+            if (isFoundPath(dungeon, mid)) {
+                upper = mid;
+            } else {
+                lower = mid + 1;
+            }
+        }
 
-		return upper;
-	}
+        return upper;
+    }
 private:
-	bool isFoundPath(vector<vector<int>> &dungeon, int health) {
-		for (int i = 0; i < n; ++i) {
-			memset(f[i], 0, m << 2);
-		}
-		f[0][0] = dungeon[0][0] + health > 0 ? dungeon[0][0] + health : INT_MIN;
-		for (int i = 1; i < n; ++i) {
-			if (f[i - 1][0] == INT_MIN || dungeon[i][0] + f[i - 1][0] <= 0) {
-				f[i][0] = INT_MIN;
-			} else {
-				f[i][0] = dungeon[i][0] + f[i - 1][0];
-			}
-		}
-		for (int i = 1; i < m; ++i) {
-			if (f[0][i - 1] == INT_MIN || dungeon[0][i] + f[0][i - 1] <= 0) {
-				f[0][i] = INT_MIN;
-			} else {
-				f[0][i] = dungeon[0][i] + f[0][i - 1];
-			}
-		}
-		for (int i = 1; i < n; ++i) {
-			for (int j = 1; j < m; ++j) {
-				int maxPre = max(f[i - 1][j], f[i][j - 1]);
-				if (maxPre == INT_MIN || dungeon[i][j] + maxPre <= 0) {
-					f[i][j] = INT_MIN;
-				} else {
-					f[i][j] = dungeon[i][j] + maxPre;
-				}
-			}
-		}
+    bool isFoundPath(vector<vector<int>> &dungeon, int health) {
+        for (int i = 0; i < n; ++i) {
+            memset(f[i], 0, m << 2);
+        }
+        f[0][0] = dungeon[0][0] + health > 0 ? dungeon[0][0] + health : INT_MIN;
+        for (int i = 1; i < n; ++i) {
+            if (f[i - 1][0] == INT_MIN || dungeon[i][0] + f[i - 1][0] <= 0) {
+                f[i][0] = INT_MIN;
+            } else {
+                f[i][0] = dungeon[i][0] + f[i - 1][0];
+            }
+        }
+        for (int i = 1; i < m; ++i) {
+            if (f[0][i - 1] == INT_MIN || dungeon[0][i] + f[0][i - 1] <= 0) {
+                f[0][i] = INT_MIN;
+            } else {
+                f[0][i] = dungeon[0][i] + f[0][i - 1];
+            }
+        }
+        for (int i = 1; i < n; ++i) {
+            for (int j = 1; j < m; ++j) {
+                int maxPre = max(f[i - 1][j], f[i][j - 1]);
+                if (maxPre == INT_MIN || dungeon[i][j] + maxPre <= 0) {
+                    f[i][j] = INT_MIN;
+                } else {
+                    f[i][j] = dungeon[i][j] + maxPre;
+                }
+            }
+        }
 
-		return f[n - 1][m - 1] > 0;
-	}
+        return f[n - 1][m - 1] > 0;
+    }
 
-	int n;
-	int m;
-	int **f;
+    int n;
+    int m;
+    int **f;
 };
 </code></pre>
 <p>Runtime: 19 ms</p>
@@ -577,30 +611,30 @@ By the construction, it is also the longest palindrome prefix of s.</p>
 class Solution {
 public:
     string shortestPalindrome(string s) {
-		if (s.length() < 2) {
-			return s;
-		}
+        if (s.length() < 2) {
+            return s;
+        }
 
-		string t(s.rbegin(), s.rend());
-		t = s + "#" + t;
+        string t(s.rbegin(), s.rend());
+        t = s + "#" + t;
 
-		int lenS = s.length();
-		int lenT = t.length();
-		vector<int> next(lenT + 1, 0);
+        int lenS = s.length();
+        int lenT = t.length();
+        vector<int> next(lenT + 1, 0);
 
-		next[0] = -1;
-		for (int i = 1; i <= lenT; ++i) {
-			int preNext = next[i - 1];
-			while (preNext != -1 && t[preNext] != t[i - 1]) {
-				preNext = next[preNext];
-			}
-			next[i] = preNext + 1;
-		}
+        next[0] = -1;
+        for (int i = 1; i <= lenT; ++i) {
+            int preNext = next[i - 1];
+            while (preNext != -1 && t[preNext] != t[i - 1]) {
+                preNext = next[preNext];
+            }
+            next[i] = preNext + 1;
+        }
 
-		t = s.substr(next.back());
-		reverse(t.begin(), t.end());
+        t = s.substr(next.back());
+        reverse(t.begin(), t.end());
 
-		return t + s;
+        return t + s;
     }
 };
 </code></pre>
@@ -666,110 +700,110 @@ public:
 Optimization: when a word is found, remove it from the trie.</p>
 <pre><code>
 struct Node {
-	Node() {
-		next = vector<int>(26, -1);
-		isWord = false;
-	}
+    Node() {
+        next = vector<int>(26, -1);
+        isWord = false;
+    }
 
-	vector<int> next;
-	bool isWord;
+    vector<int> next;
+    bool isWord;
 };
 
 class Solution {
 public:
     vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
         if (board.empty() || board.front().empty() || words.empty()) {
-			return vector<string>();
-		}
+            return vector<string>();
+        }
 
-		n = board.size();
-		m = board.front().size();
+        n = board.size();
+        m = board.front().size();
 
-		trie.clear();
-		trie.push_back(Node());
-		for (const string &word : words) {
-			trieAdd(0, word, 0);
-		}
+        trie.clear();
+        trie.push_back(Node());
+        for (const string &word : words) {
+            trieAdd(0, word, 0);
+        }
 
-		result.clear();
-		for (int i = 0; i < n; ++i) {
-			for (int j = 0; j < m; ++j) {
-				if (trie.front().next[board[i][j] - 'a'] != -1) {
-					isVisited.clear();
-					isVisited.insert(i << 16 | j);
-					searchWord(trie.front().next[board[i][j] - 'a'], string(1, board[i][j]), board, i, j);
-				}
-			}
-		}
+        result.clear();
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (trie.front().next[board[i][j] - 'a'] != -1) {
+                    isVisited.clear();
+                    isVisited.insert(i << 16 | j);
+                    searchWord(trie.front().next[board[i][j] - 'a'], string(1, board[i][j]), board, i, j);
+                }
+            }
+        }
 
-		return vector<string>(result.begin(), result.end());
+        return vector<string>(result.begin(), result.end());
     }
 private:
-	void trieAdd(int id, const string &word, int a) {
-		if (a >= word.length()) {
-			trie[id].isWord = true;
-			return;
-		}
+    void trieAdd(int id, const string &word, int a) {
+        if (a >= word.length()) {
+            trie[id].isWord = true;
+            return;
+        }
 
-		int nid = trie[id].next[word[a] - 'a'];
+        int nid = trie[id].next[word[a] - 'a'];
 
-		if (nid == -1) {
-			trie.push_back(Node());
-			nid = trie.size() - 1;
-			trie[id].next[word[a] - 'a'] = nid;
-		}
+        if (nid == -1) {
+            trie.push_back(Node());
+            nid = trie.size() - 1;
+            trie[id].next[word[a] - 'a'] = nid;
+        }
 
-		trieAdd(nid, word, a + 1);
-	}
+        trieAdd(nid, word, a + 1);
+    }
 
-	void trieRemove(int id, const string &word, int a, int &numNext) {
-		int numNextChild = 0;
-		if (a < word.length()) {
-			trieRemove(trie[id].next[word[a] - 'a'], word, a + 1, numNextChild);
-		} else {
-			trie[id].isWord = false;
-		}
+    void trieRemove(int id, const string &word, int a, int &numNext) {
+        int numNextChild = 0;
+        if (a < word.length()) {
+            trieRemove(trie[id].next[word[a] - 'a'], word, a + 1, numNextChild);
+        } else {
+            trie[id].isWord = false;
+        }
 
-		if (a < word.length() && numNextChild == 0) {
-			trie[id].next[word[a] - 'a'] = -1;
-		}
-		for (int i : trie[id].next) {
-			numNext += (i == -1 ? 0 : 1);
-		}
-	}
+        if (a < word.length() && numNextChild == 0) {
+            trie[id].next[word[a] - 'a'] = -1;
+        }
+        for (int i : trie[id].next) {
+            numNext += (i == -1 ? 0 : 1);
+        }
+    }
 
-	void searchWord(int id, string s, const vector<vector<char>> &board, int x, int y) {
-		if (trie[id].isWord) {
-			result.insert(s);
-		    int tmp; trieRemove(0, s, 0, tmp);
-		}
+    void searchWord(int id, string s, const vector<vector<char>> &board, int x, int y) {
+        if (trie[id].isWord) {
+            result.insert(s);
+            int tmp; trieRemove(0, s, 0, tmp);
+        }
 
-		for (int i = 0; i < 4; ++i) {
-			int nx = x + dx[i];
-			int ny = y + dy[i];
+        for (int i = 0; i < 4; ++i) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
 
-			if (nx < 0 || nx >= n || ny < 0 || ny >= m
-					|| isVisited.find(nx << 16 | ny) != isVisited.end()
-					|| trie[id].next[board[nx][ny] - 'a'] == -1) {
-				continue;
-			}
+            if (nx < 0 || nx >= n || ny < 0 || ny >= m
+                    || isVisited.find(nx << 16 | ny) != isVisited.end()
+                    || trie[id].next[board[nx][ny] - 'a'] == -1) {
+                continue;
+            }
 
-			s += board[nx][ny];
-			isVisited.insert(nx << 16 | ny);
-			searchWord(trie[id].next[board[nx][ny] - 'a'], s, board, nx, ny);
-			isVisited.erase(nx << 16 | ny);
-			s.pop_back();
-		}
-	}
+            s += board[nx][ny];
+            isVisited.insert(nx << 16 | ny);
+            searchWord(trie[id].next[board[nx][ny] - 'a'], s, board, nx, ny);
+            isVisited.erase(nx << 16 | ny);
+            s.pop_back();
+        }
+    }
 
-	const int dx[4] = {0, 1, 0, -1};
-	const int dy[4] = {1, 0, -1, 0};
+    const int dx[4] = {0, 1, 0, -1};
+    const int dy[4] = {1, 0, -1, 0};
 
-	int n;
-	int m;
-	vector<Node> trie;
-	unordered_set<int> isVisited;
-	unordered_set<string> result;
+    int n;
+    int m;
+    vector<Node> trie;
+    unordered_set<int> isVisited;
+    unordered_set<string> result;
 };
 </code></pre>
 <p>Runtime: 199 ms</p>
@@ -781,56 +815,56 @@ class Solution {
 public:
     vector<string> wordBreak(string s, unordered_set<string>& wordDict) {
         if (s.empty() || wordDict.empty()) {
-			return vector<string>();
-		}
+            return vector<string>();
+        }
 
-		int length = s.length();
-		vector<bool> f(length + 1, false);
+        int length = s.length();
+        vector<bool> f(length + 1, false);
 
-		maxLen = 0;
-		for (const string &s : wordDict) {
-		    maxLen = max(maxLen, (int)s.length());
-		}
+        maxLen = 0;
+        for (const string &s : wordDict) {
+            maxLen = max(maxLen, (int)s.length());
+        }
 
-		f[0] = true;
-		for (int i = 1; i <= length; ++i) {
-			for (int j = i - 1; j >= 0 && i - j <= maxLen; --j) {
-				if (f[j] && wordDict.find(s.substr(j, i - j)) != wordDict.end()) {
-					f[i] = true;
-					break;
-				}
-			}
-		}
+        f[0] = true;
+        for (int i = 1; i <= length; ++i) {
+            for (int j = i - 1; j >= 0 && i - j <= maxLen; --j) {
+                if (f[j] && wordDict.find(s.substr(j, i - j)) != wordDict.end()) {
+                    f[i] = true;
+                    break;
+                }
+            }
+        }
 
-		result.clear();
+        result.clear();
 
-		if (f[length]) {
-			helper(f, s, length - 1, "", wordDict);
-		}
+        if (f[length]) {
+            helper(f, s, length - 1, "", wordDict);
+        }
 
-		return result;
+        return result;
     }
 private:
-	void helper(const vector<bool> &f, const string &s, int b, string cur,
-			const unordered_set<string> &dict){
-		if (b < 0) {
-			result.push_back(cur.substr(1));
-			return;
-		}
+    void helper(const vector<bool> &f, const string &s, int b, string cur,
+            const unordered_set<string> &dict){
+        if (b < 0) {
+            result.push_back(cur.substr(1));
+            return;
+        }
 
-		for (int a = b; a >= 0 && b - a < maxLen; --a) {
-			if (!f[a]) {
-				continue;
-			}
-			string sub = s.substr(a, b - a + 1);
-			if (dict.find(sub) != dict.end()) {
-				helper(f, s, a - 1, " " + sub + cur, dict);
-			}
-		}
-	}
+        for (int a = b; a >= 0 && b - a < maxLen; --a) {
+            if (!f[a]) {
+                continue;
+            }
+            string sub = s.substr(a, b - a + 1);
+            if (dict.find(sub) != dict.end()) {
+                helper(f, s, a - 1, " " + sub + cur, dict);
+            }
+        }
+    }
 
-	int maxLen;
-	vector<string> result;
+    int maxLen;
+    vector<string> result;
 };
 </code></pre>
 <p>Runtime: 3 ms</p>
@@ -897,47 +931,47 @@ class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         if (nums1.empty() && nums2.empty()) {
-			return 0.;
-		}
+            return 0.;
+        }
 
-		int size1 = nums1.size();
-		int size2 = nums2.size();
+        int size1 = nums1.size();
+        int size2 = nums2.size();
 
-		if (size1 + size2 & 1) {
-			// odd number of elements
-			return 0. + findKthElement(size1 + size2 + 1 >> 1,
-					nums1, 0, size1, nums2, 0, size2);
-		} else {
-			// even number of elements
-			return (findKthElement(size1 + size2 >> 1,
-					nums1, 0, size1, nums2, 0, size2)
-					+ findKthElement(size1 + size2 + 2 >> 1,
-					nums1, 0, size1, nums2, 0, size2)) * .5;
-		}
+        if (size1 + size2 & 1) {
+            // odd number of elements
+            return 0. + findKthElement(size1 + size2 + 1 >> 1,
+                    nums1, 0, size1, nums2, 0, size2);
+        } else {
+            // even number of elements
+            return (findKthElement(size1 + size2 >> 1,
+                    nums1, 0, size1, nums2, 0, size2)
+                    + findKthElement(size1 + size2 + 2 >> 1,
+                    nums1, 0, size1, nums2, 0, size2)) * .5;
+        }
     }
 private:
-	int findKthElement(int k, const vector<int> &nums1, int b1, int e1,
-			const vector<int> &nums2, int b2, int e2) {
-		if (e1 == b1) {
-			return nums2[b2 + k - 1];
-		} else if (e2 == b2) {
-			return nums1[b1 + k - 1];
-		} else if (k == 1) {
-			return nums1[b1] < nums2[b2] ? nums1[b1] : nums2[b2];
-		}
+    int findKthElement(int k, const vector<int> &nums1, int b1, int e1,
+            const vector<int> &nums2, int b2, int e2) {
+        if (e1 == b1) {
+            return nums2[b2 + k - 1];
+        } else if (e2 == b2) {
+            return nums1[b1 + k - 1];
+        } else if (k == 1) {
+            return nums1[b1] < nums2[b2] ? nums1[b1] : nums2[b2];
+        }
 
-		int kk = k >> 1;
-		int p1 = (b1 + kk - 1 < e1 ? b1 + kk - 1 : e1 - 1);
-		int p2 = (b2 + kk - 1 < e2 ? b2 + kk - 1 : e2 - 1);
+        int kk = k >> 1;
+        int p1 = (b1 + kk - 1 < e1 ? b1 + kk - 1 : e1 - 1);
+        int p2 = (b2 + kk - 1 < e2 ? b2 + kk - 1 : e2 - 1);
 
-		if (nums1[p1] < nums2[p2]) {
-			return findKthElement(k - (p1 - b1 + 1), nums1, p1 + 1, e1,
-					nums2, b2, e2);
-		} else {
-			return findKthElement(k - (p2 - b2 + 1), nums1, b1, e1,
-					nums2, p2 + 1, e2);
-		}
-	}
+        if (nums1[p1] < nums2[p2]) {
+            return findKthElement(k - (p1 - b1 + 1), nums1, p1 + 1, e1,
+                    nums2, b2, e2);
+        } else {
+            return findKthElement(k - (p2 - b2 + 1), nums1, b1, e1,
+                    nums2, p2 + 1, e2);
+        }
+    }
 };
 </code></pre>
 <p>Runtime: 35 ms</p>
@@ -951,77 +985,77 @@ Iterate on the list, if the vertical border is a:<br>
 If no conflict exists, check whether the area of all rectangles sum to area of their bounding box.</p>
 <pre><code>
 struct Node {
-	Node(int id, int x, int b, int t, int type) {
-		this->id = id;
-		this->x = x;
-		this->b = b;
-		this->t = t;
-		this->type = type;
-	}
+    Node(int id, int x, int b, int t, int type) {
+        this->id = id;
+        this->x = x;
+        this->b = b;
+        this->t = t;
+        this->type = type;
+    }
 
-	int id;
-	int x, b, t;
-	int type;
+    int id;
+    int x, b, t;
+    int type;
 };
 
 bool cmp(const Node &a, const Node &b) {
-	return a.x == b.x ? a.type > b.type : a.x < b.x;
+    return a.x == b.x ? a.type > b.type : a.x < b.x;
 }
 
 class Solution {
 public:
     bool isRectangleCover(vector<vector<int>>& rectangles) {
         if (rectangles.empty()) {
-			return true;
-		}
+            return true;
+        }
 
-		int size = rectangles.size();
-		int area = 0;
-		int xMax = INT_MIN;
-		int xMin = INT_MAX;
-		int yMax = INT_MIN;
-		int yMin = INT_MAX;
-		vector<Node> nodes;
-		map<int, int> active;
+        int size = rectangles.size();
+        int area = 0;
+        int xMax = INT_MIN;
+        int xMin = INT_MAX;
+        int yMax = INT_MIN;
+        int yMin = INT_MAX;
+        vector<Node> nodes;
+        map<int, int> active;
 
-		nodes.reserve(size << 1);
+        nodes.reserve(size << 1);
 
-		for (auto &v : rectangles) {
-			xMax = max(xMax, v[2]);
-			xMin = min(xMin, v[0]);
-			yMax = max(yMax, v[3]);
-			yMin = min(yMin, v[1]);
-			area += (v[2] - v[0]) * (v[3] - v[1]);
-			nodes.push_back(Node(nodes.size() >> 1, v[0], v[1], v[3], 0));
-			nodes.push_back(Node(nodes.size() >> 1, v[2], v[1], v[3], 1));
-		}
+        for (auto &v : rectangles) {
+            xMax = max(xMax, v[2]);
+            xMin = min(xMin, v[0]);
+            yMax = max(yMax, v[3]);
+            yMin = min(yMin, v[1]);
+            area += (v[2] - v[0]) * (v[3] - v[1]);
+            nodes.push_back(Node(nodes.size() >> 1, v[0], v[1], v[3], 0));
+            nodes.push_back(Node(nodes.size() >> 1, v[2], v[1], v[3], 1));
+        }
 
-		sort(nodes.begin(), nodes.end(), cmp);
+        sort(nodes.begin(), nodes.end(), cmp);
 
-		for (Node &node : nodes) {
-			if (node.type == 1) {
-				// right border of a rectangle
-				active.erase(node.b);
-				continue;
-			}
+        for (Node &node : nodes) {
+            if (node.type == 1) {
+                // right border of a rectangle
+                active.erase(node.b);
+                continue;
+            }
 
-			auto ite = active.find(node.b);
-			// left border of a rectangles
-			if (ite != active.end()) {
-				return false;
-			}
-			if ((ite = active.lower_bound(node.b)) != active.begin()
-					&& (--ite)->second > node.b) {
-				return false;
-			}
-			if ((ite = active.upper_bound(node.b)) != active.end()
-					&& ite->first < node.t) {
-				return false;
-			}
-			active.insert(make_pair(node.b, node.t));
-		}
+            auto ite = active.find(node.b);
+            // left border of a rectangles
+            if (ite != active.end()) {
+                return false;
+            }
+            if ((ite = active.lower_bound(node.b)) != active.begin()
+                    && (--ite)->second > node.b) {
+                return false;
+            }
+            if ((ite = active.upper_bound(node.b)) != active.end()
+                    && ite->first < node.t) {
+                return false;
+            }
+            active.insert(make_pair(node.b, node.t));
+        }
 
-		return area == (xMax - xMin) * (yMax - yMin);
+        return area == (xMax - xMin) * (yMax - yMin);
     }
 };
 </code></pre>
@@ -1033,54 +1067,54 @@ public:
 public:
     bool isMatch(string s, string p) {
         if (s.empty() && p.empty()) {
-			return true;
-		} else if (s.empty()) {
-			bool isAllAsterisk = true;
+            return true;
+        } else if (s.empty()) {
+            bool isAllAsterisk = true;
 
-			for (char ch : p) {
-				if (ch != '*') {
-					isAllAsterisk = false;
-					break;
-				}
-			}
+            for (char ch : p) {
+                if (ch != '*') {
+                    isAllAsterisk = false;
+                    break;
+                }
+            }
 
-			return isAllAsterisk;
-		} else if (p.empty()) {
-			return false;
-		}
+            return isAllAsterisk;
+        } else if (p.empty()) {
+            return false;
+        }
 
-		int lengthS = s.length();
-		int lengthP = p.length();
-		int input = 0;
-		int *f[2] = {new int [lengthP + 1], new int [lengthP + 1]};
-		bool *star = new bool [lengthP + 1];
+        int lengthS = s.length();
+        int lengthP = p.length();
+        int input = 0;
+        int *f[2] = {new int [lengthP + 1], new int [lengthP + 1]};
+        bool *star = new bool [lengthP + 1];
 
         memset(f[0], 0, sizeof(int) * (lengthP + 1));
         memset(f[1], 0, sizeof(int) * (lengthP + 1));
         memset(star, 0, sizeof(bool) * (lengthP + 1));
 
-		f[input][0] = star[0] = true;
-		for (int i = 1; i <= lengthP; ++i) {
-			if (p[i - 1] != '*') {
-				break;
-			}
-			f[input][i] = star[i] = true;
-		}
-		for (int i = 1; i <= lengthS; ++i) {
-		    f[input ^ 1][0] = false;
-			for (int j = 1; j <= lengthP; ++j) {
-			    f[input ^ 1][j] = false;
-				if (p[j - 1] == '*') {
-					f[input ^ 1][j] = star[j - 1];
-				} else {
-					f[input ^ 1][j] = f[input][j - 1] && (p[j - 1] == '?' || s[i - 1] == p[j - 1]);
-				}
-				star[j] = star[j] || f[input ^ 1][j];
-			}
-			input ^= 1;
-		}
+        f[input][0] = star[0] = true;
+        for (int i = 1; i <= lengthP; ++i) {
+            if (p[i - 1] != '*') {
+                break;
+            }
+            f[input][i] = star[i] = true;
+        }
+        for (int i = 1; i <= lengthS; ++i) {
+            f[input ^ 1][0] = false;
+            for (int j = 1; j <= lengthP; ++j) {
+                f[input ^ 1][j] = false;
+                if (p[j - 1] == '*') {
+                    f[input ^ 1][j] = star[j - 1];
+                } else {
+                    f[input ^ 1][j] = f[input][j - 1] && (p[j - 1] == '?' || s[i - 1] == p[j - 1]);
+                }
+                star[j] = star[j] || f[input ^ 1][j];
+            }
+            input ^= 1;
+        }
 
-		return f[input][lengthP];
+        return f[input][lengthP];
     }
 };
 </code></pre>
@@ -1158,43 +1192,43 @@ typedef pair<int, int> PII;
 class LRUCache{
 public:
     LRUCache(int capacity) {
-		this->capacity = capacity;
-		while (!cache.empty()) {
-			cache.pop_back();
-		}
-		umap.clear();
+        this->capacity = capacity;
+        while (!cache.empty()) {
+            cache.pop_back();
+        }
+        umap.clear();
     }
 
     int get(int key) {
-		if (umap.find(key) == umap.end()) {
-			return -1;
-		} else {
-			auto ite = umap[key];
+        if (umap.find(key) == umap.end()) {
+            return -1;
+        } else {
+            auto ite = umap[key];
 
-			cache.push_front(PII(key, ite->second));
-			cache.erase(ite);
-			umap[key] = cache.begin();
-			return cache.front().second;
-		}
+            cache.push_front(PII(key, ite->second));
+            cache.erase(ite);
+            umap[key] = cache.begin();
+            return cache.front().second;
+        }
     }
 
     void set(int key, int value) {
-		if (umap.find(key) == umap.end()) {
-			if (cache.size() >= capacity) {
-			    auto lru = cache.end(); --lru;
-				umap.erase(lru->first);
-				cache.erase(lru);
-			}
-		} else {
-			cache.erase(umap[key]);
-		}
-		cache.push_front(PII(key, value));
-		umap[key] = cache.begin();
+        if (umap.find(key) == umap.end()) {
+            if (cache.size() >= capacity) {
+                auto lru = cache.end(); --lru;
+                umap.erase(lru->first);
+                cache.erase(lru);
+            }
+        } else {
+            cache.erase(umap[key]);
+        }
+        cache.push_front(PII(key, value));
+        umap[key] = cache.begin();
     }
 private:
-	int capacity;
-	list<PII> cache;
-	unordered_map<int, list<PII>::iterator> umap;
+    int capacity;
+    list<PII> cache;
+    unordered_map<int, list<PII>::iterator> umap;
 };
 </code></pre>
 <p>Runtime: 76 ms</p>
@@ -1204,51 +1238,51 @@ private:
 <pre><code>class Solution {
 public:
     int maxPoints(vector<Point>& points) {
-		if (points.size() < 3) {
-			return points.size();
-		}
+        if (points.size() < 3) {
+            return points.size();
+        }
 
-		unordered_map<double, int> umap;
-		int size = points.size();
-		int result = 0;
+        unordered_map<double, int> umap;
+        int size = points.size();
+        int result = 0;
 
-		for (int i = 0; i < size; ++i) {
-			int numSamePoints = 0;
+        for (int i = 0; i < size; ++i) {
+            int numSamePoints = 0;
 
-			umap.clear();
-			for (int j = 0; j < size; ++j) {
-				const Point &p1 = points[i];
-				const Point &p2 = points[j];
+            umap.clear();
+            for (int j = 0; j < size; ++j) {
+                const Point &p1 = points[i];
+                const Point &p2 = points[j];
 
-				if (i == j) {
-					continue;
-				} else if (p1.x == p2.x && p1.y == p2.y) {
-					++numSamePoints;
-					continue;
-				} else {
-					double slope = 0.;
-					// compute slope
-					if (p1.x == p2.x) {
-						slope = INT_MAX + 0.;
-					} else {
-						slope = (p2.y - p1.y + 0.) / (p2.x - p1.x + 0.);
-					}
-					// insert to hash map
-					if (umap.find(slope) == umap.end()) {
-						umap[slope] = 1;
-					} else {
-						umap[slope] += 1;
-					}
-				}
-			}
+                if (i == j) {
+                    continue;
+                } else if (p1.x == p2.x && p1.y == p2.y) {
+                    ++numSamePoints;
+                    continue;
+                } else {
+                    double slope = 0.;
+                    // compute slope
+                    if (p1.x == p2.x) {
+                        slope = INT_MAX + 0.;
+                    } else {
+                        slope = (p2.y - p1.y + 0.) / (p2.x - p1.x + 0.);
+                    }
+                    // insert to hash map
+                    if (umap.find(slope) == umap.end()) {
+                        umap[slope] = 1;
+                    } else {
+                        umap[slope] += 1;
+                    }
+                }
+            }
 
-			result = max(result, 1 + numSamePoints);
-    		for (auto &e : umap) {
-    			result = max(result, 1 + e.second + numSamePoints);
-    		}
-		}
+            result = max(result, 1 + numSamePoints);
+            for (auto &e : umap) {
+                result = max(result, 1 + e.second + numSamePoints);
+            }
+        }
 
-		return result;
+        return result;
     }
 };
 </code></pre>
@@ -1265,33 +1299,33 @@ Thus max = 1011 = 11.</p>
 class Solution {
 public:
     int findMaximumXOR(vector<int>& nums) {
-		if (nums.empty()) {
-			return 0;
-		}
+        if (nums.empty()) {
+            return 0;
+        }
 
-		int mask = 0;
-		int result = 0;
-    	unordered_set<int> uset;
+        int mask = 0;
+        int result = 0;
+        unordered_set<int> uset;
 
-		for (int i = 30; i >= 0; --i) {
-    		uset.clear();
-			mask |= (1 << i);
+        for (int i = 30; i >= 0; --i) {
+            uset.clear();
+            mask |= (1 << i);
 
-			for (int i : nums) {
-				uset.insert(i & mask);
-			}
+            for (int i : nums) {
+                uset.insert(i & mask);
+            }
 
-			int test = result | (1 << i);
+            int test = result | (1 << i);
 
-			for (int i : uset) {
-				if (uset.find(test ^ i) != uset.end()) {
-					result = test;
-					break;
-				}
-			}
-		}
+            for (int i : uset) {
+                if (uset.find(test ^ i) != uset.end()) {
+                    result = test;
+                    break;
+                }
+            }
+        }
 
-		return result;
+        return result;
     }
 };
 </code></pre>
@@ -1301,105 +1335,105 @@ public:
 <p>Build graph using BFS starting from endWord, for each node record its distance to endWord, then find all solutions using DFS from beginWord to endWord with decreasing distance.</p>
 <pre><code>
 struct Node {
-	Node(string word, int dist) {
-		this->word = word;
-		this->dist = dist;
-	}
+    Node(string word, int dist) {
+        this->word = word;
+        this->dist = dist;
+    }
 
-	int dist;
-	string word;
-	vector<int> next;
+    int dist;
+    string word;
+    vector<int> next;
 };
 
 class Solution {
 public:
     vector<vector<string>> findLadders(string beginWord, string endWord, unordered_set<string> &wordList) {
         if (beginWord.length() != endWord.length()) {
-			return vector<vector<string>>();
-		}
+            return vector<vector<string>>();
+        }
 
         current.clear();
         result.clear();
-		graph.clear();
-		id.clear();
-		for(; !q.empty(); q.pop());
+        graph.clear();
+        id.clear();
+        for(; !q.empty(); q.pop());
 
-		wordList.insert(beginWord);
-		wordList.insert(endWord);
-		buildGraph(endWord, wordList);
+        wordList.insert(beginWord);
+        wordList.insert(endWord);
+        buildGraph(endWord, wordList);
 
-		if (id.find(beginWord) == id.end()) {
-		    return result;
-		}
+        if (id.find(beginWord) == id.end()) {
+            return result;
+        }
 
-		findPath(beginWord, endWord);
+        findPath(beginWord, endWord);
 
-		return result;
+        return result;
     }
 
-	void buildGraph(string endWord, unordered_set<string> &dict) {
-		q.push(make_pair(endWord, 0));
-		id[endWord] = graph.size();
-		graph.push_back(Node(endWord, 0));
+    void buildGraph(string endWord, unordered_set<string> &dict) {
+        q.push(make_pair(endWord, 0));
+        id[endWord] = graph.size();
+        graph.push_back(Node(endWord, 0));
 
-		while (!q.empty()) {
-			string word = q.front().first;
-			int dist = q.front().second;
-			int len = word.length();
+        while (!q.empty()) {
+            string word = q.front().first;
+            int dist = q.front().second;
+            int len = word.length();
 
-			for (int i = 0; i < len; ++i) {
-				// change one (ith) character
-				for (char ch = 'a'; ch <= 'z'; ++ch) {
-					string newWord = word;
+            for (int i = 0; i < len; ++i) {
+                // change one (ith) character
+                for (char ch = 'a'; ch <= 'z'; ++ch) {
+                    string newWord = word;
 
-					newWord[i] = ch;
-					if (dict.find(newWord) == dict.end()) {
-						// not in dict
-						continue;
-					}
-					if (id.find(newWord) == id.end()) {
-					    // new word
-			            id[newWord] = graph.size();
+                    newWord[i] = ch;
+                    if (dict.find(newWord) == dict.end()) {
+                        // not in dict
+                        continue;
+                    }
+                    if (id.find(newWord) == id.end()) {
+                        // new word
+                        id[newWord] = graph.size();
                         graph.push_back(Node(newWord, dist + 1));
-    					q.push(make_pair(newWord, dist + 1));
-					}
-					if (newWord != word) {
-    			    	graph[id[word]].next.push_back(id[newWord]);
-					}
-				}
-			}
+                        q.push(make_pair(newWord, dist + 1));
+                    }
+                    if (newWord != word) {
+                        graph[id[word]].next.push_back(id[newWord]);
+                    }
+                }
+            }
 
-			q.pop();
-		}
-	}
+            q.pop();
+        }
+    }
 
-	void findPath(string beginWord, string endWord) {
-	    current.push_back(beginWord);
-	    helper(id[beginWord], graph[id[beginWord]].dist);
-	}
+    void findPath(string beginWord, string endWord) {
+        current.push_back(beginWord);
+        helper(id[beginWord], graph[id[beginWord]].dist);
+    }
 
-	void helper(int id, int dist) {
-	    if (dist == 0) {
-	       result.push_back(current);
-	       return;
-	    }
+    void helper(int id, int dist) {
+        if (dist == 0) {
+           result.push_back(current);
+           return;
+        }
 
-	    for (int i : graph[id].next) {
-	        if (graph[i].dist >= dist) {
-	            continue;
-	        }
-	        current.push_back(graph[i].word);
-	        helper(i, dist - 1);
-	        current.pop_back();
-	    }
-	}
+        for (int i : graph[id].next) {
+            if (graph[i].dist >= dist) {
+                continue;
+            }
+            current.push_back(graph[i].word);
+            helper(i, dist - 1);
+            current.pop_back();
+        }
+    }
 
 private:
-	vector<Node> graph;
-	unordered_map<string, int> id;
-	queue<pair<string, int>> q;
-	vector<vector<string>> result;
-	vector<string> current;
+    vector<Node> graph;
+    unordered_map<string, int> id;
+    queue<pair<string, int>> q;
+    vector<vector<string>> result;
+    vector<string> current;
 };
 </code></pre>
 <p>Runtime: 565 ms</p>
@@ -1412,142 +1446,142 @@ class Solution {
 public:
     bool isNumber(string s) {
 
-		if (s.empty()) {
-			return false;
-		}
+        if (s.empty()) {
+            return false;
+        }
 
-		int length = (s += "#END#").length();
-		int ptr = 0;
-		enum state {
-			START, DECIMAL_SIGN, INTEGER_DIGIT, DECIMAL_POINT, FRACTIONAL_DIGIT,
-			E, EXPONENT_SIGN, EXPONENT_DIGIT, SPACE, TERMINATION, INVALID
-		} stateId;
-		bool isDecimalPointOnlyError = false;
+        int length = (s += "#END#").length();
+        int ptr = 0;
+        enum state {
+            START, DECIMAL_SIGN, INTEGER_DIGIT, DECIMAL_POINT, FRACTIONAL_DIGIT,
+            E, EXPONENT_SIGN, EXPONENT_DIGIT, SPACE, TERMINATION, INVALID
+        } stateId;
+        bool isDecimalPointOnlyError = false;
 
-		while (ptr < length && s[ptr] == ' ') {
-			++ptr;
-		}
+        while (ptr < length && s[ptr] == ' ') {
+            ++ptr;
+        }
 
-		stateId = START;
-		while (ptr < length) {
-			char nxt = s[ptr];
+        stateId = START;
+        while (ptr < length) {
+            char nxt = s[ptr];
 
-			if (stateId == START) {
-				if (nxt == '+' || nxt == '-') {
-					stateId = DECIMAL_SIGN;
-				} else if (nxt >= '0' && nxt <= '9') {
-					stateId = INTEGER_DIGIT;
-				} else if (nxt == '.') {
-					isDecimalPointOnlyError = true;
-					stateId = DECIMAL_POINT;
-				} else {
-					break;
-				}
+            if (stateId == START) {
+                if (nxt == '+' || nxt == '-') {
+                    stateId = DECIMAL_SIGN;
+                } else if (nxt >= '0' && nxt <= '9') {
+                    stateId = INTEGER_DIGIT;
+                } else if (nxt == '.') {
+                    isDecimalPointOnlyError = true;
+                    stateId = DECIMAL_POINT;
+                } else {
+                    break;
+                }
 
-			} else if (stateId == DECIMAL_SIGN) {
-				if (nxt >= '0' && nxt <= '9') {
-					stateId = INTEGER_DIGIT;
-				}else if (nxt == '.') {
-					isDecimalPointOnlyError = true;
-					stateId = DECIMAL_POINT;
-				} else {
-					break;
-				}
+            } else if (stateId == DECIMAL_SIGN) {
+                if (nxt >= '0' && nxt <= '9') {
+                    stateId = INTEGER_DIGIT;
+                }else if (nxt == '.') {
+                    isDecimalPointOnlyError = true;
+                    stateId = DECIMAL_POINT;
+                } else {
+                    break;
+                }
 
-			} else if (stateId == INTEGER_DIGIT) {
-				if (nxt == ' ') {
-					stateId = SPACE;
-				} else if (nxt >= '0' && nxt <= '9') {
-					// state unchanged
-				} else if (nxt == '.') {
-					stateId = DECIMAL_POINT;
-				} else if (nxt == 'e' || nxt == 'E') {
-					stateId = E;
-				} else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
-					stateId = TERMINATION;
-					break;
-				} else {
-					break;
-				}
+            } else if (stateId == INTEGER_DIGIT) {
+                if (nxt == ' ') {
+                    stateId = SPACE;
+                } else if (nxt >= '0' && nxt <= '9') {
+                    // state unchanged
+                } else if (nxt == '.') {
+                    stateId = DECIMAL_POINT;
+                } else if (nxt == 'e' || nxt == 'E') {
+                    stateId = E;
+                } else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
+                    stateId = TERMINATION;
+                    break;
+                } else {
+                    break;
+                }
 
-			} else if (stateId == DECIMAL_POINT) {
-				if (nxt == ' ') {
-					stateId = SPACE;
-				} else if (nxt >= '0' && nxt <= '9') {
-					isDecimalPointOnlyError = false;
-					stateId = FRACTIONAL_DIGIT;
-				} else if (nxt == 'e' || nxt == 'E') {
-					stateId = E;
-				} else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
-					stateId = TERMINATION;
-					break;
-				} else {
-					break;
-				}
+            } else if (stateId == DECIMAL_POINT) {
+                if (nxt == ' ') {
+                    stateId = SPACE;
+                } else if (nxt >= '0' && nxt <= '9') {
+                    isDecimalPointOnlyError = false;
+                    stateId = FRACTIONAL_DIGIT;
+                } else if (nxt == 'e' || nxt == 'E') {
+                    stateId = E;
+                } else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
+                    stateId = TERMINATION;
+                    break;
+                } else {
+                    break;
+                }
 
-				if (isDecimalPointOnlyError) {
-					break;
-				}
+                if (isDecimalPointOnlyError) {
+                    break;
+                }
 
-			} else if (stateId == FRACTIONAL_DIGIT) {
-				if (nxt == 'e' || nxt == 'E') {
-					stateId = E;
-				} else if (nxt >= '0' && nxt <= '9') {
-					// state unchanged
-				} else if (nxt == ' ') {
-					stateId = SPACE;
-				} else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
-					stateId = TERMINATION;
-					break;
-				} else {
-					break;
-				}
+            } else if (stateId == FRACTIONAL_DIGIT) {
+                if (nxt == 'e' || nxt == 'E') {
+                    stateId = E;
+                } else if (nxt >= '0' && nxt <= '9') {
+                    // state unchanged
+                } else if (nxt == ' ') {
+                    stateId = SPACE;
+                } else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
+                    stateId = TERMINATION;
+                    break;
+                } else {
+                    break;
+                }
 
-			} else if (stateId == E) {
-				if (nxt == '+' || nxt == '-') {
-					stateId = EXPONENT_SIGN;
-				} else if (nxt >= '0' && nxt <= '9') {
-					stateId = EXPONENT_DIGIT;
-				} else {
-					break;
-				}
+            } else if (stateId == E) {
+                if (nxt == '+' || nxt == '-') {
+                    stateId = EXPONENT_SIGN;
+                } else if (nxt >= '0' && nxt <= '9') {
+                    stateId = EXPONENT_DIGIT;
+                } else {
+                    break;
+                }
 
-			} else if (stateId == EXPONENT_SIGN) {
-				if (nxt >= '0' && nxt <= '9') {
-					stateId = EXPONENT_DIGIT;
-				} else if (nxt == ' ') {
-					stateId = SPACE;
-				} else {
-					break;
-				}
+            } else if (stateId == EXPONENT_SIGN) {
+                if (nxt >= '0' && nxt <= '9') {
+                    stateId = EXPONENT_DIGIT;
+                } else if (nxt == ' ') {
+                    stateId = SPACE;
+                } else {
+                    break;
+                }
 
-			} else if (stateId == EXPONENT_DIGIT) {
-				if (nxt >= '0' && nxt <= '9') {
-					// state unchanged
-				} else if (nxt == ' ') {
-					stateId = SPACE;
-				} else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
-					stateId = TERMINATION;
-					break;
-				} else {
-					break;
-				}
+            } else if (stateId == EXPONENT_DIGIT) {
+                if (nxt >= '0' && nxt <= '9') {
+                    // state unchanged
+                } else if (nxt == ' ') {
+                    stateId = SPACE;
+                } else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
+                    stateId = TERMINATION;
+                    break;
+                } else {
+                    break;
+                }
 
-			} else if (stateId == SPACE) {
-				if (nxt == ' ') {
-					// state unchanged
-				} else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
-					stateId = TERMINATION;
-					break;
-				} else {
-					break;
-				}
-			}
+            } else if (stateId == SPACE) {
+                if (nxt == ' ') {
+                    // state unchanged
+                } else if (nxt == '#' && s.substr(ptr, 5) == "#END#") {
+                    stateId = TERMINATION;
+                    break;
+                } else {
+                    break;
+                }
+            }
 
-			++ptr;
-		}
+            ++ptr;
+        }
 
-		return stateId == TERMINATION && !isDecimalPointOnlyError;
+        return stateId == TERMINATION && !isDecimalPointOnlyError;
     }
 };
 </code></pre>
@@ -1561,17 +1595,17 @@ public:
     int integerBreak(int n) {
         vector<int> f(n + 1, 0);
 
-		f[1] = 1;
-		for (int i = 2; i <= n; ++i) {
-			for (int j = 1; j <= (i >> 1); ++j) {
-				f[i] = max(f[i], j * (i - j));
-				f[i] = max(f[i], f[j] * (i - j));
-				f[i] = max(f[i], j * f[i - j]);
-				f[i] = max(f[i], f[j] * f[i - j]);
-			}
-		}
+        f[1] = 1;
+        for (int i = 2; i <= n; ++i) {
+            for (int j = 1; j <= (i >> 1); ++j) {
+                f[i] = max(f[i], j * (i - j));
+                f[i] = max(f[i], f[j] * (i - j));
+                f[i] = max(f[i], j * f[i - j]);
+                f[i] = max(f[i], f[j] * f[i - j]);
+            }
+        }
 
-		return f[n];
+        return f[n];
     }
 };
 </code></pre>
@@ -1583,27 +1617,27 @@ public:
 class Solution {
 public:
     int countNumbersWithUniqueDigits(int n) {
-		if (n == 0) {
-			return 1;
-		} else if (n == 1) {
-			return 10;
-		} else if (n > 10) {
-			n = 10;
-		}
+        if (n == 0) {
+            return 1;
+        } else if (n == 1) {
+            return 10;
+        } else if (n > 10) {
+            n = 10;
+        }
 
-		vector<int> vi(11);
+        vector<int> vi(11);
 
-		vi[1] = 9;
-		for (int i = 2; i <= n; ++i) {
-			vi[i] = vi[i - 1] * (11 - i);
-		}
+        vi[1] = 9;
+        for (int i = 2; i <= n; ++i) {
+            vi[i] = vi[i - 1] * (11 - i);
+        }
 
-		vi[1] = 10;
-		for (int i = 2; i <= n; ++i) {
-			vi[i] += vi[i - 1];
-		}
+        vi[1] = 10;
+        for (int i = 2; i <= n; ++i) {
+            vi[i] += vi[i - 1];
+        }
 
-		return vi[n];
+        return vi[n];
     }
 };
 </code></pre>
@@ -1616,22 +1650,22 @@ class Solution {
 public:
     bool isSubsequence(string s, string t) {
         if (s.empty()) {
-			return true;
-		} else if (t.empty() || s.length() > t.length()) {
-			return false;
-		}
+            return true;
+        } else if (t.empty() || s.length() > t.length()) {
+            return false;
+        }
 
-		int lenS = s.length();
-		int lenT = t.length();
-		int i = 0;
+        int lenS = s.length();
+        int lenT = t.length();
+        int i = 0;
 
-		for (int j = 0; i < lenS && j < lenT; ++i, ++j) {
-			while (j < lenT && s[i] != t[j]) {
-				++j;
-			}
-		}
+        for (int j = 0; i < lenS && j < lenT; ++i, ++j) {
+            while (j < lenT && s[i] != t[j]) {
+                ++j;
+            }
+        }
 
-		return i == lenS;
+        return i == lenS;
     }
 };
 </code></pre>
@@ -1642,31 +1676,31 @@ public:
 <pre><code>
 class Solution {
 public:
-	Solution(vector<int> nums) {
-	    this->nums = nums;
-		this->numsShuffled = nums;
-	}
+    Solution(vector<int> nums) {
+        this->nums = nums;
+        this->numsShuffled = nums;
+    }
 
-	/** Resets the array to its original configuration and return it. */
-	vector<int> reset() {
-		return nums;
-	}
+    /** Resets the array to its original configuration and return it. */
+    vector<int> reset() {
+        return nums;
+    }
 
-	/** Returns a random shuffling of the array. */
-	vector<int> shuffle() {
-	    int n = nums.size();
+    /** Returns a random shuffling of the array. */
+    vector<int> shuffle() {
+        int n = nums.size();
 
-		for (int i = 0; i < n - 1; ++i) {
-			int j = rand() % (n - i);
-			swap(numsShuffled[i], numsShuffled[j + i]);
-		}
+        for (int i = 0; i < n - 1; ++i) {
+            int j = rand() % (n - i);
+            swap(numsShuffled[i], numsShuffled[j + i]);
+        }
 
-		return numsShuffled;
-	}
+        return numsShuffled;
+    }
 
 private:
     vector<int> nums;
-	vector<int> numsShuffled;
+    vector<int> numsShuffled;
 };
 </code></pre>
 <p>Runtime: 339 ms</p>
@@ -1676,25 +1710,25 @@ private:
 <pre><code>
 class Solution {
 public:
-	vector<int> twoSum(vector<int>& numbers, int target) {
-		int n = numbers.size();
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        int n = numbers.size();
 
-		if (n < 2) {
-			return vector<int>{-1, -1};
-		}
+        if (n < 2) {
+            return vector<int>{-1, -1};
+        }
 
-		int i = 0;
-		int j = n - 1;
+        int i = 0;
+        int j = n - 1;
 
-		while (i < j && numbers[i] + numbers[j] != target) {
-			if (numbers[i] + numbers[j] < target) {
-				++i;
-			} else {
-				--j;
-			}
-		}
+        while (i < j && numbers[i] + numbers[j] != target) {
+            if (numbers[i] + numbers[j] < target) {
+                ++i;
+            } else {
+                --j;
+            }
+        }
 
-		return i < j ? vector<int>{i + 1, j + 1} : vector<int>{-1, -1};
+        return i < j ? vector<int>{i + 1, j + 1} : vector<int>{-1, -1};
     }
 };
 </code></pre>
@@ -1704,29 +1738,29 @@ public:
 <p>Sort by h (taller first) and k (smaller first), then for each person, shift him ahead until satisfying requirement on k.</p>
 <pre><code>class Solution {
 public:
-	vector<pair<int, int>> reconstructQueue(vector<pair<int, int>>& people) {
+    vector<pair<int, int>> reconstructQueue(vector<pair<int, int>>& people) {
 
-		int n = people.size();
+        int n = people.size();
 
-		if (n == 0) {
-			return vector<pair<int, int>>();
-		}
+        if (n == 0) {
+            return vector<pair<int, int>>();
+        }
 
-	    sort(people.begin(), people.end(), comparePeople);
+        sort(people.begin(), people.end(), comparePeople);
 
-		for (int i = 1; i < n; ++i) {
-			for (int j = i; people[j].second < j; --j) {
-				swap(people[j], people[j - 1]);
-			}
-		}
+        for (int i = 1; i < n; ++i) {
+            for (int j = i; people[j].second < j; --j) {
+                swap(people[j], people[j - 1]);
+            }
+        }
 
-		return people;
-	}
+        return people;
+    }
 
 private:
-	static bool comparePeople(const pair<int, int> &a, const pair<int, int> &b) {
-		return (a.first == b.first) ? (a.second < b.second) : (a.first > b.first);
-	}
+    static bool comparePeople(const pair<int, int> &a, const pair<int, int> &b) {
+        return (a.first == b.first) ? (a.second < b.second) : (a.first > b.first);
+    }
 };
 </code></pre>
 <p>Runtime: 139 ms</p>
@@ -1740,12 +1774,12 @@ public:
 
         vector<int> result(num + 1);
 
-		result[0] = 0;
-		for (int i = 1; i <= num; ++i) {
-			result[i] = (i & 1) ? result[i >> 1] + 1: result[i >> 1];
-		}
+        result[0] = 0;
+        for (int i = 1; i <= num; ++i) {
+            result[i] = (i & 1) ? result[i >> 1] + 1: result[i >> 1];
+        }
 
-		return result;
+        return result;
     }
 };
 </code></pre>
@@ -1766,24 +1800,24 @@ public:
 <p>Simply count letters in s and t.</p>
 <pre><code>class Solution {
 public:
-	char findTheDifference(string s, string t) {
+    char findTheDifference(string s, string t) {
 
-		int count[256];
+        int count[256];
 
-		memset(count, 0, sizeof count);
+        memset(count, 0, sizeof count);
 
-		for (auto &ch : s) {
-			++count[(int)ch];
-		}
+        for (auto &ch : s) {
+            ++count[(int)ch];
+        }
 
-		for (auto &ch : t) {
-			if (--count[(int)ch] == -1) {
-				return ch;
-			}
-		}
+        for (auto &ch : t) {
+            if (--count[(int)ch] == -1) {
+                return ch;
+            }
+        }
 
-		return 'A';
-	}
+        return 'A';
+    }
 };
 </code></pre>
 <p>Runtime: 3 ms</p>
@@ -1792,33 +1826,33 @@ public:
 <p>Scan from both ends and swap vowels.</p>
 <pre><code>class Solution {
 public:
-	string reverseVowels(string s) {
+    string reverseVowels(string s) {
 
-		int length = s.length();
-		int i = 0;
-		int j = length - 1;
-		char tmp;
+        int length = s.length();
+        int i = 0;
+        int j = length - 1;
+        char tmp;
 
-		while( i < j ){
-			while( !isVowel( s[ i ] ) && i < j ) ++i;
-			while( !isVowel( s[ j ] ) && i < j ) --j;
-			if( i < j ){
-				tmp = s[ i ];
-				s[ i ] = s[ j ];
-				s[ j ] = tmp;
-			}
-			++i;
-			--j;
-		}
+        while( i < j ){
+            while( !isVowel( s[ i ] ) && i < j ) ++i;
+            while( !isVowel( s[ j ] ) && i < j ) --j;
+            if( i < j ){
+                tmp = s[ i ];
+                s[ i ] = s[ j ];
+                s[ j ] = tmp;
+            }
+            ++i;
+            --j;
+        }
 
-		return s;
-	}
+        return s;
+    }
 
 private:
-	bool isVowel( char ch ){
-		return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u'
-			|| ch == 'A' || ch == 'E' || ch == 'I' || ch == 'O' || ch == 'U';
-	}
+    bool isVowel( char ch ){
+        return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u'
+            || ch == 'A' || ch == 'E' || ch == 'I' || ch == 'O' || ch == 'U';
+    }
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
@@ -1827,36 +1861,36 @@ private:
 <p>Application of map.</p>
 <pre><code>class Solution {
 public:
-	vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
 
-		map< int, int > map1;
-		vector< int > intersection;
+        map< int, int > map1;
+        vector< int > intersection;
 
-		for( auto i : nums1 ){
+        for( auto i : nums1 ){
 
-			auto ite = map1.find( i );
+            auto ite = map1.find( i );
 
-			if( ite == map1.end() ){
-				map1[ i ] = 1;
-			}else{
-				++ite->second;
-			}
-		}
+            if( ite == map1.end() ){
+                map1[ i ] = 1;
+            }else{
+                ++ite->second;
+            }
+        }
 
-		for( auto i : nums2 ){
+        for( auto i : nums2 ){
 
-			auto ite = map1.find( i );
+            auto ite = map1.find( i );
 
-			if( ite != map1.end() ){
-				intersection.push_back( i );
-				if( --ite->second == 0 ){
-					map1.erase( ite );
-				}
-			}
-		}
+            if( ite != map1.end() ){
+                intersection.push_back( i );
+                if( --ite->second == 0 ){
+                    map1.erase( ite );
+                }
+            }
+        }
 
-		return intersection;
-	}
+        return intersection;
+    }
 };
 </code></pre>
 <p>Runtime: 16 ms</p>
@@ -1865,27 +1899,27 @@ public:
 <p>Application of unordered_set.</p>
 <pre><code>class Solution {
 public:
-	vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
 
-		vector< int > intersection;
-		unordered_set< int > uset1, uset2;
+        vector< int > intersection;
+        unordered_set< int > uset1, uset2;
 
-		for( auto i : nums1 ){
-			uset1.insert( i );
-		}
+        for( auto i : nums1 ){
+            uset1.insert( i );
+        }
 
-		for( auto i : nums2 ){
-			if( uset1.find( i ) != uset1.end() ){
-				uset2.insert( i );
-			}
-		}
+        for( auto i : nums2 ){
+            if( uset1.find( i ) != uset1.end() ){
+                uset2.insert( i );
+            }
+        }
 
-		for( auto i : uset2 ){
-			intersection.push_back( i );
-		}
+        for( auto i : uset2 ){
+            intersection.push_back( i );
+        }
 
-		return intersection;
-	}
+        return intersection;
+    }
 };
 </code></pre>
 <p>Runtime: 12 ms</p>
@@ -1896,15 +1930,15 @@ public:
 public:
     int getSum(int a, int b) {
 
-		int c;
+        int c;
 
         while( b ){
-			c = ( a & b ) << 1;
-			a = a ^ b;
-			b = c;
-		}
+            c = ( a & b ) << 1;
+            a = a ^ b;
+            b = c;
+        }
 
-		return a;
+        return a;
     }
 };
 </code></pre>
