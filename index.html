@@ -1587,6 +1587,37 @@ public:
 </code></pre>
 <p>Runtime: 6 ms</p>
 
+<h3><a name="413" class="anchor" href="#413"><span class="octicon octicon-link"></span></a>#413 Arithmetic Slices (Medium)</h3>
+<p>Find arithmetic subsequence, count number of arithmetic slices.<br>
+An arithmetic subsequence of size N has 1+2+...+(n-2) slices.</p>
+<pre><code>class Solution {
+public:
+    int numberOfArithmeticSlices(vector<int>& A) {
+        if (A.size() < 3) {
+            return 0;
+        }
+
+		int size = A.size();
+		int result = 0;
+		int diff = A[0] - A[1];
+		int slot = 0;
+
+		for (int i = 1; i < size - 1; ++i) {
+			if (A[i] - A[i + 1] == diff) {
+				slot += 1;
+				result += slot;
+			} else {
+				slot = 0;
+				diff = A[i] - A[i + 1];
+			}
+		}
+
+		return result;
+    }
+};
+</code></pre>
+<p>Runtime: 3 ms</p>
+
 <h3><a name="343" class="anchor" href="#343"><span class="octicon octicon-link"></span></a>#343 Integer Break (Medium)</h3>
 <p>Dynamic Programming.</p>
 <pre><code>
