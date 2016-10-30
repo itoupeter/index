@@ -6313,11 +6313,41 @@ public:
 </code></pre>
 <p>Runtime: 124 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
+<h3><a name="382" class="anchor" href="#382"></a>#382 Linked List Random Node (Medium)</h3>
+<p>Reservoir sampling.<br>
+Iterate on the linked list. For the ith node, uniformly sample in [1, i], say a. If a == i, set expected result to the current node value.</p>
 <pre><code>
+class Solution {
+public:
+    Solution(ListNode* head) {
+        this->head = head;
+		g = default_random_engine();
+		u = uniform_int_distribution<int>(0, INT_MAX);
+    }
+
+    int getRandom() {
+        if (head == nullptr) {
+			return 0;
+		}
+
+		int result = head->val;
+		int count = 1;
+
+		for (auto ptr = head; ptr != nullptr; ptr = ptr->next, ++count) {
+			if (u(g) % count == 0) {
+				result = ptr->val;
+			}
+		}
+
+		return result;
+    }
+private:
+	ListNode *head;
+	default_random_engine g;
+	uniform_int_distribution<int> u;
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 116 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
