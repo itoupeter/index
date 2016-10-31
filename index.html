@@ -6388,11 +6388,51 @@ public:
 </code></pre>
 <p>Runtime: 33 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="378" class="anchor" href="#378"></a>#378 Kth Smallest Element in a Sorted Matrix (Medium)</h3>
+<p>Use a small first priority queue to maintain smallest elements.<br>
+Initially push matrix[0][0] into pq. Each time pop top element in pq and push its right and bottom element into pq.<br>
+The Kth element being popped is the answer.<br>
+*Note that every element is pushed at most once.</p>
+<pre><code>struct cmp{
+	typedef pair<int, int> PII;
+	bool operator()(const PII &a, const PII &b) {
+		return a.second > b.second;
+	}
+};
+
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+		typedef pair<int, int> PII;
+        priority_queue<PII, vector<PII>, cmp> pq;
+		unordered_set<int> checked;
+		int n = matrix.size();
+		int discarded = 0;
+
+		pq.push(make_pair(0, matrix[0][0]));
+		checked.insert(0);
+
+		while (discarded < k - 1) {
+			int pos = pq.top().first; pq.pop();
+			int i = pos >> 16;
+			int j = pos & 0xffff;
+
+			if (i < n - 1 && checked.find((i + 1) << 16 | j) == checked.end()) {
+				checked.insert((i + 1) << 16 | j);
+				pq.push(make_pair((i + 1) << 16 | j, matrix[i + 1][j]));
+			}
+			if (j < n - 1 && checked.find(i << 16 | (j + 1)) == checked.end()) {
+				checked.insert(i << 16 | (j + 1));
+				pq.push(make_pair(i << 16 | (j + 1), matrix[i][j + 1]));
+			}
+			++discarded;
+		}
+
+		return pq.top().second;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 202 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
