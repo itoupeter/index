@@ -6519,11 +6519,37 @@ public:
 </code></pre>
 <p>Runtime: 202 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
+<h3><a name="337" class="anchor" href="#337"></a>#337 House Robber III (Medium)</h3>
+<p>DP on tree.<br>
+Max rob current = rob current + max not rob children<br>
+Max not rob current = max(max rob children, max not rob children)</p>
 <pre><code>
+class Solution {
+public:
+    int rob(TreeNode* root) {
+        int rob = 0, nrob = 0;
+
+		helper(root, rob, nrob);
+
+		return max(rob, nrob);
+    }
+private:
+	void helper(TreeNode *root, int &rob, int &nrob) {
+		if (root == nullptr) {
+			rob = nrob = 0;
+			return;
+		}
+
+		int lrob, lnrob, rrob, rnrob;
+
+		helper(root->left, lrob, lnrob);
+		helper(root->right, rrob, rnrob);
+		rob = lnrob + rnrob + root->val;
+		nrob = max(lrob, lnrob) + max(rrob, rnrob);
+	}
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 13 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
