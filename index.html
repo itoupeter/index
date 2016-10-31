@@ -6551,9 +6551,40 @@ private:
 </code></pre>
 <p>Runtime: 13 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
+<h3><a name="394" class="anchor" href="#394"></a>#394 Decode String (Medium)</h3>
+<p>Idea: use a stack to store the strings to be replicated.</p>
 <pre><code>
+class Solution {
+public:
+	string decodeString(string s) {
+		stack<string> ss;
+		stack<int> sk;
+		int k = 0;
+
+		ss.push("");
+		for (char ch : s) {
+			if (ch == '[') {
+				sk.push(k);
+				ss.push("");
+				k = 0;
+			} else if (ch == ']') {
+				string tmp;
+				for (int i = 0; i < sk.top(); ++i) {
+					tmp += ss.top();
+				}
+				sk.pop();
+				ss.pop();
+				ss.top() += tmp;
+			} else if (ch >= '0' && ch <= '9') {
+				k = k * 10 + (ch - '0');
+			} else {
+				ss.top() += ch;
+			}
+		}
+
+		return ss.top();
+	}
+};
 </code></pre>
 <p>Runtime: 0 ms</p>
 
