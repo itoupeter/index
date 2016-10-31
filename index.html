@@ -6465,9 +6465,30 @@ public:
 </code></pre>
 <p>Runtime: 23 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="377" class="anchor" href="#377"></a>#377 Combination Sum IV (Medium)</h3>
+<p>Combination sum of N is:<br>
+combination sum of N-1 (by appending a 1 at the front, if 1 is in the given array)<br>
++ combination sum of N-2 (by appending a 2 at the front, if 1 is in the given array)<br>
++ ...
++ 1 (N itself, is N is in the given array).</p>
+<pre><code>class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target) {
+        vector<int> dp(target + 1, 0);
+        int size = nums.size();
+
+        dp[0] = 1;
+        sort(nums.begin(), nums.end());
+
+		for (int i = 1; i <= target; ++i) {
+			for (int j = 0; j < size && nums[j] <= i; ++j) {
+				dp[i] += dp[i - nums[j]];
+			}
+		}
+
+		return dp[target];
+    }
+};
 </code></pre>
 <p>Runtime: 0 ms</p>
 
