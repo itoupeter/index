@@ -6492,11 +6492,32 @@ public:
 </code></pre>
 <p>Runtime: 0 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
+<h3><a name="436" class="anchor" href="#436"></a>#436 Find Right Interval (Medium)</h3>
+<p>Sort by start and for each interval I binary search for start >= I's end.<br>
+*Here I used map.</p>
 <pre><code>
+class Solution {
+public:
+    vector<int> findRightInterval(vector<Interval>& intervals) {
+		typedef pair<int, int> endId;
+		map<int, endId> start;
+		vector<int> result;
+		int size = intervals.size();
+
+		for (int i = 0; i < size; ++i) {
+			start[intervals[i].start] = make_pair(intervals[i].end, i);
+		}
+
+		for (auto &interval : intervals) {
+			auto ite = start.lower_bound(interval.end);
+			result.push_back(ite == start.end() ? -1 : ite->second.second);
+		}
+
+		return result;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 202 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
