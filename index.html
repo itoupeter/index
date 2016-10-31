@@ -6349,11 +6349,44 @@ private:
 </code></pre>
 <p>Runtime: 116 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
+<h3><a name="347" class="anchor" href="#347"></a>#347 Top K Frequent Elements (Medium)</h3>
+<p>Count all element occurence and use a priority queue to preserve top K frequent elements.</p>
 <pre><code>
+struct cmp {
+	typedef pair<int, int> PII; // first->num, second->freq
+	bool operator()(const PII &a, const PII &b) {
+		return a.second > b.second;
+	}
+};
+
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+		unordered_map<int, int> count;
+        priority_queue<int, vector<pair<int, int>>, cmp> pq;
+		vector<int> result;
+
+		for (int i : nums) {
+			++count[i];
+		}
+
+		for (auto e : count) {
+			pq.push(make_pair(e.first, e.second));
+			if (pq.size() > k) {
+				pq.pop();
+			}
+		}
+
+		while (!pq.empty()) {
+			result.push_back(pq.top().first);
+			pq.pop();
+		}
+
+		return result;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 33 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
