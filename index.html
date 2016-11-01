@@ -7016,11 +7016,44 @@ private:
 </code></pre>
 <p>Runtime: 159 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
+<h3><a name="435" class="anchor" href="#435"></a>#435 Non-overlapping Intervals (Medium)</h3>
+<p>Greedy.<br>
+Sort all intervals about start position. Iterate on all intervals, discard the one with bigger end if there is conflict.</p>
 <pre><code>
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<Interval>& intervals) {
+		stack<Interval> s;
+		int size = intervals.size();
+		int result = 0;
+
+        sort(intervals.begin(), intervals.end(), cmp);
+
+		for (auto &interval : intervals) {
+		    int con = false;
+			while (!s.empty() && interval.start < s.top().end) {
+				if (interval.end > s.top().end) {
+					result += 1;
+					con = true;
+					break;
+				} else {
+					result += 1;
+					s.pop();
+				}
+			}
+			if (con) continue;
+			s.push(interval);
+		}
+
+		return result;
+    }
+private:
+	static bool cmp(const Interval &a, const Interval &b) {
+		return (a.start == b.start ? (a.end < b.end) : a.start < b.start);
+	}
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 26 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
