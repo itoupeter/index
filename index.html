@@ -6919,11 +6919,39 @@ public:
 </code></pre>
 <p>Runtime: 0 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
+<h3><a name="341" class="anchor" href="#341"></a>#341 Flatten Nested List Iterator (Medium)</h3>
+<p>Use a stack to hold NestedInteger. Unpack top element if it is a list.</p>
 <pre><code>
+class NestedIterator {
+public:
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        for (auto ite = nestedList.rbegin(); ite != nestedList.rend(); ++ite) {
+			s.push(*ite);
+		}
+    }
+
+    int next() {
+		int result = s.top().getInteger(); s.pop();
+
+		return result;
+    }
+
+    bool hasNext() {
+		while (!s.empty() && !s.top().isInteger()) {
+			vector<NestedInteger> v = s.top().getList(); s.pop();
+
+			for (auto ite = v.rbegin(); ite != v.rend(); ++ite) {
+				s.push(*ite);
+			}
+		}
+
+        return !s.empty();
+    }
+private:
+	stack<NestedInteger> s;
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 49 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
