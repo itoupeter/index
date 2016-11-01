@@ -6836,9 +6836,34 @@ private:
 </code></pre>
 <p>Runtime: 0 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="386" class="anchor" href="#386"></a>#386 Lexicographical Numbers (Medium)</h3>
+<p>In-order traverse the prefix tree and construct the result array.</p>
+<pre><code>class Solution {
+public:
+    vector<int> lexicalOrder(int n) {
+        vector<int> result;
+
+        helper(0, n, result);
+
+        return result;
+    }
+private:
+	void helper(int prefix, int n, vector<int> &result) {
+		if (prefix > 0 && prefix <= n) {
+			result.push_back(prefix);
+		}
+
+		for (int i = 0; i < 10; ++i) {
+			if (prefix + i == 0) {
+				continue;
+			} else if (prefix * 10 + i <= n) {
+				helper(prefix * 10 + i, n, result);
+			} else {
+				break;
+			}
+		}
+	}
+};
 </code></pre>
 <p>Runtime: 0 ms</p>
 
