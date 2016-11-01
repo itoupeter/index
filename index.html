@@ -6588,11 +6588,42 @@ public:
 </code></pre>
 <p>Runtime: 0 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="404" class="anchor" href="#404"></a>#404 Sum of Left Leaves (Medium)</h3>
+<p>Traverse the tree. If current node is a left leaf, add its value to result.</p>
+<pre><code>class Solution {
+public:
+    int sumOfLeftLeaves(TreeNode* root) {
+        if (root == nullptr) {
+            return 0;
+        } else {
+            int result = 0;
+
+            helper(root, 1, result);
+
+            return result;
+        }
+    }
+private:
+    void helper(TreeNode *root, int flag, int &result) {
+        if (root == nullptr) {
+            return;
+        } else if (root->left == nullptr && root->right == nullptr) {
+            if (flag == 0) {
+                result += root->val;
+            }
+            return;
+        }
+
+        if (root->left) {
+            helper(root->left, 0, result);
+        }
+        if (root->right) {
+            helper(root->right, 1, result);
+        }
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 3 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
