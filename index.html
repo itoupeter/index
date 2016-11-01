@@ -6739,6 +6739,32 @@ public:
 </code></pre>
 <p>Runtime: 26 ms</p>
 
+<h3><a name="424" class="anchor" href="#424"></a>#424 Longest Repeating Character Replacement (Medium)</h3>
+<p>Sliding window.<br>
+i moves first. MaxCount is the max number of same character in [i, j]. If (j-i+1) - maxCount > k, move j ahead.<p>
+<pre><code>class Solution {
+public:
+    int characterReplacement(string s, int k) {
+        int size = s.length();
+		int count[26] = {0};
+		int maxCount = 0;
+		int result = 0;
+
+		for (int i = 0, j = 0; i < size; ++i) {
+			count[s[i] - 'A'] += 1;
+			maxCount = max(maxCount, count[s[i] - 'A']);
+			if (i - j + 1 - maxCount > k) {
+				count[s[j++] - 'A'] -= 1;
+			}
+			result = max(result, i - j + 1);
+		}
+
+		return result;
+    }
+};
+</code></pre>
+<p>Runtime: 9 ms</p>
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
