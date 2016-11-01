@@ -6867,9 +6867,31 @@ private:
 </code></pre>
 <p>Runtime: 0 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="334" class="anchor" href="#334"></a>#334 Increasing Triplet Subsequence (Medium)</h3>
+<p>LIS. Returen once LIS is longer than 3.</p>
+<pre><code>class Solution {
+public:
+    bool increasingTriplet(vector<int>& nums) {
+        vector<int> v;
+
+        for (int i : nums) {
+            if (v.empty()) {
+                v.push_back(i);
+            } else if (i <= v[0]) {
+                v[0] = i;
+            } else if (v.size() > 1 && i <= v[1]) {
+                v[1] = i;
+            } else if (i > v.back()) {
+                v.push_back(i);
+            }
+            if (v.size() == 3) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+};
 </code></pre>
 <p>Runtime: 0 ms</p>
 
