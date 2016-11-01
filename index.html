@@ -6953,11 +6953,35 @@ private:
 </code></pre>
 <p>Runtime: 49 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="416" class="anchor" href="#416"></a>#416 Partition Equal Subset Sum (Medium)</h3>
+<p>Dynamic Programming.</p>
+<pre><code>class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int sum = 0;
+
+		for (int i : nums) {
+			sum += i;
+		}
+
+		if (sum == 0 || sum & 1) {
+			return false;
+		}
+
+		vector<bool> dp((sum >>= 1) + 1, false);
+
+		dp[0] = true;
+		for (int i : nums) {
+			for (int j = sum; j >= i; --j) {
+				dp[j] = dp[j] || dp[j - i];
+			}
+		}
+
+		return dp[sum];
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 899 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
