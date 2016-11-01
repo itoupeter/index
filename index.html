@@ -36,6 +36,41 @@
    <div id="main_content_wrap" class="outer">
     <section id="main_content" class="inner">
 
+<h3><a name="390" class="anchor" href="#390"></a>#390 Elimination Game (Medium)</h3>
+<p>Math<br></p>
+<pre><code>class Solution {
+public:
+    int lastRemaining(int n) {
+        return helper(n, 0);
+    }
+private:
+	int helper(int n, int d) {
+		if (n == 1) {
+			return 1;
+		} else if (d == 0) {
+			return helper(n >> 1, 1) << 1;
+		} else if (n & 1) {
+			return helper(n >> 1, 0) << 1;
+		} else {
+			return (helper(n >> 1, 0) << 1) - 1;
+		}
+	}
+};
+</code></pre>
+<p>Runtime: 29 ms</p>
+<p>WARNING! Black Magic!!<br></p>
+<pre><code>class Solution {
+public:
+    int lastRemaining(int n) {
+        int tmp = 0x7FFFFFFF;
+        while(tmp >= n) tmp >>= 1;
+        return  ((n|0x55555555)&tmp) + 1;
+    }
+};
+</code></pre>
+<p>Runtime: 39 ms</p>
+
+
 <h3><a name="344" class="anchor" href="#344"><span class="octicon octicon-link"></span></a>#344 Reverse String (Easy)</h3>
 <p>Scan first half and swap characters.</p>
 <pre><code>
@@ -7093,12 +7128,6 @@ public:
 };
 </code></pre>
 <p>Runtime: 19 ms</p>
-
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
-</code></pre>
-<p>Runtime: 0 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
