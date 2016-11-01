@@ -6983,11 +6983,38 @@ public:
 </code></pre>
 <p>Runtime: 899 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="398" class="anchor" href="#398"></a>#398 Random Pick Index (Medium)</h3>
+<p>Reservoir sampling.</p>
+<pre><code>class Solution {
+public:
+    Solution(vector<int> nums) {
+        this->nums = nums;
+		u = uniform_int_distribution<int>(0, INT_MAX);
+    }
+
+    int pick(int target) {
+        int result = 0;
+		int count = 0;
+		int size = nums.size();
+
+		for (int i = 0; i < size; ++i) {
+			if (nums[i] == target) {
+				count += 1;
+				if (u(g) % count == 0) {
+					result = i;
+				}
+			}
+		}
+
+		return result;
+    }
+private:
+	vector<int> nums;
+	default_random_engine g;
+	uniform_int_distribution<int> u;
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 159 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
