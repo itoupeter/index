@@ -6625,6 +6625,162 @@ private:
 </code></pre>
 <p>Runtime: 3 ms</p>
 
+<h3><a name="423" class="anchor" href="#423"></a>#423 Reconstruct Original Digits from English (Medium)</h3>
+<p>Use unique character in the word to figure out word counts.</p>
+<pre><code>
+class Solution {
+public:
+    string originalDigits(string s) {
+        vector<int> input(26, 0);
+        vector<int> count(10, 0);
+        string result;
+
+        for (char ch : s) {
+            input[ch - 'a'] += 1;
+        }
+
+        // zero
+        count[0] = input['z' - 'a'];
+        for (int i = 0; i < count[0]; ++i) {
+            input['z' - 'a'] -= 1;
+            input['e' - 'a'] -= 1;
+            input['r' - 'a'] -= 1;
+            input['o' - 'a'] -= 1;
+        }
+
+        // two
+        count[2] = input['w' - 'a'];
+        for (int i = 0; i < count[2]; ++i) {
+            input['t' - 'a'] -= 1;
+            input['w' - 'a'] -= 1;
+            input['o' - 'a'] -= 1;
+        }
+
+        // six
+        count[6] = input['x' - 'a'];
+        for (int i = 0; i < count[6]; ++i) {
+            input['s' - 'a'] -= 1;
+            input['i' - 'a'] -= 1;
+            input['x' - 'a'] -= 1;
+        }
+
+        // four
+        count[4] = input['u' - 'a'];
+        for (int i = 0; i < count[4]; ++i) {
+            input['f' - 'a'] -= 1;
+            input['o' - 'a'] -= 1;
+            input['u' - 'a'] -= 1;
+            input['r' - 'a'] -= 1;
+        }
+
+        // three
+        count[3] = input['r' - 'a'];
+        for (int i = 0; i < count[3]; ++i) {
+            input['t' - 'a'] -= 1;
+            input['h' - 'a'] -= 1;
+            input['r' - 'a'] -= 1;
+            input['e' - 'a'] -= 1;
+            input['e' - 'a'] -= 1;
+        }
+
+        // one
+        count[1] = input['o' - 'a'];
+        for (int i = 0; i < count[1]; ++i) {
+            input['o' - 'a'] -= 1;
+            input['n' - 'a'] -= 1;
+            input['e' - 'a'] -= 1;
+        }
+
+        // five
+        count[5] = input['f' - 'a'];
+        for (int i = 0; i < count[5]; ++i) {
+            input['f' - 'a'] -= 1;
+            input['i' - 'a'] -= 1;
+            input['v' - 'a'] -= 1;
+            input['e' - 'a'] -= 1;
+        }
+
+        // seven
+        count[7] = input['v' - 'a'];
+        for (int i = 0; i < count[7]; ++i) {
+            input['s' - 'a'] -= 1;
+            input['e' - 'a'] -= 1;
+            input['v' - 'a'] -= 1;
+            input['e' - 'a'] -= 1;
+            input['n' - 'a'] -= 1;
+        }
+
+        // eight
+        count[8] = input['g' - 'a'];
+        for (int i = 0; i < count[8]; ++i) {
+            input['e' - 'a'] -= 1;
+            input['i' - 'a'] -= 1;
+            input['g' - 'a'] -= 1;
+            input['h' - 'a'] -= 1;
+            input['t' - 'a'] -= 1;
+        }
+
+        // nine
+        count[9] = input['i' - 'a'];
+        for (int i = 0; i < count[9]; ++i) {
+            input['n' - 'a'] -= 1;
+            input['i' - 'a'] -= 1;
+            input['n' - 'a'] -= 1;
+            input['e' - 'a'] -= 1;
+        }
+
+        for (int i = 0; i < 10; ++i) {
+            result += string(count[i], (char)('0' + i));
+        }
+
+        return result;
+    }
+};
+</code></pre>
+<p>Runtime: 26 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
