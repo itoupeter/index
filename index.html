@@ -7129,6 +7129,80 @@ public:
 </code></pre>
 <p>Runtime: 19 ms</p>
 
+<h3><a name="331" class="anchor" href="#331"></a>#331 Verify Preorder Serialization of a Binary Tree (Medium)</h3>
+<p>Use a stack to consume the tree.<br>
+Keep reducing subtrees of the form [num, #, #] with a [#].</p>
+<pre><code>class Solution {
+public:
+    bool isValidSerialization(string preorder) {
+        stringstream ss(preorder);
+		string str;
+		vector<bool> v;
+
+		while (getline(ss, str, ',')) {
+			v.push_back(str == "#" ? false : true);
+
+			while (v.size() >= 3 && !v.back() && !v[v.size() - 2]) {
+				v.pop_back(); v.pop_back();
+				if (!v.back()) return false;
+				v.pop_back(); v.push_back(false);
+			}
+		}
+
+		return v.size() == 1 && !v.back();
+    }
+};
+</code></pre>
+<p>Runtime: 13 ms</p>
+<p>Simplified with a count.</p>
+<pre><code>class Solution {
+public:
+    bool isValidSerialization(string preorder) {
+        stringstream ss(preorder);
+		string str;
+		int need = 1;
+
+		while (getline(ss, str, ',')) {
+		    if (need == 0) return false;
+			need += (str == "#" ? -1 : 1);
+		}
+
+		return need == 0;
+    }
+};
+</code></pre>
+<p>Runtime: 13 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
