@@ -7218,7 +7218,8 @@ private:
 
 <h3><a name="376" class="anchor" href="#376"></a>#376 Wiggle Subsequence (Medium)</h3>
 <p>If the next number conflicts the wiggle condition, replace current number with the next number.</p>
-<pre><code>class Solution {
+<pre><code>
+class Solution {
 public:
     int wiggleMaxLength(vector<int>& nums) {
 		return max(helper(nums, INT_MAX), helper(nums, INT_MIN));
