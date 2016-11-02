@@ -7173,11 +7173,48 @@ public:
 </code></pre>
 <p>Runtime: 13 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="395" class="anchor" href="#395"></a>#395 Longest Substring with At Least K Repeating Characters (Medium)</h3>
+<p>Count occurrence of each character. Use that with less than K occurrence to split the input string and handle parts recursively.</p>
+<pre><code>class Solution {
+public:
+    int longestSubstring(string s, int k) {
+		int result;
+
+        helper(s, k, result);
+
+		return result;
+    }
+private:
+	void helper(const string &s, int k, int &result) {
+		int count[26] = {0};
+		char split = '\0';
+
+		for (auto ch : s) {
+			count[ch - 'a'] += 1;
+		}
+
+		for (int i = 0; i < 26; ++i) {
+			if (count[i] && count[i] < k) {
+				split = (char)('a' + i);
+				break;
+			}
+		}
+
+		if (split == '\0') {
+			result = max(result, (int)s.length());
+			return;
+		}
+
+		stringstream ss(s);
+		string part;
+
+		while (getline(ss, part, split)) {
+			helper(part, k, result);
+		}
+	}
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 6 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
