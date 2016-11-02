@@ -7281,9 +7281,39 @@ private:
 </code></pre>
 <p>Runtime: 99 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="388" class="anchor" href="#388"></a>#388 Longest Absolution File Path (Medium)</h3>
+<p>Use a stack to keep track of the length of directories of all levels.</p>
+<pre><code>class Solution {
+public:
+    int lengthLongestPath(string input) {
+		stringstream ss(input);
+		string line;
+		stack<int> st;
+		int result = 1;
+
+		while (getline(ss, line)) {
+			int level = 0;
+			int top = 0;
+
+			for (auto ch : line) {
+				if (ch != '\t') break;
+				level += 1;
+			}
+
+			while (st.size() > level) st.pop();
+			top = (st.empty() ? 0 : st.top());
+			line.erase(0, level);
+
+			if (line.find(".") != -1) {
+				result = max(result, top + 1 + (int)line.length());
+			} else {
+				st.push(top + 1 + line.length());
+			}
+		}
+
+        return result - 1;
+    }
+};
 </code></pre>
 <p>Runtime: 0 ms</p>
 
