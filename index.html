@@ -7358,11 +7358,44 @@ private:
 </code></pre>
 <p>Runtime: 1835 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="368" class="anchor" href="#368"></a>#368 Largest Divisible Subset (Medium)</h3>
+<p>Dynamic Programming<br>
+DP[i] is largest set size with nums[i] being the largest number in the set.<br>
+DP[i] = max{ DP[j] + 1 }, where nums[i] % nums[j] == 0.</p>
+<pre><code>class Solution {
+public:
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+		int size = nums.size();
+		int last = nums.empty() ? -1: 0;
+		int maxSet = 0;
+        vector<int> result;
+		vector<int> dp(size, 1);
+		vector<int> pre(size, -1);
+
+		sort(nums.begin(), nums.end());
+
+		for (int i = 0; i < size; ++i) {
+			for (int j = i - 1; j >= 0; --j) {
+				if (nums[i] % nums[j] == 0 && dp[i] < dp[j] + 1) {
+					dp[i] = dp[j] + 1;
+					pre[i] = j;
+				}
+			}
+			if (maxSet < dp[i]) {
+				maxSet = dp[i];
+				last = i;
+			}
+		}
+
+		for (int i = last; i > -1; i = pre[i]) {
+			result.push_back(nums[i]);
+		}
+
+		return result;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 49 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
