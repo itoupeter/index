@@ -7594,11 +7594,32 @@ public:
 </code></pre>
 <p>Runtime: 16 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="187" class="anchor" href="#187"></a>#187 Repeated DNA Sequences (Medium)</h3>
+<p>Simple application of Hash Set.<br>
+Can be further optimized by using your own hash function, for example:<br>
+A maps to bits 00, C->01, G->10, and T->11, thus AACTGT is 000001111011.</p>
+<pre><code>class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        int size = s.length();
+		unordered_set<string> uset;
+		unordered_set<string> result;
+
+		for (int i = 0; i + 10 <= size; ++i) {
+			string substr = s.substr(i, 10);
+
+			if (uset.find(substr) != uset.end()) {
+				result.insert(substr);
+			}
+
+			uset.insert(substr);
+		}
+
+		return vector<string>(result.begin(), result.end());
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 86 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
