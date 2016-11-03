@@ -7496,11 +7496,57 @@ public:
 </code></pre>
 <p>Runtime: 52 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="373" class="anchor" href="#373"></a>#373 Find K Pairs with Smallest Sums (Medium)</h3>
+<p>Priority Queue<br>
+In PQ, (Ai, Bj) with min Ai + Bj at the top. Push (A0, B0) into PQ.<br>
+Each time (Ai, Bj) is popped, <br>
+[1] If i == j, push (Ai+1, Bj+1) into PQ, <br>
+[2] If i > j, push (Ai+1, Bj) into PQ, <br>
+[3] If i < j, push (Ai, Bj+1) into PQ. </p>
+<pre><code>struct Node {
+	Node(int i, int j, int a, int b) : i(i), j(j), a(a), b(b), sum(a + b) {}
+
+	int i, j, a, b, sum;
+};
+struct CMP {
+	bool operator()(const Node &a, const Node &b) {
+		return a.sum > b.sum;
+	}
+};
+class Solution {
+public:
+   vector<pair<int, int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+       if (nums1.empty() || nums2.empty()) {
+           return vector<pair<int, int>>();
+       }
+
+	   priority_queue<Node, vector<Node>, CMP> pq;
+	   vector<pair<int, int>> result;
+	   int n = nums1.size();
+	   int m = nums2.size();
+
+	   pq.push(Node(0, 0, nums1[0], nums2[0]));
+
+	   while (k-- && !pq.empty()) {
+		   Node top = pq.top(); pq.pop();
+
+		   if (top.i == top.j && top.i + 1 < n && top.j + 1 < m) {
+			   pq.push(Node(top.i + 1, top.j + 1, nums1[top.i + 1], nums2[top.j + 1]));
+		   }
+		   if (top.i >= top.j && top.i + 1 < n) {
+			   pq.push(Node(top.i + 1, top.j, nums1[top.i + 1], nums2[top.j]));
+		   }
+		   if (top.i <= top.j && top.j + 1 < m) {
+			   pq.push(Node(top.i , top.j + 1, nums1[top.i], nums2[top.j + 1]));
+		   }
+		   result.push_back(make_pair(top.a, top.b));
+	   }
+
+	   return result;
+   }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 13 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
