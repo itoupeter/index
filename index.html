@@ -7317,11 +7317,46 @@ public:
 </code></pre>
 <p>Runtime: 0 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="372" class="anchor" href="#372"></a>#372 Super Pow (Medium)</h3>
+<p>For example, a = 3, b = 13 = 1101b<br>
+3^13 = 3^8 * 3^4 * 3^1, where we can compute 3^2n = 3^n * 3^n.</p>
+<pre><code>class Solution {
+public:
+    int superPow(int a, vector<int>& b) {
+        vector<int> c(b.rbegin(), b.rend());
+
+		return helper(a % MOD, c);
+    }
+private:
+	int helper(int a, vector<int> &c) {
+		if (c.empty()) return 1;
+
+		int size = c.size();
+		int flag = false;
+
+		for (int i = size - 1; i >= 0; --i) {
+			if (c[i] & 1) {
+				if (i > 0) {
+					c[i - 1] += 10;
+				} else {
+					flag = true;
+				}
+			}
+			c[i] >>= 1;
+		}
+
+		while (!c.empty() && c.back() == 0) c.pop_back();
+
+		return flag
+				? a * helper(a * a % MOD, c) % MOD
+				: helper(a * a % MOD, c);
+	}
+
+	const int MOD = 1337;
+};
+
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 1835 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
