@@ -7455,6 +7455,89 @@ private:
 </code></pre>
 <p>Runtime: 76 ms</p>
 
+<h3><a name="385" class="anchor" href="#385"></a>#385 Mini Parser (Medium)</h3>
+<p>Use a stack to construct nested integer.</p>
+<pre><code>
+class Solution {
+public:
+    NestedInteger deserialize(string s) {
+		stringstream ss(s);
+		stack<NestedInteger> s1;
+		int a;
+		char ch;
+
+		if (ss >> a) {
+			return NestedInteger(a);
+		} else {
+			ss.clear();
+		}
+
+		while (!ss.eof()) {
+			if (ss >> a) {
+				s1.top().add(NestedInteger(a));
+			} else {
+				ss.clear();
+			}
+
+			if (ss >> ch) {
+				if (ch == '[') {
+					s1.push(NestedInteger());
+				} else if (ch == ']' && s1.size() > 1) {
+					NestedInteger ni = s1.top(); s1.pop();
+
+					s1.top().add(ni);
+				}
+			}
+		}
+
+		return s1.top();
+    }
+};
+</code></pre>
+<p>Runtime: 52 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
