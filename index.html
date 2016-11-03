@@ -7397,11 +7397,63 @@ public:
 </code></pre>
 <p>Runtime: 49 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="417" class="anchor" href="#417"></a>#417 Pacific Atlantic Water Flow (Medium)</h3>
+<p>Search.<br>
+Start from ocean and flood neighering grid if it is higher or has equal height.</p>
+<pre><code>typedef vector<vector<bool>> MB;
+typedef vector<pair<int, int>> VPI;
+typedef vector<vector<int>> VVI;
+class Solution {
+public:
+    vector<pair<int, int>> pacificAtlantic(vector<vector<int>>& matrix) {
+        if (matrix.empty() || matrix.front().empty()) {
+			return vector<pair<int, int>>();
+		}
+
+		VPI result;
+		int n = matrix.size();
+		int m = matrix.front().size();
+		MB p(n, vector<bool>(m, false));
+		MB a(n, vector<bool>(m, false));
+
+		for (int i = 0; i < n; ++i) {
+			if (!p[i][0]) helper(i, 0, n, m, matrix, p);
+			if (!a[i][m - 1]) helper(i, m - 1, n, m, matrix, a);
+		}
+		for (int i = 1; i < m; ++i) {
+			if (!p[0][i]) helper(0, i, n, m, matrix, p);
+			if (!a[n - 1][i - 1]) helper(n - 1, i - 1, n, m, matrix, a);
+		}
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < m; ++j) {
+				if (p[i][j] && a[i][j]) {
+					result.push_back(make_pair(i, j));
+				}
+			}
+		}
+
+		return result;
+    }
+private:
+	void helper(int x, int y, int n, int m, VVI &mat, MB &mb) {
+		mb[x][y] = true;
+
+		for (int i = 0; i < 4; ++i) {
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+
+			if (nx >= 0 && nx < n && ny >= 0 && ny < m
+					&& !mb[nx][ny] && mat[nx][ny] >= mat[x][y]) {
+				helper(nx, ny, n, m, mat, mb);
+			}
+		}
+	}
+
+	const int dx[4] = {0, 1, 0, -1};
+	const int dy[4] = {1, 0, -1, 0};
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 76 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
