@@ -7643,11 +7643,58 @@ public:
 </code></pre>
 <p>Runtime: 0 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="227" class="anchor" href="#227"></a>#227 Basic Calculator II (Medium)</h3>
+<p>Use stack to handle operator priority.</p>
+<pre><code>class Solution {
+public:
+    int calculate(string s) {
+		stack<int> nums;
+		stack<char> ops;
+        stringstream ss(s);
+		int i;
+		char ch;
+
+		while (!ss.eof()) {
+			if (ss >> i) {
+				nums.push(i);
+			} else {
+				ss.clear();
+			}
+			if (ss >> ch) {
+				if (ch != '+' && ch != '-' && ch != '*' && ch != '/') continue;
+				while (!ops.empty() && pri(ch) <= pri(ops.top())) {
+					int a = nums.top(); nums.pop();
+					int b = nums.top(); nums.pop();
+
+					nums.push(cal(b, a, ops.top()));
+					ops.pop();
+				}
+				ops.push(ch);
+			}
+		}
+		while (!ops.empty()) {
+			int a = nums.top(); nums.pop();
+			int b = nums.top(); nums.pop();
+
+			nums.push(cal(b, a, ops.top()));
+			ops.pop();
+		}
+
+		return nums.top();
+    }
+private:
+	inline int pri(const char op) {
+		return op == '+' || op == '-' ? 0 : 1;
+	}
+	inline int cal(const int a, const int b, const char op) {
+		if (op == '+') return a + b;
+		if (op == '-') return a - b;
+		if (op == '*') return a * b;
+		return a / b;
+	}
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 59 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
