@@ -7696,11 +7696,34 @@ private:
 </code></pre>
 <p>Runtime: 59 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="139" class="anchor" href="#139"></a>#139 Word Break (Medium)</h3>
+<p>Dynamic Programming.<br>
+DP[i] denotes whether the prefix of s of size i is a word.<br>
+DP[i] = DP[j] && s[j + 1, i] is a word.</p>
+<pre><code>class Solution {
+public:
+    bool wordBreak(string s, unordered_set<string>& wordDict) {
+        int size = s.length();
+		int maxLen = 0;
+		vector<bool> dp(size + 1, false);
+
+		for (auto word : wordDict) {
+			maxLen = max(maxLen, (int)word.length());
+		}
+
+		dp[0] = true;
+		for (int i = 1; i <= size; ++i) {
+			for (int j = i - 1; j >= 0 && j >= i - maxLen; --j) {
+				dp[i] = dp[j] && wordDict.find(s.substr(j, i - j)) != wordDict.end();
+				if (dp[i]) break;
+			}
+		}
+
+		return dp[size];
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 6 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
