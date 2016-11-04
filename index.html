@@ -7773,6 +7773,95 @@ public:
 </code></pre>
 <p>Runtime: 16 ms</p>
 
+<h3><a name="322" class="anchor" href="#322"></a>#322 Reconstruct Itinerary (Medium)</h3>
+<p>One-stroke Painting Problem. DFS.</p>
+<pre><code>struct Node {
+	Node() : visited(0) {}
+
+	vector<string> nxt;
+	int visited;
+};
+typedef unordered_map<string, Node> Graph;
+class Solution {
+public:
+    vector<string> findItinerary(vector<pair<string, string>> tickets) {
+        Graph graph;
+		vector<string> result;
+
+		for (auto &p : tickets) {
+			addEdge(graph, p.first, p.second);
+		}
+
+		for (auto &p : graph) {
+			sort(p.second.nxt.begin(), p.second.nxt.end());
+		}
+
+		helper(graph, "JFK", result);
+
+		return vector<string>(result.rbegin(), result.rend());
+    }
+private:
+	void addEdge(Graph &graph, const string &src, const string &dst) {
+		if (graph.find(src) == graph.end()) {
+			graph[src] = Node();
+		}
+		graph[src].nxt.push_back(dst);
+	}
+	void helper(Graph &graph, const string &src, vector<string> &result) {
+		int size = graph[src].nxt.size();
+    	int &cur = graph[src].visited;
+
+		while (cur < size) {
+    		helper(graph, graph[src].nxt[cur++], result);
+		}
+		result.push_back(src);
+	}
+};
+</code></pre>
+<p>Runtime: 29 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
