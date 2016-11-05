@@ -7820,11 +7820,16 @@ private:
 </code></pre>
 <p>Runtime: 29 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="342" class="anchor" href="#342"></a>#342 Power of Four (Medium)</h3>
+<p>Power of four are 1b, 100b, 10000b, ...</p>
+<pre><code>class Solution {
+public:
+	bool isPowerOfFour(int num) {
+		return num && (num & -num ^ num) == 0 && (num & 0x55555555) == num;
+	}
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 3 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
