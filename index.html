@@ -7831,11 +7831,25 @@ public:
 </code></pre>
 <p>Runtime: 3 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="151" class="anchor" href="#151"></a>#151 Reverse Words in a String (Medium)</h3>
+<p>Simple string manipulation.<br>
+Dtringstream is handy.</p>
+<pre><code>class Solution {
+public:
+    void reverseWords(string &s) {
+		stringstream ss(s);
+		string word;
+
+		s.clear();
+		while (ss >> word) {
+			s += " " + string(word.rbegin(), word.rend());
+		}
+		s = string(s.rbegin(), s.rend());
+		if (!s.empty()) s.pop_back();
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 16 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
