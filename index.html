@@ -7851,11 +7851,46 @@ public:
 </code></pre>
 <p>Runtime: 16 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
+<h3><a name="29" class="anchor" href="#29"></a>#29 Divide Two Integers (Medium)</h3>
+<p>Keep subtracting divisor from dividend, and augmenting divisor by twice if succeeded.<br>
+*Dam. Should have used long long to simplify code.</p>
 <pre><code>
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        if (divisor == 0) {
+			return INT_MAX;
+		} else if (dividend == 0) {
+			return 0;
+		} else if (divisor == INT_MIN) {
+			return dividend == INT_MIN ? 1 : 0;
+		} else if (dividend != INT_MIN && abs(divisor) > abs(dividend)) {
+			return 0;
+		} else if (dividend == INT_MIN && abs(divisor) == 1) {
+			return divisor == 1 ? INT_MIN : INT_MAX;
+		}
+
+		bool negative = dividend < 0 && divisor > 0 || dividend > 0 && divisor < 0 ? true : false;
+		auto isValid = [=] (int x) {return x == 0 || dividend > 0 && x > 0 || dividend < 0 && x < 0;};
+		int shift = 0;
+		int result = 0;
+
+		divisor = negative ? -divisor : divisor;
+		while (isValid(dividend - (divisor << shift)) || shift > 0) {
+			if (isValid(dividend - (divisor << shift))) {
+				dividend -= (divisor << shift);
+				result += 1 << shift;
+				shift += (divisor << shift) >= (1 << 29) || (divisor << shift) <= -(1 << 29) ? 0 : 1;
+			} else {
+				shift -= 1;
+			}
+		}
+
+		return negative ? -result : result;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 9 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
