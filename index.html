@@ -7892,11 +7892,80 @@ public:
 </code></pre>
 <p>Runtime: 9 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="166" class="anchor" href="#166"></a>#166 Fraction to Recurring Decimal (Medium)</h3>
+<p>Simulate division. Use hash map to find loop in fractional part.</p>
+<pre><code>class Solution {
+public:
+    string fractionToDecimal(int numerator, int denominator) {
+        if (numerator == 0) {
+			return "0";
+		} else if (denominator == 0) {
+			return "INF";
+		}
+
+		unordered_set<long long> uset;
+		long long nu = (long long)numerator;
+		long long de = (long long)denominator;
+		long long cur;
+		long long loop;
+		int size;
+		bool negative = false;
+		stringstream ss;
+		string result;
+
+		if (nu < 0) {
+			nu = -nu;
+			negative = !negative;
+		}
+		if (de < 0) {
+			de = -de;
+			negative = !negative;
+		}
+		if (negative) {
+			result += '-';
+		}
+
+		cur = nu % de;
+		ss << nu / de;
+		result += ss.str();
+		ss.str().clear();
+		if (cur) {
+			result += '.';
+		}
+
+		while (uset.find(cur) == uset.end()) {
+			uset.insert(cur);
+			cur = cur * 10LL % de;
+			if (cur == 0LL) break;
+		}
+
+		loop = cur;
+		cur = nu % de;
+		size = uset.size();
+		for (int i = 0; i < size; ++i) {
+			if (cur == loop) break;
+			result += (char)('0' + cur * 10 / de);
+			cur = cur * 10 % de;
+		}
+
+		if (loop == 0) {
+			return result;
+		}
+
+		cur = loop;
+		result += '(';
+		for (int i = 0; i < size; ++i) {
+			result += (char)('0' + cur * 10 / de);
+			cur = cur * 10 % de;
+			if (cur == loop) break;
+		}
+		result += ')';
+
+		return result;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 9 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
