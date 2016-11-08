@@ -7967,9 +7967,61 @@ public:
 </code></pre>
 <p>Runtime: 9 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="306" class="anchor" href="#306"></a>#306 Additive Number (Medium)</h3>
+<p>Test all possible combinations of first two numbers.</p>
+<pre><code>class Solution {
+public:
+    bool isAdditiveNumber(string num) {
+        if (num.size() < 3) {
+            return false;
+        }
+
+        int size = num.size();
+
+        for (int i = 1; i < size - 1; ++i) {
+            if (i > 1 && num[0] == '0') break;
+
+            for (int j = 1; i + j < size; ++j) {
+                if (j > 1 && num[i] == '0') break;
+                if (check(num, i, j)) return true;
+            }
+        }
+
+        return false;
+    }
+private:
+    string add(const string &a, const string &b) {
+        string result;
+        int carry = 0;
+
+        for (int i = a.size() - 1, j = b.size() - 1; i >= 0 || j >= 0 || carry; --i, --j) {
+            int tmp = (i >= 0 ? a[i] - '0' : 0) + (j >= 0 ? b[j] - '0' : 0) + carry;
+
+            result += (char)(tmp % 10 + '0');
+            carry = tmp / 10;
+        }
+
+        return string(result.rbegin(), result.rend());
+    }
+    bool check(const string &s, int a, int b) {
+        int size = s.size();
+        int start = 0;
+
+        while (start + a + b < size) {
+            string num1 = s.substr(start, a);
+            string num2 = s.substr(start + a, b);
+            string sum = add(num1, num2);
+
+            if (s.find(sum, start + a + b) != start + a + b) return false;
+
+            start += a;
+            a = b;
+            b = sum.size();
+        }
+
+        return true;
+    }
+};
 </code></pre>
 <p>Runtime: 0 ms</p>
 
