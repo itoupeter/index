@@ -8025,11 +8025,70 @@ private:
 </code></pre>
 <p>Runtime: 0 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="130" class="anchor" href="#130"></a>#130 Surrounded Region (Medium)</h3>
+<p>BFS from 'O' on border, mark achievable grid as final 'O'.</p>
+<pre><code>class Solution {
+public:
+    void solve(vector<vector<char>>& board) {
+        if (board.empty() || board.front().empty()) return;
+
+        int n = board.size();
+        int m = board.front().size();
+        queue<pair<int, int>> q;
+
+        for (int i = 0; i < n; ++i) {
+            if (board[i][0] == 'O') {
+                board[i][0] = '#';
+                q.push(make_pair(i, 0));
+            }
+            if (board[i][m - 1] == 'O') {
+                board[i][m - 1] = '#';
+                q.push(make_pair(i, m - 1));
+            }
+        }
+
+        for (int i = 0; i < m; ++i) {
+            if (board[0][i] == 'O') {
+                board[0][i] = '#';
+                q.push(make_pair(0, i));
+            }
+            if (board[n - 1][i] == 'O') {
+                board[n - 1][i] = '#';
+                q.push(make_pair(n - 1, i));
+            }
+        }
+
+        while (!q.empty()) {
+            int i = q.front().first;
+            int j = q.front().second; q.pop();
+
+            if (i > 0 && board[i - 1][j] == 'O') {
+                board[i - 1][j] = '#';
+                q.push(make_pair(i - 1, j));
+            }
+            if (i < n - 1 && board[i + 1][j] == 'O') {
+                board[i + 1][j] = '#';
+                q.push(make_pair(i + 1, j));
+            }
+            if (j > 0 && board[i][j - 1] == 'O') {
+                board[i][j - 1] = '#';
+                q.push(make_pair(i, j - 1));
+            }
+            if (j < m - 1 && board[i][j + 1] == 'O') {
+                board[i][j + 1] = '#';
+                q.push(make_pair(i, j + 1));
+            }
+        }
+
+        for (auto &v : board) {
+            for (auto &ch : v) {
+                ch = (ch == '#' ? 'O' : 'X');
+            }
+        }
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 16 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
