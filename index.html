@@ -8133,6 +8133,71 @@ private:
 </code></pre>
 <p>Runtime: 52 ms</p>
 
+<h3><a name="91" class="anchor" href="#91"></a>#91 Decode Ways (Medium)</h3>
+<p>Dynamic Programming.<br>
+DP[i] represents decode way of prefix of length i<br>
+DP[i] = DP[i - 1](if s[i] is not 0) + DP[i - 2](if s[i-1] is not zero and s[i-1]*10+s[i] <= 26);</p>
+<pre><code>class Solution {
+public:
+    int numDecodings(string s) {
+        int size = s.size();
+        vector<int> dp(size + 1, 0);
+
+        dp[0] = 1;
+
+        for (int i = 1; i <= size; ++i) {
+            dp[i] += s[i - 1] != '0' ? dp[i - 1] : 0;
+            dp[i] += s[i - 2] != '0' && (s[i - 2] - '0') * 10 + (s[i - 1] - '0') < 27 ? dp[i - 2] : 0;
+        }
+
+        return size ? dp[size] : 0;
+    }
+};
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
