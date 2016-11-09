@@ -8090,11 +8090,48 @@ public:
 </code></pre>
 <p>Runtime: 16 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
+<h3><a name="307" class="anchor" href="#307"></a>#307 Range Sum Query - Mutable (Medium)</h3>
+<p>Binary Indexed Array.</p>
 <pre><code>
+class NumArray {
+public:
+    NumArray(vector<int> &nums) {
+        int size = nums.size();
+
+        bia = vector<int>(size + 1, 0);
+
+        for (int i = 0; i < size; ++i) {
+            update(i, nums[i]);
+        }
+    }
+
+    void update(int i, int val) {
+        int size = bia.size();
+        int delta = val - sumRange(i, i);
+
+        for (++i; i < size; i = i + (i & -i)) {
+            bia[i] += delta;
+        }
+    }
+
+    int sumRange(int i, int j) {
+        return prefixSum(j + 1) - prefixSum(i);
+    }
+private:
+    int prefixSum(int i) {
+        int result = 0;
+
+        for (; i; i = (i & (i - 1))) {
+            result += bia[i];
+        }
+
+        return result;
+    }
+
+    vector<int> bia;
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 52 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
