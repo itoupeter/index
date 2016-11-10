@@ -8262,11 +8262,36 @@ private:
 </code></pre>
 <p>Runtime: 95 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="220" class="anchor" href="#220"></a>#220 Contains Duplicate III (Medium)</h3>
+<p>Use a BST to maintain numbers whose indices are at most k less that current number.<br>
+*Map is handy for use. Actually can use set.</p>
+<pre><code>class Solution {
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        int size = nums.size();
+		map<long long, int> m;
+
+		for (int i = 0; i < size; ++i) {
+			if (i - k - 1 >= 0) {
+				if (--m[(long long)nums[i - k - 1]] == 0) {
+					m.erase((long long)nums[i - k - 1]);
+				}
+			}
+
+			auto ite = m.lower_bound((long long)nums[i] - t);
+
+			if (ite != m.end() && ite->first <= (long long)nums[i] + t) {
+				return true;
+			}
+
+			++m[nums[i]];
+		}
+
+		return false;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 59 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
