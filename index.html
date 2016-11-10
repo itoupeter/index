@@ -8293,11 +8293,36 @@ public:
 </code></pre>
 <p>Runtime: 59 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="15" class="anchor" href="#15"></a>#15 3Sum (Medium)</h3>
+<p>Two pointers.</p>
+<pre><code>class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+		vector<vector<int>> result;
+        int size = nums.size();
+
+		sort(nums.begin(), nums.end());
+
+		for (int k = size - 1; k >= 2; --k) {
+			while (k < size - 1 && k >= 2 && nums[k] == nums[k + 1]) --k;
+			for (int i = 0, j = k - 1; i < j;) {
+				while (i > 0 && i < j && nums[i] == nums[i - 1]) ++i;
+				while (j < k - 1 && i < j && nums[j] == nums[j + 1]) --j;
+				if (i >= j) break;
+				if (nums[i] + nums[j] + nums[k] == 0) {
+					result.push_back(vector<int>{nums[i], nums[j], nums[k]});
+					++i; --j;
+				} else {
+					nums[i] + nums[j] + nums[k] < 0 ? ++i : --j;
+				}
+			}
+		}
+
+		return result;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 42 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
