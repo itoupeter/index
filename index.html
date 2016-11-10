@@ -8361,11 +8361,46 @@ private:
 </code></pre>
 <p>Runtime: 16 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
+<h3><a name="304" class="anchor" href="#304"></a>#304 Range Sum Query 2D - Immutable (Medium)</h3>
+<p>2D prefix sum.</p>
 <pre><code>
+class NumMatrix {
+public:
+    NumMatrix(vector<vector<int>> &matrix) {
+        if (matrix.empty() || matrix.front().empty()) {
+            return;
+        }
+
+        int n = matrix.size();
+		int m = matrix.front().size();
+
+		for (int i = 0; i < n; ++i) {
+			for (int j = 1; j < m; ++j) {
+				matrix[i][j] += matrix[i][j - 1];
+			}
+		}
+		for (int i = 0; i < m; ++i) {
+			for (int j = 1; j < n; ++j) {
+				matrix[j][i] += matrix[j - 1][i];
+			}
+		}
+		sum = matrix;
+    }
+
+    int sumRegion(int row1, int col1, int row2, int col2) {
+        int result = sum[row2][col2];
+
+		result -= row1 > 0 ? sum[row1 - 1][col2] : 0;
+		result -= col1 > 0 ? sum[row2][col1 - 1] : 0;
+		result += row1 > 0 && col1 > 0 ? sum[row1 - 1][col1 - 1] : 0;
+
+		return result;
+    }
+private:
+	vector<vector<int>> sum;
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 33 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
