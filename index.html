@@ -7967,11 +7967,48 @@ public:
 </code></pre>
 <p>Runtime: 9 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
+<h3><a name="127" class="anchor" href="#127"></a>#127 Word Ladder (Medium)</h3>
+<p>BFS from beginWord to endWord.</p>
 <pre><code>
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, unordered_set<string>& wordList) {
+		if (beginWord == endWord) {
+			return 1;
+		}
+
+        queue<string> q1;
+		queue<int> q2;
+		unordered_set<string> visited;
+		int size = beginWord.size();
+
+		q1.push(beginWord);
+		q2.push(1);
+		visited.insert(beginWord);
+
+		while (!q1.empty()) {
+			for (int i = 0; i < size; ++i) {
+				string newWord = q1.front();
+
+				for (int j = 0; j < 26; ++j) {
+					newWord[i] = (char)('a' + j);
+					if (newWord == endWord) return q2.front() + 1;
+					if (visited.find(newWord) != visited.end()) continue;
+					if (wordList.find(newWord) == wordList.end()) continue;
+					visited.insert(newWord);
+					q1.push(newWord);
+					q2.push(q2.front() + 1);
+				}
+			}
+			q1.pop();
+			q2.pop();
+		}
+
+		return 0;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 645 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
