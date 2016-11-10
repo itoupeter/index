@@ -8324,11 +8324,42 @@ public:
 </code></pre>
 <p>Runtime: 42 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="98" class="anchor" href="#98"></a>#98 Validate Binary Search Tree (Medium)</h3>
+<p>Recursively check subtree.</p>
+<pre><code>class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        int dummy;
+
+		return helper(root, dummy, dummy);
+    }
+private:
+	bool helper(TreeNode *root, int &minVal, int &maxVal) {
+		if (root == nullptr) {
+			return true;
+		}
+
+		bool result = true;
+		int lMinVal = root->val, lMaxVal = root->val;
+		int rMinVal = root->val, rMaxVal = root->val;
+
+		if (root->left != nullptr) {
+			result = result && helper(root->left, lMinVal, lMaxVal)
+				&& lMaxVal < root->val;
+		}
+		if (root->right != nullptr) {
+			result = result && helper(root->right, rMinVal, rMaxVal)
+				&& rMinVal > root->val;
+		}
+		minVal = lMinVal;
+		maxVal = rMaxVal;
+
+		return result;
+
+	}
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 16 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
