@@ -8199,11 +8199,68 @@ public:
 </code></pre>
 <p>Runtime: 0 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
+<h3><a name="211" class="anchor" href="#211"></a>#211 Add and Search Word - Data structure design (Medium)</h3>
+<p>Build a trie to store words. DFS query.</p>
 <pre><code>
+struct TrieNode {
+	TrieNode() : nxt(vector<int>(26, -1)), isWord(false) {}
+
+	vector<int> nxt;
+	bool isWord;
+};
+
+struct Trie {
+	Trie() {
+		nodes.push_back(TrieNode());
+	}
+
+	void add(int node, const string &word, int idx) {
+		if (idx == word.size()) {
+			nodes[node].isWord = true;
+			return;
+		}
+		if (nodes[node].nxt[word[idx] - 'a'] == -1) {
+			nodes[node].nxt[word[idx] - 'a'] = nodes.size();
+			nodes.push_back(TrieNode());
+		}
+		add(nodes[node].nxt[word[idx] - 'a'], word, idx + 1);
+	}
+
+	vector<TrieNode> nodes;
+};
+
+class WordDictionary {
+public:
+    void addWord(string word) {
+        trie.add(0, word, 0);
+    }
+
+    bool search(string word) {
+        return searchHelper(0, word, 0);
+    }
+
+	bool searchHelper(int node, const string &word, int idx) {
+		if (idx == word.size()) {
+			return trie.nodes[node].isWord;
+		}
+
+		if (word[idx] == '.') {
+			for (int i = 0; i < 26; ++i) {
+			    int nxtNode = trie.nodes[node].nxt[i];
+				if (nxtNode == -1) continue;
+				if (searchHelper(nxtNode, word, idx + 1)) return true;
+			}
+			return false;
+		} else {
+		    int nxtNode = trie.nodes[node].nxt[word[idx] - 'a'];
+		    return nxtNode != -1 && searchHelper(nxtNode, word, idx + 1);
+		}
+	}
+private:
+	Trie trie;
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 95 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
