@@ -8402,11 +8402,32 @@ private:
 </code></pre>
 <p>Runtime: 33 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="3" class="anchor" href="#3"></a>#3 Longest Substring Without Repeating Characters (Medium)</h3>
+<p>Two pointers.</p>
+<pre><code>class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        if (s.empty()) {
+			return 0;
+		}
+
+		int size = s.size();
+		int result = 0;
+		bool flag[256] = {false};
+
+		for (int i = 0, j = 0; i < size; ++i) {
+			while (flag[s[i]]) {
+			    flag[s[j++]] = false;
+			}
+			flag[(int)s[i]] = true;
+			result = max(result, i - j + 1);
+		}
+
+		return result;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 12 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
