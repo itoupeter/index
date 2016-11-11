@@ -8498,11 +8498,76 @@ public:
 </code></pre>
 <p>Runtime: 15 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="355" class="anchor" href="#355"></a>#355 Design Twitter (Medium)</h3>
+<p>Use heap to find 10 latest tweets by followees.</p>
+<pre><code>struct User {
+    User() {}
+    User(int id) {followees.insert(id);}
+
+	unordered_set<int> followees;
+	vector<pair<int, int>> tweets;
+};
+
+class Twitter {
+public:
+    Twitter() {
+        timeStamp = 0;
+    }
+
+    void postTweet(int userId, int tweetId) {
+        checkUser(userId);
+		users[userId].tweets.push_back(make_pair(-(timeStamp++), tweetId));
+    }
+
+    vector<int> getNewsFeed(int userId) {
+		priority_queue<pair<int, int>> pq;
+		vector<int> result;
+
+		checkUser(userId);
+
+		for (auto user : users[userId].followees) {
+			int size = users[user].tweets.size();
+
+			for (int i = 0; i < 10 && i < size; ++i) {
+				pq.push(users[user].tweets[size - i - 1]);
+				if (pq.size() > 10) pq.pop();
+			}
+		}
+
+		while (!pq.empty()) {
+			result.push_back(pq.top().second);
+			pq.pop();
+		}
+
+		return vector<int>(result.rbegin(), result.rend());
+    }
+
+    void follow(int followerId, int followeeId) {
+        if (followerId == followeeId) return;
+		checkUser(followerId);
+		checkUser(followeeId);
+        users[followerId].followees.insert(followeeId);
+    }
+
+    void unfollow(int followerId, int followeeId) {
+        if (followerId == followeeId) return;
+		checkUser(followerId);
+		checkUser(followeeId);
+        users[followerId].followees.erase(followeeId);
+    }
+private:
+	void checkUser(int id) {
+		if (users.find(id) == users.end()) {
+			users.insert(make_pair(id, User(id)));
+		}
+	}
+
+	unordered_map<int, User> users;
+	int timeStamp;
+};
+
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 69 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
