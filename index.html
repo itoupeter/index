@@ -8598,11 +8598,38 @@ public:
 </code></pre>
 <p>Runtime: 9 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="5" class="anchor" href="#5"></a>#5 Longest Palindromic Substring (Medium)</h3>
+<p>Iterator on middle character and span in both direction.</p>
+<pre><code>class Solution {
+public:
+    string longestPalindrome(string s) {
+        if (s.empty()) {
+			return s;
+		}
+
+		int size = s.size();
+		string result(1, s.front());
+
+		for (int i = 0; i < size - 1; ++i) {
+			for (int j = i - 1, k = i + 1; j >= 0 && k < size; --j, ++k) {
+				if (s[j] != s[k]) break;
+				if (result.size() < k - j + 1) {
+    				result = s.substr(j, k - j + 1);
+				}
+			}
+			for (int j = i, k = i + 1; j >= 0 && k < size; --j, ++k) {
+				if (s[j] != s[k]) break;
+				if (result.size() < k - j + 1) {
+    				result = s.substr(j, k - j + 1);
+				}
+			}
+		}
+
+		return result;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 53 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
