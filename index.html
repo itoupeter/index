@@ -8429,11 +8429,38 @@ public:
 </code></pre>
 <p>Runtime: 12 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="71" class="anchor" href="#71"></a>#71 Simplify Path (Medium)</h3>
+<p>String manipulation.<br>
+*stringstream is handy for use.</p>
+<pre><code>class Solution {
+public:
+    string simplifyPath(string path) {
+        stringstream ss(path);
+		string str;
+		string result;
+		vector<string> vs;
+
+		while (getline(ss, str, '/')) {
+			if (str == "") {
+				continue;
+			} else if (str == "..") {
+				if (!vs.empty()) vs.pop_back();
+			} else if (str == ".") {
+				// do nothing
+			} else {
+				vs.push_back( "/" + str);
+			}
+		}
+
+		for (auto &s : vs) {
+			result += s;
+		}
+
+		return vs.empty() ? "/" : result;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 13 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
