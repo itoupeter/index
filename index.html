@@ -8462,6 +8462,78 @@ public:
 </code></pre>
 <p>Runtime: 13 ms</p>
 
+<h3><a name="61" class="anchor" href="#61"></a>#61 Rotate List (Medium)</h3>
+<p>Linked list manipulation.</p>
+<pre><code>
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+		if (head == nullptr) {
+			return nullptr;
+		}
+
+		auto size = 0;
+		auto fast = head;
+		auto slow = head;
+		auto result = head;
+
+		for (auto ptr = head; ptr; ptr = ptr->next, ++size);
+
+		if ((k %= size) == 0) {
+			return head;
+		}
+
+		for (int i = 0; i < k; ++i) {
+			fast = fast->next;
+		}
+		for (; fast->next; fast = fast->next, slow = slow->next);
+
+		result = slow->next;
+		fast->next = head;
+		slow->next = nullptr;
+
+		return result;
+    }
+};
+</code></pre>
+<p>Runtime: 15 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
