@@ -8691,6 +8691,105 @@ public:
 </code></pre>
 <p>Runtime: 3 ms</p>
 
+<h3><a name="143" class="anchor" href="#143"></a>#143 Reorder List (Medium)</h3>
+<p>Find 2 lists, first half and second half reversed, then merge them.</p>
+<pre><code>class Solution {
+public:
+    void reorderList(ListNode* head) {
+        if (head == nullptr) {
+			return;
+		}
+
+		ListNode dummy(0);
+		ListNode *list1 = head;
+		ListNode *list2 = nullptr;
+		auto slow = &dummy;
+
+		dummy.next = head;
+
+		for (auto fast = &dummy; fast && fast->next;) {
+			slow = slow->next;
+			fast = fast->next->next;
+		}
+
+		for (auto ptr = slow->next; ptr;) {
+			auto tmp = ptr->next;
+
+			ptr->next = list2;
+			list2 = ptr;
+			ptr = tmp;
+		}
+
+		slow->next = nullptr;
+		slow = &dummy;
+
+		while (list1 || list2) {
+			if (list1) {
+				slow->next = list1;
+				list1 = list1->next;
+				slow = slow->next;
+			}
+			if (list2) {
+				slow->next = list2;
+				list2 = list2->next;
+				slow = slow->next;
+			}
+		}
+
+		slow->next = nullptr;
+    }
+};
+</code></pre>
+<p>Runtime: 49 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
+<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
+<p></p>
+<pre><code>
+</code></pre>
+<p>Runtime: 0 ms</p>
+
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
 <pre><code>
