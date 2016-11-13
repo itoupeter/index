@@ -8742,11 +8742,36 @@ public:
 </code></pre>
 <p>Runtime: 49 ms</p>
 
-<h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
-<p></p>
-<pre><code>
+<h3><a name="452" class="anchor" href="#452"></a>#452 Minimum Number of Arrows to Burst Balloons (Medium)</h3>
+<p>Greedy. Sort intervals and choose the position to shoot most balloons at the beginning.</p>
+<pre><code>class Solution {
+public:
+    int findMinArrowShots(vector<pair<int, int>>& points) {
+		if (points.empty()) {
+			return 0;
+		}
+
+		int result = 1;
+		int size = points.size();
+		int target;
+
+        sort(points.begin(), points.end());
+		target = points[0].second;
+
+		for (int i = 1; i < size; ++i) {
+			if (points[i].second < target) {
+				target = points[i].second;
+			} else if (points[i].first > target) {
+				target = points[i].second;
+				result += 1;
+			}
+		}
+
+		return result;
+    }
+};
 </code></pre>
-<p>Runtime: 0 ms</p>
+<p>Runtime: 136 ms</p>
 
 <h3><a name="" class="anchor" href="#"></a># (Medium)</h3>
 <p></p>
